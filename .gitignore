@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data files — too large for git (5.4 GB dataset lives on local machine only)
+data/processed/*.parquet
+data/processed/*.csv
+data/neo4j_bulk_import/*.csv
+data/neo4j_import/*.csv
+*.parquet
+*.csv
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.venv
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/secrets.toml
+
+# Personal / academic documents
+*.docx
+*.doc
+*.pdf
+*.html
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Keep data folders tracked as empty
+!data/.gitkeep
+!data/processed/.gitkeep
+!data/neo4j_bulk_import/.gitkeep
