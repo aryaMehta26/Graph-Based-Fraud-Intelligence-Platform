@@ -8,7 +8,10 @@ import time
 # --- PAGE SETUP ---
 st.set_page_config(page_title="DATA 298A Fraud Platform", layout="wide", initial_sidebar_state="expanded")
 
-PROJ = "/Users/aryaaa/Desktop/DATA 298"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/SJSU_Spartans_primary_mark.svg/1200px-SJSU_Spartans_primary_mark.svg.png", width=150)
 st.sidebar.title("System Navigation Menu")
 selection = st.sidebar.radio("Go to Phase:", [
@@ -84,7 +87,7 @@ Team 12 | DATA 298A | Graph Fraud Intelligence Platform
 
 [1/4] Downloading IBM AML dataset from Kaggle...
       Source: ealtman2019/ibm-transactions-for-anti-money-laundering-aml
-      [SUCCESS] Dataset path: /Users/aryaaa/.cache/kagglehub/datasets/.../versions/8
+      [SUCCESS] Dataset path: ~/.cache/kagglehub/datasets/.../versions/8
 
 [2/4] Files available in dataset:
 File Name                                      Size
@@ -413,7 +416,7 @@ elif "7. Neo4j Graph Validation" in selection:
     
     @st.cache_resource
     def init_connection():
-        return GraphDatabase.driver("neo4j://127.0.0.1:7687", auth=("neo4j", "Aryamehta@26"))
+        return GraphDatabase.driver(os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687"), auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "fraud2026")))
         
     try:
         driver = init_connection()
