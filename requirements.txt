@@ -12,6 +12,8 @@ shap>=0.44.0
 # Graph
 neo4j>=5.0.0
 python-dotenv>=1.0.0
+igraph>=0.11.0
+leidenalg>=0.10.0
 
 # Visualization
 matplotlib>=3.7.0
