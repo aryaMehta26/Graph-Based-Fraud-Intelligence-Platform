@@ -92,8 +92,7 @@ TABULAR_FEATURES = [
 ]
 
 # Graph features added by 05_build_feature_store.py
-# Community features (community_id, community_size, community_fraud_rate)
-# excluded until Louvain is implemented (Issue #4).
+# Community features populated by 04b_louvain_communities.py (Issue #4).
 GRAPH_FEATURES = [
     "src_out_degree",
     "src_in_degree",
@@ -103,6 +102,10 @@ GRAPH_FEATURES = [
     "dst_in_degree",
     "dst_total_degree",
     "dst_degree_centrality",
+    "src_community_size",
+    "src_community_fraud_rate",
+    "dst_community_size",
+    "dst_community_fraud_rate",
 ]
 
 ALL_FEATURES = TABULAR_FEATURES + GRAPH_FEATURES

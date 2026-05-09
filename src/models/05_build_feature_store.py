@@ -68,15 +68,17 @@ OUTPUT_FILES = {
     "test":  os.path.join(PROC_DIR, "test_graph_enriched.parquet"),
 }
 
-# Graph feature columns produced by 04_extract_graph_features.py
-# Community columns (community_id, community_size, community_fraud_rate) are
-# stubbed to 0 until Issue #4 (Louvain script) is implemented.
+# Graph feature columns produced by 04_extract_graph_features.py and
+# 04b_louvain_communities.py (community columns).
 GRAPH_COLS = [
     "account_id",
     "out_degree",
     "in_degree",
     "total_degree",
     "degree_centrality",
+    "community_id",
+    "community_size",
+    "community_fraud_rate",
 ]
 
 COMMUNITY_STUB_COLS = ["community_id", "community_size", "community_fraud_rate"]
@@ -107,19 +109,30 @@ def validate_paths():
 
 
 def load_graph_features() -> pd.DataFrame:
-    df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=GRAPH_COLS)
-    log.info("Graph features loaded: %d accounts", len(df))
+    # Read only the columns that exist in the CSV (community columns present
+    # only after 04b_louvain_communities.py has run)
+    import csv
+    with open(GRAPH_FEATURES_FILE, "r") as f:
+        header = next(csv.reader(f))
+    available_cols = [c for c in GRAPH_COLS if c in header]
+    missing_cols   = [c for c in GRAPH_COLS if c not in header]
+
+    df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=available_cols)
+    log.info("Graph features loaded: %d accounts | columns: %s", len(df), available_cols)
+
     df["out_degree"]        = df["out_degree"].astype("int32")
     df["in_degree"]         = df["in_degree"].astype("int32")
     df["total_degree"]      = df["total_degree"].astype("int32")
     df["degree_centrality"] = df["degree_centrality"].astype("float32")
-    # Stub community columns until Louvain script (Issue #4) is implemented
-    for col in COMMUNITY_STUB_COLS:
-        df[col] = 0
+
+    if missing_cols:
+        log.warning("Community columns not found — stubbing to 0. Run 04b_louvain_communities.py to populate: %s", missing_cols)
+        for col in missing_cols:
+            df[col] = 0
+
     df["community_id"]         = df["community_id"].astype("int32")
     df["community_size"]       = df["community_size"].astype("int32")
     df["community_fraud_rate"] = df["community_fraud_rate"].astype("float32")
-    log.warning("community_id / community_size / community_fraud_rate are stubbed to 0 — run Louvain script (Issue #4) to populate.")
     return df
 
 
