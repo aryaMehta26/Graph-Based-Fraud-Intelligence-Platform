@@ -4,7 +4,7 @@
 
 **Detecting money laundering at scale using Knowledge Graphs and Deep Graph Learning**
 
-*DATA 298A · San José State University  *
+*DATA 298A · San José State University · Team 12 · April 2026*
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.x-008CC1?style=flat&logo=neo4j&logoColor=white)](https://neo4j.com)
@@ -335,6 +335,16 @@ Open `http://localhost:8501` — the 7-phase dashboard walks through the complet
 - [ ] Alert dashboard with fraud probability scores and ring visualizations
 - [ ] Model retraining pipeline with drift detection
 
+---
+
+## Team
+
+**Team 12 — DATA 298A Applied Data Science Capstone**
+**San José State University · Spring 2026**
+
+| Name | Role |
+|---|---|
+| Arya Mehta | Data Engineering, Graph Architecture, Pipeline Orchestration |
 
 ---
 
