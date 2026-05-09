@@ -1,0 +1,189 @@
+{
+  "v1": {
+    "variant": "v1",
+    "model": "claude-haiku-4-5-20251001",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 0.8333,
+      "grounded": 10,
+      "total": 12,
+      "ungrounded_items": [
+        "Total amount cycled through subgraph: $132,700.00",
+        "Community fraud rate: 0.671"
+      ]
+    },
+    "consistency": {
+      "score": 0.937,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.79,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1254,
+      "avg_output_tokens": 528
+    },
+    "sample_output": {
+      "pattern": "Cyclic Transfer",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00",
+        "Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00"
+      ],
+      "actions": [
+        "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation",
+        "File Suspicious Activity Report (SAR) for all three accounts"
+      ]
+    }
+  },
+  "v2": {
+    "variant": "v2",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 0.9231,
+      "grounded": 12,
+      "total": 13,
+      "ungrounded_items": [
+        "All transactions occurred between 02:00\u201303:22, outside normal business hours"
+      ]
+    },
+    "consistency": {
+      "score": 0.8832,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.6108,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1255,
+      "avg_output_tokens": 774
+    },
+    "sample_output": {
+      "pattern": "Cyclic Transfer",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 900A1B2 sent $45000.0 to account 900B3C4 (T_101) at 02:15",
+        "Account 900B3C4 sent $44200.0 to account 900C5D6 (T_102) at 02:48"
+      ],
+      "actions": [
+        "Freeze account 900A1B2 at bank 10 immediately pending full AML investigation",
+        "Freeze account 900B3C4 at bank 20 immediately pending full AML investigation"
+      ]
+    }
+  },
+  "v3": {
+    "variant": "v3",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 1.0,
+      "grounded": 12,
+      "total": 12,
+      "ungrounded_items": []
+    },
+    "consistency": {
+      "score": 0.8718,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.5726,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1202,
+      "avg_output_tokens": 1386
+    },
+    "sample_output": {
+      "pattern": "Layering Ring",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 900A1B2 (bank_id 10) carries role 'layering_node' with degree_centrality 0.743 and is both a source and destination in the cycle",
+        "Account 900B3C4 (bank_id 20) carries role 'layering_node' with degree_centrality 0.698 and is both a source and destination in the cycle"
+      ],
+      "actions": [
+        "Immediately freeze outbound wire capabilities on accounts 900A1B2, 900B3C4, and 900C5D6 pending full investigation",
+        "File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103"
+      ]
+    }
+  },
+  "v4": {
+    "variant": "v4",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 0.9,
+      "grounded": 9,
+      "total": 10,
+      "ungrounded_items": [
+        "All transactions flagged is_laundering = 1"
+      ]
+    },
+    "consistency": {
+      "score": 0.9009,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.6695,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1278,
+      "avg_output_tokens": 1687
+    },
+    "sample_output": {
+      "pattern": "Cyclic Transfer",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2 forms a closed loop across 3 transactions",
+        "T_101: $45000.0 from 900A1B2 to 900B3C4 at 02:15"
+      ],
+      "actions": [
+        "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending full investigation",
+        "File Suspicious Activity Reports (SARs) for all three accounts: 900A1B2 (bank_id 10), 900B3C4 (bank_id 20), 900C5D6 (bank_id 30)"
+      ]
+    }
+  }
+}

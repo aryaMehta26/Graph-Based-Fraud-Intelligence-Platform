@@ -1,0 +1,92 @@
+{
+  "subgraph_id": "community_289",
+  "community_id": 289,
+  "community_fraud_rate": 0.512,
+  "community_size": 9,
+  "flagged_by": "xgboost_layer1 + louvain_layer2",
+  "accounts": [
+    {
+      "account_id": "700X9Y1",
+      "bank_id": 50,
+      "out_degree": 6,
+      "in_degree": 1,
+      "total_degree": 7,
+      "degree_centrality": 0.923,
+      "community_id": 289,
+      "role": "source_distributor"
+    },
+    {
+      "account_id": "700X9Y2",
+      "bank_id": 51,
+      "out_degree": 0,
+      "in_degree": 1,
+      "total_degree": 1,
+      "degree_centrality": 0.112,
+      "community_id": 289,
+      "role": "recipient"
+    },
+    {
+      "account_id": "700X9Y3",
+      "bank_id": 52,
+      "out_degree": 0,
+      "in_degree": 1,
+      "total_degree": 1,
+      "degree_centrality": 0.098,
+      "community_id": 289,
+      "role": "recipient"
+    },
+    {
+      "account_id": "700X9Y4",
+      "bank_id": 53,
+      "out_degree": 0,
+      "in_degree": 1,
+      "total_degree": 1,
+      "degree_centrality": 0.103,
+      "community_id": 289,
+      "role": "recipient"
+    }
+  ],
+  "transactions": [
+    {
+      "txn_id": "T_201",
+      "src_acct": "700X9Y1",
+      "dst_acct": "700X9Y2",
+      "amount": 18500.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-20T04:05:00",
+      "is_laundering": 1,
+      "hour": 4,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_202",
+      "src_acct": "700X9Y1",
+      "dst_acct": "700X9Y3",
+      "amount": 17900.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-20T04:07:00",
+      "is_laundering": 1,
+      "hour": 4,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_203",
+      "src_acct": "700X9Y1",
+      "dst_acct": "700X9Y4",
+      "amount": 18200.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-20T04:09:00",
+      "is_laundering": 1,
+      "hour": 4,
+      "is_weekend": 0
+    }
+  ],
+  "graph_stats": {
+    "total_amount_in_subgraph": 54600.00,
+    "transaction_count": 3,
+    "fraud_transaction_count": 3,
+    "time_window_minutes": 4,
+    "dominant_payment_format": "ACH",
+    "cross_bank_transfers": 3
+  }
+}
