@@ -1,0 +1,110 @@
+[
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source distributor in the subgraph",
+      "Account 700X9Y1 sent 3 transactions totaling $54600.0 to multiple recipients within a 4-minute window",
+      "Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 at 04:05 on 2022-09-20",
+      "Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 at 04:07 on 2022-09-20",
+      "Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 at 04:09 on 2022-09-20",
+      "All 3 transactions are flagged is_laundering=1 and occurred between 04:05 and 04:09 (off-hours)",
+      "All 3 transactions are cross-bank ACH transfers spanning bank_id 50, 51, 52, and 53",
+      "Each individual transfer amount ($18500.0, $17900.0, $18200.0) is structured just below the $20,000 reporting threshold",
+      "Community 289 has a fraud rate of 0.512 and all 3 of 3 transactions in the subgraph are flagged as fraudulent",
+      "Recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 each have in_degree of 1 and out_degree of 0, consistent with terminal layering endpoints"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923",
+      "Freeze accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds",
+      "File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0",
+      "Notify bank_id 51, 52, and 53 of the suspicious inbound ACH transfers to coordinate cross-institution holds",
+      "Investigate the source of funds feeding account 700X9Y1 at bank_id 50 to identify upstream layering or placement activity",
+      "Conduct structuring analysis on account 700X9Y1 for additional transactions near the $18000\u2013$19999 range that may not appear in this subgraph",
+      "Escalate to FinCEN given the cross-bank nature of all 3 transfers and the 51.2% community fraud rate in community 289"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-09T17:11:35.119659",
+      "input_tokens": 1344,
+      "output_tokens": 728,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source distributor in the subgraph\",\n    \"Account 700X9Y1 sent 3 transactions totaling $54600.0 to multiple recipients within a 4-minute window\",\n    \"Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 at 04:05 on 2022-09-20\",\n    \"Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 at 04:07 on 2022-09-20\",\n    \"Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 at 04:09 on 2022-09-20\",\n    \"All 3 transactions are flagged is_laundering=1 and occurred between 04:05 and 04:09 (off-hours)\",\n    \"All 3 transactions are cross-bank ACH transfers spanning bank_id 50, 51, 52, and 53\",\n    \"Each individual transfer amount ($18500.0, $17900.0, $18200.0) is structured just below the $20,000 reporting threshold\",\n    \"Community 289 has a fraud rate of 0.512 and all 3 of 3 transactions in the subgraph are flagged as fraudulent\",\n    \"Recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 each have in_degree of 1 and out_degree of 0, consistent with terminal layering endpoints\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923\",\n    \"Freeze accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds\",\n    \"File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0\",\n    \"Notify bank_id 51, 52, and 53 of the suspicious inbound ACH transfers to coordinate cross-institution holds\",\n    \"Investigate the source of funds feeding account 700X9Y1 at bank_id 50 to identify upstream layering or placement activity\",\n    \"Conduct structuring analysis on account 700X9Y1 for additional transactions near the $18000\u2013$19999 range that may not appear in this subgraph\",\n    \"Escalate to FinCEN given the cross-bank nature of all 3 transfers and the 51.2% community fraud rate in community 289\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source distributor in the subgraph",
+      "Account 700X9Y1 sent 3 transactions totaling $54600.0 within a 4-minute window (04:05 to 04:09 on 2022-09-20)",
+      "All 3 transactions (T_201, T_202, T_203) originated from account 700X9Y1 and were flagged is_laundering=1",
+      "Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 via ACH at 04:05",
+      "Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 via ACH at 04:07",
+      "Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 via ACH at 04:09",
+      "All 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree=1 and out_degree=0, indicating terminal recipients with no onward activity",
+      "All 3 transfers are cross-bank (banks 50, 51, 52, 53), with 3 cross_bank_transfers recorded",
+      "Transactions executed at hour 4 (early morning, off-hours), a common timing indicator for automated or illicit activity",
+      "Community 289 has a fraud_rate of 0.512, with all 3 of 3 transactions flagged as fraudulent",
+      "Individual transfer amounts of $18500.0, $17900.0, and $18200.0 are each structured just below the $20,000 threshold, suggesting deliberate structuring"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923",
+      "Place a hold on accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds",
+      "File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0",
+      "Investigate the remaining 3 out-degree connections of account 700X9Y1 not captured in this subgraph to identify additional potential recipients",
+      "Coordinate with banks 51, 52, and 53 to alert them of suspicious inbound ACH transfers to accounts 700X9Y2, 700X9Y3, and 700X9Y4",
+      "Conduct KYC review and beneficial ownership analysis on account 700X9Y1 at bank 50",
+      "Examine whether the structuring of amounts ($18500.0, $17900.0, $18200.0) below reporting thresholds constitutes a pattern of deliberate evasion",
+      "Escalate to law enforcement if KYC review reveals fictitious or high-risk entities associated with account 700X9Y1"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-09T17:11:47.396256",
+      "input_tokens": 1344,
+      "output_tokens": 816,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source distributor in the subgraph\",\n    \"Account 700X9Y1 sent 3 transactions totaling $54600.0 within a 4-minute window (04:05 to 04:09 on 2022-09-20)\",\n    \"All 3 transactions (T_201, T_202, T_203) originated from account 700X9Y1 and were flagged is_laundering=1\",\n    \"Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 via ACH at 04:05\",\n    \"Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 via ACH at 04:07\",\n    \"Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 via ACH at 04:09\",\n    \"All 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree=1 and out_degree=0, indicating terminal recipients with no onward activity\",\n    \"All 3 transfers are cross-bank (banks 50, 51, 52, 53), with 3 cross_bank_transfers recorded\",\n    \"Transactions executed at hour 4 (early morning, off-hours), a common timing indicator for automated or illicit activity\",\n    \"Community 289 has a fraud_rate of 0.512, with all 3 of 3 transactions flagged as fraudulent\",\n    \"Individual transfer amounts of $18500.0, $17900.0, and $18200.0 are each structured just below the $20,000 threshold, suggesting deliberate structuring\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923\",\n    \"Place a hold on accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds\",\n    \"File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0\",\n    \"Investigate the remaining 3 out-degree connections of account 700X9Y1 not captured in this subgraph to identify additional potential recipients\",\n    \"Coordinate with banks 51, 52, and 53 to alert them of suspicious inbound ACH transfers to accounts 700X9Y2, 700X9Y3, and 700X9Y4\",\n    \"Conduct KYC review and beneficial ownership analysis on account 700X9Y1 at bank 50\",\n    \"Examine whether the structuring of amounts ($18500.0, $17900.0, $18200.0) below reporting thresholds constitutes a pattern of deliberate evasion\",\n    \"Escalate to law enforcement if KYC review reveals fictitious or high-risk entities associated with account 700X9Y1\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source_distributor in the subgraph",
+      "Account 700X9Y1 sent 3 transactions totaling $54600.0 to multiple recipients within a 4-minute window",
+      "Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 at 04:05 on 2022-09-20",
+      "Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 at 04:07 on 2022-09-20",
+      "Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 at 04:09 on 2022-09-20",
+      "All 3 transactions are flagged is_laundering=1 and occurred at hour 4 (early morning, off-hours)",
+      "All 3 transactions are cross-bank ACH transfers spanning bank_id 50, 51, 52, and 53",
+      "Each recipient account (700X9Y2, 700X9Y3, 700X9Y4) has in_degree of 1 and out_degree of 0, consistent with terminal layering endpoints",
+      "Community 289 has a fraud rate of 0.512, and all 3 transactions in the subgraph are confirmed fraudulent",
+      "Individual transfer amounts of $18500.0, $17900.0, and $18200.0 are each just below the $20,000 threshold, suggesting deliberate structuring"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923",
+      "Place a hold on accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds",
+      "File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0",
+      "Investigate the remaining 3 outbound transactions from account 700X9Y1 (out_degree is 6 but only 3 transactions are present in this subgraph) to identify additional recipient accounts",
+      "Conduct KYC review and beneficial ownership analysis on account 700X9Y1 at bank_id 50",
+      "Coordinate with banks 51, 52, and 53 to flag recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 for suspicious inbound transfers",
+      "Investigate whether the structuring of amounts ($18500.0, $17900.0, $18200.0) below reporting thresholds constitutes a deliberate evasion pattern requiring a separate structuring referral",
+      "Review all ACH activity originating from bank_id 50 during the 04:00\u201305:00 window on 2022-09-20 for related suspicious transactions"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-09T17:11:59.078295",
+      "input_tokens": 1344,
+      "output_tokens": 801,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has an out_degree of 6 and degree_centrality of 0.923, acting as the sole source_distributor in the subgraph\",\n    \"Account 700X9Y1 sent 3 transactions totaling $54600.0 to multiple recipients within a 4-minute window\",\n    \"Transaction T_201 sent $18500.0 from 700X9Y1 to 700X9Y2 at 04:05 on 2022-09-20\",\n    \"Transaction T_202 sent $17900.0 from 700X9Y1 to 700X9Y3 at 04:07 on 2022-09-20\",\n    \"Transaction T_203 sent $18200.0 from 700X9Y1 to 700X9Y4 at 04:09 on 2022-09-20\",\n    \"All 3 transactions are flagged is_laundering=1 and occurred at hour 4 (early morning, off-hours)\",\n    \"All 3 transactions are cross-bank ACH transfers spanning bank_id 50, 51, 52, and 53\",\n    \"Each recipient account (700X9Y2, 700X9Y3, 700X9Y4) has in_degree of 1 and out_degree of 0, consistent with terminal layering endpoints\",\n    \"Community 289 has a fraud rate of 0.512, and all 3 transactions in the subgraph are confirmed fraudulent\",\n    \"Individual transfer amounts of $18500.0, $17900.0, and $18200.0 are each just below the $20,000 threshold, suggesting deliberate structuring\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 700X9Y1 immediately pending full AML investigation due to its role as source_distributor with degree_centrality of 0.923\",\n    \"Place a hold on accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of received funds\",\n    \"File a Suspicious Activity Report (SAR) covering transactions T_201, T_202, and T_203 totaling $54600.0\",\n    \"Investigate the remaining 3 outbound transactions from account 700X9Y1 (out_degree is 6 but only 3 transactions are present in this subgraph) to identify additional recipient accounts\",\n    \"Conduct KYC review and beneficial ownership analysis on account 700X9Y1 at bank_id 50\",\n    \"Coordinate with banks 51, 52, and 53 to flag recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 for suspicious inbound transfers\",\n    \"Investigate whether the structuring of amounts ($18500.0, $17900.0, $18200.0) below reporting thresholds constitutes a deliberate evasion pattern requiring a separate structuring referral\",\n    \"Review all ACH activity originating from bank_id 50 during the 04:00\u201305:00 window on 2022-09-20 for related suspicious transactions\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]
