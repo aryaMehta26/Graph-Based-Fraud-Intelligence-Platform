@@ -1,0 +1,114 @@
+{
+  "subgraph_id": "community_447",
+  "community_id": 447,
+  "community_fraud_rate": 0.423,
+  "community_size": 12,
+  "flagged_by": "xgboost_layer1 + louvain_layer2",
+  "accounts": [
+    {
+      "account_id": "800A3F2",
+      "bank_id": 20,
+      "out_degree": 47,
+      "in_degree": 3,
+      "total_degree": 50,
+      "degree_centrality": 0.891,
+      "community_id": 447,
+      "role": "suspected_funnel"
+    },
+    {
+      "account_id": "800B1C9",
+      "bank_id": 20,
+      "out_degree": 2,
+      "in_degree": 18,
+      "total_degree": 20,
+      "degree_centrality": 0.412,
+      "community_id": 447,
+      "role": "feeder"
+    },
+    {
+      "account_id": "800C4D1",
+      "bank_id": 3196,
+      "out_degree": 1,
+      "in_degree": 14,
+      "total_degree": 15,
+      "degree_centrality": 0.387,
+      "community_id": 447,
+      "role": "feeder"
+    },
+    {
+      "account_id": "800D7E8",
+      "bank_id": 1208,
+      "out_degree": 0,
+      "in_degree": 8,
+      "total_degree": 8,
+      "degree_centrality": 0.201,
+      "community_id": 447,
+      "role": "receiver"
+    }
+  ],
+  "transactions": [
+    {
+      "txn_id": "T_001",
+      "src_acct": "800B1C9",
+      "dst_acct": "800A3F2",
+      "amount": 9800.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-14T03:12:00",
+      "is_laundering": 1,
+      "hour": 3,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_002",
+      "src_acct": "800C4D1",
+      "dst_acct": "800A3F2",
+      "amount": 9750.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-14T03:18:00",
+      "is_laundering": 1,
+      "hour": 3,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_003",
+      "src_acct": "800A3F2",
+      "dst_acct": "800D7E8",
+      "amount": 48200.00,
+      "payment_format": "Wire",
+      "timestamp": "2022-09-14T04:45:00",
+      "is_laundering": 1,
+      "hour": 4,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_004",
+      "src_acct": "800B1C9",
+      "dst_acct": "800A3F2",
+      "amount": 9900.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-14T03:44:00",
+      "is_laundering": 1,
+      "hour": 3,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_005",
+      "src_acct": "800C4D1",
+      "dst_acct": "800A3F2",
+      "amount": 9600.00,
+      "payment_format": "ACH",
+      "timestamp": "2022-09-14T03:52:00",
+      "is_laundering": 1,
+      "hour": 3,
+      "is_weekend": 0
+    }
+  ],
+  "graph_stats": {
+    "total_amount_in_subgraph": 97250.00,
+    "transaction_count": 5,
+    "fraud_transaction_count": 5,
+    "time_window_minutes": 93,
+    "dominant_payment_format": "ACH",
+    "cross_bank_transfers": 2
+  }
+}

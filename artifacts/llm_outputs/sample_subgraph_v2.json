@@ -1,0 +1,111 @@
+[
+  {
+    "pattern": "Smurfing",
+    "evidence": [
+      "Account 800B1C9 sent two ACH transactions of $9,800.0 (T_001) and $9,900.0 (T_004) to account 800A3F2, both just below the $10,000 CTR reporting threshold",
+      "Account 800C4D1 sent two ACH transactions of $9,750.0 (T_002) and $9,600.0 (T_005) to account 800A3F2, also structured below the $10,000 reporting threshold",
+      "All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, indicating coordinated structuring",
+      "Account 800A3F2 has an out_degree of 47 and degree_centrality of 0.891, identifying it as the high-centrality funnel account aggregating structured deposits",
+      "Account 800A3F2 consolidated the structured inflows and immediately forwarded $48,200.0 via Wire transfer (T_003) to account 800D7E8 at bank 1208 at 04:45, within 93 minutes of the first feeder transaction",
+      "All 5 transactions in the subgraph are flagged is_laundering=1, representing 100% of the transaction count",
+      "Total amount flowing through the subgraph is $97,250.0, with the outbound wire of $48,200.0 representing a consolidation and cross-bank layering step",
+      "Community 447 has a fraud rate of 0.423, and the subgraph was flagged by both xgboost_layer1 and louvain_layer2 detection layers",
+      "Account 800B1C9 has an in_degree of 18 and account 800C4D1 has an in_degree of 14, suggesting they themselves receive funds from a broader network before forwarding structured amounts",
+      "Transactions T_001 through T_005 all occurred during off-hours (hour=3 or hour=4), consistent with automated or deliberate evasion behavior"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 800A3F2 at bank 20 immediately pending full AML investigation, given its role as the primary funnel with degree_centrality of 0.891",
+      "Freeze account 800D7E8 at bank 1208 to prevent further dissipation of the $48,200.0 wire received via T_003",
+      "Place a hold on accounts 800B1C9 and 800C4D1 and initiate KYC re-verification for both feeder accounts",
+      "File a Suspicious Activity Report (SAR) covering all five transactions T_001 through T_005 and the total subgraph amount of $97,250.0",
+      "Notify bank 1208 (account 800D7E8) and bank 3196 (account 800C4D1) via inter-bank AML communication channels to coordinate freezes and information sharing",
+      "Conduct a full transaction history review of account 800B1C9 (in_degree 18) and account 800C4D1 (in_degree 14) to identify upstream sources feeding the structuring network",
+      "Escalate to FinCEN given the cross-bank wire transfer of $48,200.0 and evidence of coordinated structuring across multiple institutions",
+      "Expand graph analysis to all accounts within community 447 (community size 12) to identify additional nodes not yet surfaced in this subgraph",
+      "Flag the 03:00\u201305:00 off-hours ACH activity pattern for automated monitoring rules to detect recurrence across the broader account portfolio at bank 20"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-09T16:59:21.860335",
+      "input_tokens": 1583,
+      "output_tokens": 936,
+      "raw_response": "```json\n{\n  \"pattern\": \"Smurfing\",\n  \"evidence\": [\n    \"Account 800B1C9 sent two ACH transactions of $9,800.0 (T_001) and $9,900.0 (T_004) to account 800A3F2, both just below the $10,000 CTR reporting threshold\",\n    \"Account 800C4D1 sent two ACH transactions of $9,750.0 (T_002) and $9,600.0 (T_005) to account 800A3F2, also structured below the $10,000 reporting threshold\",\n    \"All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, indicating coordinated structuring\",\n    \"Account 800A3F2 has an out_degree of 47 and degree_centrality of 0.891, identifying it as the high-centrality funnel account aggregating structured deposits\",\n    \"Account 800A3F2 consolidated the structured inflows and immediately forwarded $48,200.0 via Wire transfer (T_003) to account 800D7E8 at bank 1208 at 04:45, within 93 minutes of the first feeder transaction\",\n    \"All 5 transactions in the subgraph are flagged is_laundering=1, representing 100% of the transaction count\",\n    \"Total amount flowing through the subgraph is $97,250.0, with the outbound wire of $48,200.0 representing a consolidation and cross-bank layering step\",\n    \"Community 447 has a fraud rate of 0.423, and the subgraph was flagged by both xgboost_layer1 and louvain_layer2 detection layers\",\n    \"Account 800B1C9 has an in_degree of 18 and account 800C4D1 has an in_degree of 14, suggesting they themselves receive funds from a broader network before forwarding structured amounts\",\n    \"Transactions T_001 through T_005 all occurred during off-hours (hour=3 or hour=4), consistent with automated or deliberate evasion behavior\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 800A3F2 at bank 20 immediately pending full AML investigation, given its role as the primary funnel with degree_centrality of 0.891\",\n    \"Freeze account 800D7E8 at bank 1208 to prevent further dissipation of the $48,200.0 wire received via T_003\",\n    \"Place a hold on accounts 800B1C9 and 800C4D1 and initiate KYC re-verification for both feeder accounts\",\n    \"File a Suspicious Activity Report (SAR) covering all five transactions T_001 through T_005 and the total subgraph amount of $97,250.0\",\n    \"Notify bank 1208 (account 800D7E8) and bank 3196 (account 800C4D1) via inter-bank AML communication channels to coordinate freezes and information sharing\",\n    \"Conduct a full transaction history review of account 800B1C9 (in_degree 18) and account 800C4D1 (in_degree 14) to identify upstream sources feeding the structuring network\",\n    \"Escalate to FinCEN given the cross-bank wire transfer of $48,200.0 and evidence of coordinated structuring across multiple institutions\",\n    \"Expand graph analysis to all accounts within community 447 (community size 12) to identify additional nodes not yet surfaced in this subgraph\",\n    \"Flag the 03:00\u201305:00 off-hours ACH activity pattern for automated monitoring rules to detect recurrence across the broader account portfolio at bank 20\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Smurfing",
+    "evidence": [
+      "Account 800B1C9 sent multiple ACH transactions of $9,800.0 and $9,900.0 to account 800A3F2, both below the $10,000 reporting threshold",
+      "Account 800C4D1 sent multiple ACH transactions of $9,750.0 and $9,600.0 to account 800A3F2, both below the $10,000 reporting threshold",
+      "All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, during off-hours (hour 3)",
+      "Account 800A3F2 has a degree centrality of 0.891 and an out_degree of 47, identifying it as the suspected_funnel aggregating structured deposits",
+      "Account 800A3F2 consolidated incoming funds and immediately forwarded $48,200.0 via Wire transfer to account 800D7E8 (T_003) within 93 minutes of the first feeder transaction",
+      "All 5 transactions in the subgraph are flagged is_laundering: 1, representing 100% of transactions in community_447",
+      "Community 447 has a fraud rate of 0.423, and the subgraph spans cross-bank transfers involving bank_id 20, bank_id 3196, and bank_id 1208",
+      "Total amount aggregated and moved through account 800A3F2 within the subgraph is $97,250.0",
+      "Account 800D7E8 has an in_degree of 8 and out_degree of 0, acting purely as a terminal receiver with no outbound activity"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 800A3F2 at bank_id 20 immediately pending full AML investigation due to its role as suspected_funnel with degree centrality of 0.891",
+      "Freeze account 800D7E8 at bank_id 1208 to prevent further movement of the $48,200.0 Wire transfer received via T_003",
+      "File a Suspicious Activity Report (SAR) covering accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8 for structured transactions designed to evade CTR thresholds",
+      "Subpoena full transaction history for account 800B1C9 at bank_id 20, focusing on all 18 inbound transactions that funded the structured deposits",
+      "Subpoena full transaction history for account 800C4D1 at bank_id 3196, focusing on all 14 inbound transactions that funded the structured deposits",
+      "Coordinate with bank_id 3196 and bank_id 1208 compliance teams to share SAR filings and freeze correlated accounts under cross-bank transfer obligations",
+      "Investigate the 47 outbound transactions from account 800A3F2 beyond those captured in this subgraph to identify additional destination accounts",
+      "Escalate to FinCEN given the cross-bank, multi-institution nature of the structuring pattern and total subgraph value of $97,250.0"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-09T16:59:36.296216",
+      "input_tokens": 1583,
+      "output_tokens": 803,
+      "raw_response": "```json\n{\n  \"pattern\": \"Smurfing\",\n  \"evidence\": [\n    \"Account 800B1C9 sent multiple ACH transactions of $9,800.0 and $9,900.0 to account 800A3F2, both below the $10,000 reporting threshold\",\n    \"Account 800C4D1 sent multiple ACH transactions of $9,750.0 and $9,600.0 to account 800A3F2, both below the $10,000 reporting threshold\",\n    \"All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, during off-hours (hour 3)\",\n    \"Account 800A3F2 has a degree centrality of 0.891 and an out_degree of 47, identifying it as the suspected_funnel aggregating structured deposits\",\n    \"Account 800A3F2 consolidated incoming funds and immediately forwarded $48,200.0 via Wire transfer to account 800D7E8 (T_003) within 93 minutes of the first feeder transaction\",\n    \"All 5 transactions in the subgraph are flagged is_laundering: 1, representing 100% of transactions in community_447\",\n    \"Community 447 has a fraud rate of 0.423, and the subgraph spans cross-bank transfers involving bank_id 20, bank_id 3196, and bank_id 1208\",\n    \"Total amount aggregated and moved through account 800A3F2 within the subgraph is $97,250.0\",\n    \"Account 800D7E8 has an in_degree of 8 and out_degree of 0, acting purely as a terminal receiver with no outbound activity\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 800A3F2 at bank_id 20 immediately pending full AML investigation due to its role as suspected_funnel with degree centrality of 0.891\",\n    \"Freeze account 800D7E8 at bank_id 1208 to prevent further movement of the $48,200.0 Wire transfer received via T_003\",\n    \"File a Suspicious Activity Report (SAR) covering accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8 for structured transactions designed to evade CTR thresholds\",\n    \"Subpoena full transaction history for account 800B1C9 at bank_id 20, focusing on all 18 inbound transactions that funded the structured deposits\",\n    \"Subpoena full transaction history for account 800C4D1 at bank_id 3196, focusing on all 14 inbound transactions that funded the structured deposits\",\n    \"Coordinate with bank_id 3196 and bank_id 1208 compliance teams to share SAR filings and freeze correlated accounts under cross-bank transfer obligations\",\n    \"Investigate the 47 outbound transactions from account 800A3F2 beyond those captured in this subgraph to identify additional destination accounts\",\n    \"Escalate to FinCEN given the cross-bank, multi-institution nature of the structuring pattern and total subgraph value of $97,250.0\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Smurfing",
+    "evidence": [
+      "Account 800B1C9 sent two ACH transactions of $9,800.0 (T_001) and $9,900.0 (T_004) to account 800A3F2, both just below the $10,000 CTR reporting threshold",
+      "Account 800C4D1 sent two ACH transactions of $9,750.0 (T_002) and $9,600.0 (T_005) to account 800A3F2, both just below the $10,000 CTR reporting threshold",
+      "All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, consistent with coordinated structuring",
+      "Account 800A3F2 has a degree centrality of 0.891 and an out_degree of 47, identifying it as the suspected_funnel aggregating structured deposits",
+      "Account 800A3F2 consolidated the incoming structured funds and immediately forwarded $48,200.0 via Wire transfer to account 800D7E8 (T_003) at 04:45, within 93 minutes of the first feeder transaction",
+      "All 5 transactions in the subgraph are flagged is_laundering: 1, representing a 100% fraud transaction rate",
+      "The community_fraud_rate for community 447 is 0.423, significantly elevated above normal thresholds",
+      "Account 800D7E8 at bank_id 1208 is a pure receiver with in_degree 8 and out_degree 0, suggesting a terminal layering destination",
+      "Cross-bank transfers total 2, with feeder accounts 800C4D1 (bank_id 3196) and 800D7E8 (bank_id 1208) operating at different institutions to obscure the money trail",
+      "Total amount aggregated and moved through the subgraph is $97,250.0 within a 93-minute window"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 800A3F2 at bank_id 20 immediately pending full AML investigation due to its role as suspected_funnel with degree centrality of 0.891",
+      "Freeze account 800D7E8 at bank_id 1208 to prevent further movement of the $48,200.0 Wire transfer received via T_003",
+      "File a Suspicious Activity Report (SAR) covering all five transactions T_001 through T_005 and all four accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8",
+      "Conduct a Currency Transaction Report (CTR) review for accounts 800B1C9 and 800C4D1 to assess whether structuring below $10,000 was deliberate across a broader transaction history",
+      "Subpoena full transaction history for account 800B1C9 at bank_id 20 given its in_degree of 18, to identify upstream sources of funds",
+      "Subpoena full transaction history for account 800C4D1 at bank_id 3196 given its in_degree of 14, to identify upstream sources of funds",
+      "Coordinate with bank_id 1208 compliance team to investigate account 800D7E8 and trace any outbound transfers from that account",
+      "Escalate community 447 (community_fraud_rate 0.423, size 12) for full graph-wide review of all 12 member accounts beyond the 4 identified here",
+      "Refer case to FinCEN and relevant law enforcement given confirmed structuring pattern, cross-bank activity, and 100% fraud transaction rate within the subgraph"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-09T16:59:53.706948",
+      "input_tokens": 1583,
+      "output_tokens": 931,
+      "raw_response": "```json\n{\n  \"pattern\": \"Smurfing\",\n  \"evidence\": [\n    \"Account 800B1C9 sent two ACH transactions of $9,800.0 (T_001) and $9,900.0 (T_004) to account 800A3F2, both just below the $10,000 CTR reporting threshold\",\n    \"Account 800C4D1 sent two ACH transactions of $9,750.0 (T_002) and $9,600.0 (T_005) to account 800A3F2, both just below the $10,000 CTR reporting threshold\",\n    \"All four feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, consistent with coordinated structuring\",\n    \"Account 800A3F2 has a degree centrality of 0.891 and an out_degree of 47, identifying it as the suspected_funnel aggregating structured deposits\",\n    \"Account 800A3F2 consolidated the incoming structured funds and immediately forwarded $48,200.0 via Wire transfer to account 800D7E8 (T_003) at 04:45, within 93 minutes of the first feeder transaction\",\n    \"All 5 transactions in the subgraph are flagged is_laundering: 1, representing a 100% fraud transaction rate\",\n    \"The community_fraud_rate for community 447 is 0.423, significantly elevated above normal thresholds\",\n    \"Account 800D7E8 at bank_id 1208 is a pure receiver with in_degree 8 and out_degree 0, suggesting a terminal layering destination\",\n    \"Cross-bank transfers total 2, with feeder accounts 800C4D1 (bank_id 3196) and 800D7E8 (bank_id 1208) operating at different institutions to obscure the money trail\",\n    \"Total amount aggregated and moved through the subgraph is $97,250.0 within a 93-minute window\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 800A3F2 at bank_id 20 immediately pending full AML investigation due to its role as suspected_funnel with degree centrality of 0.891\",\n    \"Freeze account 800D7E8 at bank_id 1208 to prevent further movement of the $48,200.0 Wire transfer received via T_003\",\n    \"File a Suspicious Activity Report (SAR) covering all five transactions T_001 through T_005 and all four accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8\",\n    \"Conduct a Currency Transaction Report (CTR) review for accounts 800B1C9 and 800C4D1 to assess whether structuring below $10,000 was deliberate across a broader transaction history\",\n    \"Subpoena full transaction history for account 800B1C9 at bank_id 20 given its in_degree of 18, to identify upstream sources of funds\",\n    \"Subpoena full transaction history for account 800C4D1 at bank_id 3196 given its in_degree of 14, to identify upstream sources of funds\",\n    \"Coordinate with bank_id 1208 compliance team to investigate account 800D7E8 and trace any outbound transfers from that account\",\n    \"Escalate community 447 (community_fraud_rate 0.423, size 12) for full graph-wide review of all 12 member accounts beyond the 4 identified here\",\n    \"Refer case to FinCEN and relevant law enforcement given confirmed structuring pattern, cross-bank activity, and 100% fraud transaction rate within the subgraph\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]
