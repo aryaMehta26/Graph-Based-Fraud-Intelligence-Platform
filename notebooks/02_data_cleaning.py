@@ -15,7 +15,7 @@ import pandas as pd
 
 DIVIDER = "=" * 60
 BASE = (
-    "/Users/aryaaa/.cache/kagglehub/datasets/"
+    "/Users/aish/.cache/kagglehub/datasets/"
     "ealtman2019/ibm-transactions-for-anti-money-laundering-aml/versions/8"
 )
 TX_FILE  = f"{BASE}/HI-Medium_Trans.csv"

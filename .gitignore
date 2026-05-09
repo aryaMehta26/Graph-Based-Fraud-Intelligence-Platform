@@ -41,3 +41,4 @@ Thumbs.db
 !data/.gitkeep
 !data/processed/.gitkeep
 !data/neo4j_bulk_import/.gitkeep
+.env
