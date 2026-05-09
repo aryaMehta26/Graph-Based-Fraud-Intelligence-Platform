@@ -76,7 +76,7 @@ BASELINE_METRICS_FILE = os.path.join(MODEL_DIR, "xgboost_baseline_metrics.json")
 
 TARGET_COL = "Is Laundering"
 
-# Original tabular features (same as baseline)
+# Original tabular features — identical to 06_train_xgboost_baseline.py
 TABULAR_FEATURES = [
     "log_amount",
     "is_ACH",
@@ -85,26 +85,24 @@ TABULAR_FEATURES = [
     "is_Wire",
     "is_Bitcoin",
     "hour",
+    "dow",
     "is_weekend",
+    "is_cross_currency",
     "amount_bucket",
 ]
 
 # Graph features added by 05_build_feature_store.py
+# Community features (community_id, community_size, community_fraud_rate)
+# excluded until Louvain is implemented (Issue #4).
 GRAPH_FEATURES = [
     "src_out_degree",
     "src_in_degree",
     "src_total_degree",
     "src_degree_centrality",
-    "src_community_id",
-    "src_community_size",
-    "src_community_fraud_rate",
     "dst_out_degree",
     "dst_in_degree",
     "dst_total_degree",
     "dst_degree_centrality",
-    "dst_community_id",
-    "dst_community_size",
-    "dst_community_fraud_rate",
 ]
 
 ALL_FEATURES = TABULAR_FEATURES + GRAPH_FEATURES

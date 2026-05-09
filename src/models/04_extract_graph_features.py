@@ -29,6 +29,16 @@ Prerequisites
 -------------
 - Neo4j running with full graph loaded (bulk_load_cypher.py complete)
 - .env at project root: NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+
+Transductive Learning Note
+--------------------------
+Degree features are computed on the full 27-day graph (all splits combined).
+This means train-set rows receive degree counts that include edges from the
+val and test periods — a form of temporal leakage under a strict inductive
+setting. This is an accepted trade-off in transductive graph learning (GNNs
+operate the same way), but should be noted when reporting results. A future
+improvement (Issue #4) can recompute split-safe features using only edges
+observed before each split's start date.
 """
 
 import os
