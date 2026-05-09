@@ -2,6 +2,7 @@
 pandas>=2.0.0
 numpy>=1.24.0
 pyarrow>=14.0.0
+kagglehub>=0.2.0
 
 # Machine learning
 xgboost>=2.0.0

@@ -34,7 +34,14 @@ Usage
 Prerequisites
 -------------
     - 02_data_cleaning.py has run (train/val/test parquet splits exist)
-    - 04_extract_graph_features.py has run (graph_features_accounts.parquet exists)
+    - 04_extract_graph_features.py has run (graph_features_accounts.csv exists)
+
+Transductive Learning Note
+--------------------------
+Graph features joined here were computed on the full 27-day graph. Train rows
+therefore receive degree information derived from future val/test edges. This
+is standard transductive graph inference but is not strictly split-safe.
+See 04_extract_graph_features.py for details and a proposed future fix.
 """
 
 import os
