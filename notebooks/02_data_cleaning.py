@@ -12,14 +12,12 @@ Run      : python3 02_data_cleaning.py
 import os
 import numpy as np
 import pandas as pd
+import kagglehub
 
 DIVIDER = "=" * 60
-BASE = (
-    "/Users/aish/.cache/kagglehub/datasets/"
-    "ealtman2019/ibm-transactions-for-anti-money-laundering-aml/versions/8"
-)
-TX_FILE  = f"{BASE}/HI-Medium_Trans.csv"
-ACC_FILE = f"{BASE}/HI-Medium_accounts.csv"
+BASE     = kagglehub.dataset_download("ealtman2019/ibm-transactions-for-anti-money-laundering-aml")
+TX_FILE  = os.path.join(BASE, "HI-Medium_Trans.csv")
+ACC_FILE = os.path.join(BASE, "HI-Medium_accounts.csv")
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
 os.makedirs(OUT_DIR, exist_ok=True)
