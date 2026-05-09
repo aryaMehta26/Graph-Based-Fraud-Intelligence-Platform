@@ -346,6 +346,25 @@ def main():
         m, _ = evaluate(model, X, y, split_name)
         all_metrics[split_name] = m
 
+    # --- Save model + metrics (before SHAP so artifacts are never lost) ---
+    model_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced.json")
+    model.save_model(model_path)
+    log.info("Model saved: %s", model_path)
+
+    metrics_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced_metrics.json")
+    with open(metrics_path, "w") as f:
+        json.dump(all_metrics, f, indent=2)
+    log.info("Metrics saved: %s", metrics_path)
+
+    # --- Compare to baseline ---
+    comparison = build_comparison(BASELINE_METRICS_FILE, all_metrics)
+    if comparison:
+        comparison_path = os.path.join(MODEL_DIR, "model_comparison.json")
+        with open(comparison_path, "w") as f:
+            json.dump(comparison, f, indent=2)
+        log.info("Comparison saved: %s", comparison_path)
+        print_comparison_table(comparison)
+
     # --- Plots ---
     plot_confusion_matrix(
         model, X_test, y_test,
@@ -357,30 +376,11 @@ def main():
         os.path.join(MODEL_DIR, "xgboost_graph_enhanced_pr_curve.png"),
     )
 
-    # --- SHAP ---
+    # --- SHAP (slow — runs last so metrics are already saved above) ---
     compute_shap(
         model, X_val,
         os.path.join(MODEL_DIR, "xgboost_graph_enhanced_shap.parquet"),
     )
-
-    # --- Save model + metrics ---
-    model_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced.json")
-    model.save_model(model_path)
-    log.info("Model saved: %s", model_path)
-
-    metrics_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced_metrics.json")
-    with open(metrics_path, "w") as f:
-        json.dump(all_metrics, f, indent=2)
-    log.info("Metrics saved: %s", metrics_path)
-
-    # --- Compare to baseline (closes Issue #12 data) ---
-    comparison = build_comparison(BASELINE_METRICS_FILE, all_metrics)
-    if comparison:
-        comparison_path = os.path.join(MODEL_DIR, "model_comparison.json")
-        with open(comparison_path, "w") as f:
-            json.dump(comparison, f, indent=2)
-        log.info("Comparison saved: %s", comparison_path)
-        print_comparison_table(comparison)
 
     # --- Final summary ---
     test_m = all_metrics["test"]
