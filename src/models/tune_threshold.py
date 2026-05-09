@@ -30,7 +30,8 @@ MODEL_FILE = os.path.join(MODEL_DIR, "xgboost_baseline.json")
 
 FEATURE_COLS = [
     "log_amount", "is_ACH", "is_Cheque", "is_CC",
-    "is_Wire", "is_Bitcoin", "hour", "is_weekend", "amount_bucket",
+    "is_Wire", "is_Bitcoin", "hour", "dow", "is_weekend",
+    "is_cross_currency", "amount_bucket",
 ]
 TARGET_COL = "Is Laundering"
 

@@ -47,7 +47,7 @@ import pandas as pd
 PROJ      = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROC_DIR  = os.path.join(PROJ, "data", "processed")
 
-GRAPH_FEATURES_FILE = os.path.join(PROC_DIR, "graph_features_accounts.parquet")
+GRAPH_FEATURES_FILE = os.path.join(PROC_DIR, "graph_features_accounts.csv")
 
 SPLITS = {
     "train": os.path.join(PROC_DIR, "split_train.parquet"),
@@ -61,17 +61,18 @@ OUTPUT_FILES = {
     "test":  os.path.join(PROC_DIR, "test_graph_enriched.parquet"),
 }
 
-# Graph feature columns to bring in (excluding account_id itself)
+# Graph feature columns produced by 04_extract_graph_features.py
+# Community columns (community_id, community_size, community_fraud_rate) are
+# stubbed to 0 until Issue #4 (Louvain script) is implemented.
 GRAPH_COLS = [
     "account_id",
     "out_degree",
     "in_degree",
     "total_degree",
     "degree_centrality",
-    "community_id",
-    "community_size",
-    "community_fraud_rate",
 ]
+
+COMMUNITY_STUB_COLS = ["community_id", "community_size", "community_fraud_rate"]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -99,16 +100,19 @@ def validate_paths():
 
 
 def load_graph_features() -> pd.DataFrame:
-    df = pd.read_parquet(GRAPH_FEATURES_FILE, columns=GRAPH_COLS)
+    df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=GRAPH_COLS)
     log.info("Graph features loaded: %d accounts", len(df))
-    # Cast types to keep memory low
-    df["out_degree"]            = df["out_degree"].astype("int32")
-    df["in_degree"]             = df["in_degree"].astype("int32")
-    df["total_degree"]          = df["total_degree"].astype("int32")
-    df["degree_centrality"]     = df["degree_centrality"].astype("float32")
-    df["community_id"]          = df["community_id"].astype("int32")
-    df["community_size"]        = df["community_size"].astype("int32")
-    df["community_fraud_rate"]  = df["community_fraud_rate"].astype("float32")
+    df["out_degree"]        = df["out_degree"].astype("int32")
+    df["in_degree"]         = df["in_degree"].astype("int32")
+    df["total_degree"]      = df["total_degree"].astype("int32")
+    df["degree_centrality"] = df["degree_centrality"].astype("float32")
+    # Stub community columns until Louvain script (Issue #4) is implemented
+    for col in COMMUNITY_STUB_COLS:
+        df[col] = 0
+    df["community_id"]         = df["community_id"].astype("int32")
+    df["community_size"]       = df["community_size"].astype("int32")
+    df["community_fraud_rate"] = df["community_fraud_rate"].astype("float32")
+    log.warning("community_id / community_size / community_fraud_rate are stubbed to 0 — run Louvain script (Issue #4) to populate.")
     return df
 
 
@@ -120,13 +124,15 @@ def enrich_split(df_txn: pd.DataFrame, df_graph: pd.DataFrame, split_name: str) 
     """
     n_before = len(df_txn)
 
+    all_feature_cols = [c for c in df_graph.columns if c != "account_id"]
+
     # Sender-side join
-    src_cols = {c: f"src_{c}" for c in GRAPH_COLS if c != "account_id"}
+    src_cols = {c: f"src_{c}" for c in all_feature_cols}
     df_src = df_graph.rename(columns={"account_id": "src_acct", **src_cols})
     df_txn = df_txn.merge(df_src, on="src_acct", how="left")
 
     # Receiver-side join
-    dst_cols = {c: f"dst_{c}" for c in GRAPH_COLS if c != "account_id"}
+    dst_cols = {c: f"dst_{c}" for c in all_feature_cols}
     df_dst = df_graph.rename(columns={"account_id": "dst_acct", **dst_cols})
     df_txn = df_txn.merge(df_dst, on="dst_acct", how="left")
 
@@ -142,7 +148,7 @@ def enrich_split(df_txn: pd.DataFrame, df_graph: pd.DataFrame, split_name: str) 
 
     log.info(
         "[%s] Enriched %d rows | New graph columns added: %d",
-        split_name, len(df_txn), len(src_cols) + len(dst_cols),
+        split_name, len(df_txn), len(all_feature_cols) * 2,
     )
     return df_txn
 
