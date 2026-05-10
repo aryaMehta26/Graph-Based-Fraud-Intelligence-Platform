@@ -42,7 +42,7 @@ data/processed/
     split_test.parquet     (4.8M rows, 15%)
 ```
 
-The split is **time-ordered** — train uses the first 70% of days, val the next 15%, test the last 15%. This prevents data leakage from future transactions into training.
+The split is **time-ordered** — train uses the first 70% of days, val the next 15%, test the last 15%. This prevents future transactions from being placed directly into the training split at the raw-data stage. However, later pipeline stages may compute or join graph features on the full graph (**transductive**), which can still incorporate future validation/test edges; so the split alone does not guarantee end-to-end leakage isolation for all downstream features.
 
 ### Step 2 — Load the graph into Neo4j
 
