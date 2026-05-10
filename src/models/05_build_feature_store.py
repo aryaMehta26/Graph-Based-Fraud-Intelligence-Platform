@@ -44,6 +44,7 @@ is standard transductive graph inference but is not strictly split-safe.
 See 04_extract_graph_features.py for details and a proposed future fix.
 """
 
+import csv
 import os
 import logging
 import pandas as pd
@@ -109,7 +110,6 @@ def validate_paths():
 def load_graph_features() -> pd.DataFrame:
     # Read only the columns that exist in the CSV (community columns present
     # only after 04b_louvain_communities.py has run)
-    import csv
     with open(GRAPH_FEATURES_FILE, "r") as f:
         header = next(csv.reader(f))
     DEGREE_COLS    = ["out_degree", "in_degree", "total_degree", "degree_centrality"]
@@ -120,9 +120,10 @@ def load_graph_features() -> pd.DataFrame:
     missing_degree    = [c for c in DEGREE_COLS if c not in header]
 
     if missing_degree:
-        raise FileNotFoundError(
+        raise ValueError(
             f"Required degree columns missing from graph_features_accounts.csv: {missing_degree}\n"
-            "Run 04_extract_graph_features.py first."
+            f"Detected columns: {header}\n"
+            "Run 04_extract_graph_features.py to regenerate the file."
         )
 
     df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=available_cols)
@@ -172,7 +173,11 @@ def enrich_split(df_txn: pd.DataFrame, df_graph: pd.DataFrame, split_name: str) 
     df_txn[fill_int]   = df_txn[fill_int].fillna(0).astype("int32")
     df_txn[fill_float] = df_txn[fill_float].fillna(0.0).astype("float32")
 
-    assert len(df_txn) == n_before, "Row count changed after join — check for duplicates in graph features."
+    if len(df_txn) != n_before:
+        raise ValueError(
+            f"[{split_name}] Row count changed after join ({n_before} → {len(df_txn)}) — "
+            "check for duplicate account_ids in graph_features_accounts.csv."
+        )
 
     log.info(
         "[%s] Enriched %d rows | New graph columns added: %d",

@@ -65,6 +65,7 @@ After running
 import os
 import time
 import logging
+from collections import Counter
 import numpy as np
 import pandas as pd
 import igraph as ig
@@ -208,7 +209,6 @@ def compute_community_features(
     acct_community = dict(zip(all_accounts, membership))
 
     # community_size via Counter
-    from collections import Counter
     community_size_map = dict(Counter(membership))
 
     # community_fraud_rate — TRAIN LABELS ONLY, never val/test

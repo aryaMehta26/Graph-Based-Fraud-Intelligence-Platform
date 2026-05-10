@@ -147,18 +147,30 @@ data/models/
 
 Use this if `graph_features_accounts.csv` has been shared with you (e.g. via Google Drive or a teammate), or if you just want to run the model without Neo4j.
 
-**You only need to run:**
+**Case A — `graph_features_accounts.csv` has been shared with you (with community columns):**
+
+Place it in `data/processed/` and run:
 
 ```bash
-python3 notebooks/02_data_cleaning.py           # get the parquets
-python3 src/models/04b_louvain_communities.py   # community features (no Neo4j)
-python3 src/models/05_build_feature_store.py    # build enriched parquets
-python3 src/models/06_train_xgboost_baseline.py # baseline
-python3 src/models/tune_threshold.py            # threshold
+python3 notebooks/02_data_cleaning.py               # get the parquets
+python3 src/models/05_build_feature_store.py        # build enriched parquets
+python3 src/models/06_train_xgboost_baseline.py     # baseline
+python3 src/models/tune_threshold.py                # threshold
 python3 src/models/07_train_graph_enhanced_model.py # graph model
 ```
 
-If `graph_features_accounts.csv` was shared to you, place it in `data/processed/` and skip `04_extract_graph_features.py` and `04b_louvain_communities.py` entirely.
+**Case B — `graph_features_accounts.csv` was shared but has only degree columns (no community columns):**
+
+```bash
+python3 notebooks/02_data_cleaning.py               # get the parquets
+python3 src/models/04b_louvain_communities.py       # add community features (no Neo4j needed)
+python3 src/models/05_build_feature_store.py        # build enriched parquets
+python3 src/models/06_train_xgboost_baseline.py     # baseline
+python3 src/models/tune_threshold.py                # threshold
+python3 src/models/07_train_graph_enhanced_model.py # graph model
+```
+
+To check whether community columns are present: `python3 -c "import pandas as pd; print(pd.read_csv('data/processed/graph_features_accounts.csv').columns.tolist())"`
 
 ---
 
