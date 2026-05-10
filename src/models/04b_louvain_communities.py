@@ -212,14 +212,26 @@ def compute_community_features(
     community_size_map = dict(Counter(membership))
 
     # community_fraud_rate — TRAIN LABELS ONLY, never val/test
+    # Deduplicate so each (transaction, community) pair counts exactly once.
+    # Without dedup, within-community transactions (src and dst in same community)
+    # would be counted twice, skewing the denominator and fraud rate.
     train = txns_train[txns_train["src_acct"] != txns_train["dst_acct"]].copy()
+    train = train.reset_index(drop=True)
     train["src_community"] = train["src_acct"].map(acct_community)
     train["dst_community"] = train["dst_acct"].map(acct_community)
 
-    src_side = train[["src_community", "Is Laundering"]].rename(columns={"src_community": "community_id"})
-    dst_side = train[["dst_community", "Is Laundering"]].rename(columns={"dst_community": "community_id"})
+    src_side = train[["src_community", "Is Laundering"]].copy()
+    src_side.columns = ["community_id", "Is Laundering"]
+    src_side["txn_idx"] = train.index
+
+    dst_side = train[["dst_community", "Is Laundering"]].copy()
+    dst_side.columns = ["community_id", "Is Laundering"]
+    dst_side["txn_idx"] = train.index
+
     combined = pd.concat([src_side, dst_side], ignore_index=True).dropna(subset=["community_id"])
     combined["community_id"] = combined["community_id"].astype(int)
+    # Drop duplicates: if src and dst are in same community, count the transaction once
+    combined = combined.drop_duplicates(subset=["txn_idx", "community_id"]).drop(columns="txn_idx")
 
     community_stats = combined.groupby("community_id")["Is Laundering"].agg(["sum", "count"])
     community_stats["fraud_rate"] = community_stats["sum"] / community_stats["count"]

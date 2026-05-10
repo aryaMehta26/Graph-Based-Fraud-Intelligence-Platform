@@ -115,6 +115,13 @@ def load_graph_features() -> pd.DataFrame:
     DEGREE_COLS    = ["out_degree", "in_degree", "total_degree", "degree_centrality"]
     COMMUNITY_COLS = ["community_id", "community_size", "community_fraud_rate"]
 
+    if "account_id" not in header:
+        raise ValueError(
+            f"'account_id' column missing from graph_features_accounts.csv.\n"
+            f"Detected columns: {header}\n"
+            "Run 04_extract_graph_features.py to regenerate the file."
+        )
+
     available_cols    = [c for c in GRAPH_COLS if c in header]
     missing_community = [c for c in COMMUNITY_COLS if c not in header]
     missing_degree    = [c for c in DEGREE_COLS if c not in header]

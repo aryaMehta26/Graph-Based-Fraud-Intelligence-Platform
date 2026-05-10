@@ -93,6 +93,10 @@ TABULAR_FEATURES = [
 
 # Graph features added by 05_build_feature_store.py
 # Community features populated by 04b_louvain_communities.py (Issue #4).
+# Note: community_id is intentionally excluded — it is a high-cardinality
+# integer label (up to 66k values) with no ordinal meaning. XGBoost would
+# treat it as a numeric feature, producing arbitrary splits. The meaningful
+# community signal is captured by community_size and community_fraud_rate.
 GRAPH_FEATURES = [
     "src_out_degree",
     "src_in_degree",
