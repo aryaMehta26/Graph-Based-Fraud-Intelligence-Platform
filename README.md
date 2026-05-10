@@ -295,6 +295,12 @@ python3 -m streamlit run dashboard_app.py
 
 ---
 
+## Known Limitations
+
+**Transductive graph setup** — community detection runs on the full account graph (all 27 days). Account connectivity from val/test periods is visible during community assignment. `community_fraud_rate` is computed from training labels only to prevent direct label leakage, but the graph topology itself is not split by time. This is standard practice for transductive graph ML and is documented here per reviewer request. Future work will explore inductive community detection using only training-period edges.
+
+---
+
 ## Tech Stack
 
 | Layer | Technology | Purpose |
