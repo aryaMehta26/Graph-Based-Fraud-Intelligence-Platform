@@ -4,7 +4,7 @@
 
 **Detecting money laundering at scale using Knowledge Graphs and Deep Graph Learning**
 
-*DATA 298A · San José State University · Team 12 · April 2026*
+*DATA 298A · San José State University · *
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.x-008CC1?style=flat&logo=neo4j&logoColor=white)](https://neo4j.com)
