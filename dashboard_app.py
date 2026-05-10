@@ -21,7 +21,9 @@ selection = st.sidebar.radio("Go to Phase:", [
     "4. Features & Ontology Mapping",
     "5. Conquering the 31M Graph",
     "6. Live Pipeline Orchestrator",
-    "7. Neo4j Graph Validation"
+    "7. Neo4j Graph Validation",
+    "8. Model Performance Metrics",
+    "9. LLM Investigator"
 ])
 
 # --- PHASE 1: DATA COLLECTION ---
@@ -415,7 +417,9 @@ elif "6. Live Pipeline Orchestrator" in selection:
                 st.error(f"Pipeline Failed: {e}")
 
 # --- PHASE 7: NEO4J VALIDATION ---
-elif "7. Neo4j Graph Validation" in selection:
+elif "7. Neo4j Graph Validation",
+    "8. Model Performance Metrics",
+    "9. LLM Investigator" in selection:
     st.title("Phase 7: Neo4j Knowledge Graph Validation")
     st.markdown("Connecting directly to the highly-scalable Neo4j Warehouse to verify injection integrity and production limits.")
     st.divider()
@@ -462,18 +466,34 @@ elif "8. Model Performance Metrics" in selection:
 
     # --- Model Progression ---
     st.subheader("Model Progression — PR-AUC")
+    # Load PR-AUC progression from saved metrics files
+    _baseline_pr = _graph_pr = _community_pr = None
+    if baseline_path.exists():
+        with open(baseline_path) as _f:
+            _bm = json.load(_f)
+        _baseline_pr = _bm.get("test", {}).get("pr_auc")
+    if enhanced_path.exists():
+        with open(enhanced_path) as _f:
+            _gm = json.load(_f)
+        _graph_pr = _gm.get("test", {}).get("pr_auc")
+    if comparison_path.exists():
+        with open(comparison_path) as _f:
+            _cm = json.load(_f)
+
+    _b = f"{_baseline_pr:.4f}" if _baseline_pr else "run 06 first"
+    _g = f"{_graph_pr:.4f}"    if _graph_pr    else "run 07 first"
+
     prog_data = {
-        "Model":    ["Tabular Baseline", "+ Degree Features", "+ Community Features"],
-        "PR-AUC":  [0.3043, 0.4590, 0.5599],
-        "vs Baseline": ["—", "+51%", "+84%"],
+        "Model":    ["Tabular Baseline", "+ Degree + Community Features"],
+        "PR-AUC":  [_b, _g],
+        "vs Baseline": ["—", f"+{(_graph_pr - _baseline_pr):.1%}" if _baseline_pr and _graph_pr else "—"],
     }
     prog_df = pd.DataFrame(prog_data)
     st.dataframe(prog_df, use_container_width=True, hide_index=True)
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Tabular Baseline", "0.3043", "—")
-    col2.metric("+ Degree Features", "0.4590", "+51%")
-    col3.metric("+ Community Features", "0.5599", "+84%")
+    col1, col2 = st.columns(2)
+    col1.metric("Tabular Baseline", _b)
+    col2.metric("+ Graph Features", _g, f"+{(_graph_pr - _baseline_pr):.1%}" if _baseline_pr and _graph_pr else "—")
 
     st.divider()
 
