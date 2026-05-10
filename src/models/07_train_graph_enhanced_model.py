@@ -8,8 +8,10 @@ Closes Issue #6.
 
 Trains an XGBoost classifier on the graph-enriched feature store produced by
 05_build_feature_store.py. Every transaction row now includes structural
-features from Neo4j (degree centrality, Louvain community ID/size/fraud rate)
-for both the sender and receiver accounts.
+features from Neo4j/parquets (degree centrality + Leiden community features)
+for both the sender and receiver accounts. The model uses
+community_size/community_fraud_rate; community_id is joined upstream but
+intentionally excluded from training.
 
 This is the model that proves the core thesis: adding graph structure
 improves fraud detection beyond what tabular features alone can achieve.
@@ -92,8 +94,11 @@ TABULAR_FEATURES = [
 ]
 
 # Graph features added by 05_build_feature_store.py
-# Community features (community_id, community_size, community_fraud_rate)
-# excluded until Louvain is implemented (Issue #4).
+# Community features populated by 04b_louvain_communities.py (Issue #4).
+# Note: community_id is intentionally excluded — it is a high-cardinality
+# integer label (up to 66k values) with no ordinal meaning. XGBoost would
+# treat it as a numeric feature, producing arbitrary splits. The meaningful
+# community signal is captured by community_size and community_fraud_rate.
 GRAPH_FEATURES = [
     "src_out_degree",
     "src_in_degree",
@@ -103,6 +108,10 @@ GRAPH_FEATURES = [
     "dst_in_degree",
     "dst_total_degree",
     "dst_degree_centrality",
+    "src_community_size",
+    "src_community_fraud_rate",
+    "dst_community_size",
+    "dst_community_fraud_rate",
 ]
 
 ALL_FEATURES = TABULAR_FEATURES + GRAPH_FEATURES
@@ -343,6 +352,25 @@ def main():
         m, _ = evaluate(model, X, y, split_name)
         all_metrics[split_name] = m
 
+    # --- Save model + metrics (before SHAP so artifacts are never lost) ---
+    model_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced.json")
+    model.save_model(model_path)
+    log.info("Model saved: %s", model_path)
+
+    metrics_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced_metrics.json")
+    with open(metrics_path, "w") as f:
+        json.dump(all_metrics, f, indent=2)
+    log.info("Metrics saved: %s", metrics_path)
+
+    # --- Compare to baseline ---
+    comparison = build_comparison(BASELINE_METRICS_FILE, all_metrics)
+    if comparison:
+        comparison_path = os.path.join(MODEL_DIR, "model_comparison.json")
+        with open(comparison_path, "w") as f:
+            json.dump(comparison, f, indent=2)
+        log.info("Comparison saved: %s", comparison_path)
+        print_comparison_table(comparison)
+
     # --- Plots ---
     plot_confusion_matrix(
         model, X_test, y_test,
@@ -354,30 +382,11 @@ def main():
         os.path.join(MODEL_DIR, "xgboost_graph_enhanced_pr_curve.png"),
     )
 
-    # --- SHAP ---
+    # --- SHAP (slow — runs last so metrics are already saved above) ---
     compute_shap(
         model, X_val,
         os.path.join(MODEL_DIR, "xgboost_graph_enhanced_shap.parquet"),
     )
-
-    # --- Save model + metrics ---
-    model_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced.json")
-    model.save_model(model_path)
-    log.info("Model saved: %s", model_path)
-
-    metrics_path = os.path.join(MODEL_DIR, "xgboost_graph_enhanced_metrics.json")
-    with open(metrics_path, "w") as f:
-        json.dump(all_metrics, f, indent=2)
-    log.info("Metrics saved: %s", metrics_path)
-
-    # --- Compare to baseline (closes Issue #12 data) ---
-    comparison = build_comparison(BASELINE_METRICS_FILE, all_metrics)
-    if comparison:
-        comparison_path = os.path.join(MODEL_DIR, "model_comparison.json")
-        with open(comparison_path, "w") as f:
-            json.dump(comparison, f, indent=2)
-        log.info("Comparison saved: %s", comparison_path)
-        print_comparison_table(comparison)
 
     # --- Final summary ---
     test_m = all_metrics["test"]

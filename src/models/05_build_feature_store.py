@@ -6,8 +6,9 @@ Team 2 | San José State University
 --------------------------
 Closes Issue #5.
 
-Merges the graph-derived account features (degree centrality, Louvain
-community membership) produced by 04_extract_graph_features.py back into
+Merges the graph-derived account features (degree centrality + Leiden
+community features) produced by 04_extract_graph_features.py and
+04b_louvain_communities.py back into
 the three transaction parquet splits (train / val / test).
 
 The join is performed twice per split — once on src_acct (sender) and once
@@ -27,6 +28,10 @@ New columns added (prefixed src_ / dst_):
     dst_out_degree, dst_in_degree, dst_total_degree, dst_degree_centrality,
     dst_community_id, dst_community_size, dst_community_fraud_rate
 
+Note: community_id columns are joined into the enriched parquets for analysis
+and debugging, but the graph-enhanced XGBoost model trains on
+community_size/community_fraud_rate (not community_id).
+
 Usage
 -----
     python3 src/models/05_build_feature_store.py
@@ -44,6 +49,7 @@ is standard transductive graph inference but is not strictly split-safe.
 See 04_extract_graph_features.py for details and a proposed future fix.
 """
 
+import csv
 import os
 import logging
 import pandas as pd
@@ -68,18 +74,18 @@ OUTPUT_FILES = {
     "test":  os.path.join(PROC_DIR, "test_graph_enriched.parquet"),
 }
 
-# Graph feature columns produced by 04_extract_graph_features.py
-# Community columns (community_id, community_size, community_fraud_rate) are
-# stubbed to 0 until Issue #4 (Louvain script) is implemented.
+# Graph feature columns produced by 04_extract_graph_features.py and
+# 04b_louvain_communities.py (community columns).
 GRAPH_COLS = [
     "account_id",
     "out_degree",
     "in_degree",
     "total_degree",
     "degree_centrality",
+    "community_id",
+    "community_size",
+    "community_fraud_rate",
 ]
-
-COMMUNITY_STUB_COLS = ["community_id", "community_size", "community_fraud_rate"]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -107,19 +113,47 @@ def validate_paths():
 
 
 def load_graph_features() -> pd.DataFrame:
-    df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=GRAPH_COLS)
-    log.info("Graph features loaded: %d accounts", len(df))
+    # Read only the columns that exist in the CSV (community columns present
+    # only after 04b_louvain_communities.py has run)
+    with open(GRAPH_FEATURES_FILE, "r") as f:
+        header = next(csv.reader(f))
+    DEGREE_COLS    = ["out_degree", "in_degree", "total_degree", "degree_centrality"]
+    COMMUNITY_COLS = ["community_id", "community_size", "community_fraud_rate"]
+
+    if "account_id" not in header:
+        raise ValueError(
+            f"'account_id' column missing from graph_features_accounts.csv.\n"
+            f"Detected columns: {header}\n"
+            "Run 04_extract_graph_features.py to regenerate the file."
+        )
+
+    available_cols    = [c for c in GRAPH_COLS if c in header]
+    missing_community = [c for c in COMMUNITY_COLS if c not in header]
+    missing_degree    = [c for c in DEGREE_COLS if c not in header]
+
+    if missing_degree:
+        raise ValueError(
+            f"Required degree columns missing from graph_features_accounts.csv: {missing_degree}\n"
+            f"Detected columns: {header}\n"
+            "Run 04_extract_graph_features.py to regenerate the file."
+        )
+
+    df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=available_cols)
+    log.info("Graph features loaded: %d accounts | columns: %s", len(df), available_cols)
+
     df["out_degree"]        = df["out_degree"].astype("int32")
     df["in_degree"]         = df["in_degree"].astype("int32")
     df["total_degree"]      = df["total_degree"].astype("int32")
     df["degree_centrality"] = df["degree_centrality"].astype("float32")
-    # Stub community columns until Louvain script (Issue #4) is implemented
-    for col in COMMUNITY_STUB_COLS:
-        df[col] = 0
+
+    if missing_community:
+        log.warning("Community columns not found — stubbing to 0. Run 04b_louvain_communities.py to populate: %s", missing_community)
+        for col in missing_community:
+            df[col] = 0
+
     df["community_id"]         = df["community_id"].astype("int32")
     df["community_size"]       = df["community_size"].astype("int32")
     df["community_fraud_rate"] = df["community_fraud_rate"].astype("float32")
-    log.warning("community_id / community_size / community_fraud_rate are stubbed to 0 — run Louvain script (Issue #4) to populate.")
     return df
 
 
@@ -151,7 +185,11 @@ def enrich_split(df_txn: pd.DataFrame, df_graph: pd.DataFrame, split_name: str) 
     df_txn[fill_int]   = df_txn[fill_int].fillna(0).astype("int32")
     df_txn[fill_float] = df_txn[fill_float].fillna(0.0).astype("float32")
 
-    assert len(df_txn) == n_before, "Row count changed after join — check for duplicates in graph features."
+    if len(df_txn) != n_before:
+        raise ValueError(
+            f"[{split_name}] Row count changed after join ({n_before} → {len(df_txn)}) — "
+            "check for duplicate account_ids in graph_features_accounts.csv."
+        )
 
     log.info(
         "[%s] Enriched %d rows | New graph columns added: %d",
