@@ -119,6 +119,7 @@ def test_imports():
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
 
+    check("06_train_xgboost_baseline imports cleanly", import_06)
     check("04b_louvain_communities imports cleanly", import_04b)
     check("07_train_graph_enhanced_model imports cleanly", import_07)
     check("05_build_feature_store imports cleanly",     import_05)
@@ -245,7 +246,7 @@ def test_llm_schema():
             # (it's OK in prohibition text like "Do NOT use Cyclic Transfer")
             import re
             enum_matches = re.findall(
-                r'(?:one of|ONLY)[^\n]*Cyclic Transfer', prompt
+                r'<[^>]*Cyclic Transfer[^>]*>', prompt
             )
             assert not enum_matches, (
                 f"'Cyclic Transfer' still listed as valid option in {vk} prompt"
