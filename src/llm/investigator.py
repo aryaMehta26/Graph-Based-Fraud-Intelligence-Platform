@@ -51,7 +51,6 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 PROJ         = Path(__file__).resolve().parents[2]
 OUTPUT_DIR   = PROJ / "artifacts" / "llm_outputs"
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
@@ -290,6 +289,12 @@ def validate_schema(report: dict):
     if not isinstance(report["actions"], list) or len(report["actions"]) == 0:
         raise ValueError("'actions' must be a non-empty list")
 
+    valid_patterns = {"Layering Ring", "Smurfing", "Fan-Out", "Fan-In", "Rapid Movement", "Unknown"}
+    if report.get("pattern") not in valid_patterns:
+        raise ValueError(
+            f"Invalid pattern '{report.get('pattern')}'. Must be one of {valid_patterns}"
+        )
+
 
 def run_variant(variant_key: str, subgraph: dict, n_runs: int = 3) -> list:
     """Run one variant n_runs times (for consistency evaluation in evaluate.py)."""
@@ -310,6 +315,7 @@ def run_variant(variant_key: str, subgraph: dict, n_runs: int = 3) -> list:
 
 
 def save_outputs(variant_key: str, results: list, subgraph_name: str):
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     """Save all runs for a variant to artifacts/llm_outputs/."""
     filename = OUTPUT_DIR / f"{subgraph_name}_{variant_key}.json"
     with open(filename, "w") as f:
