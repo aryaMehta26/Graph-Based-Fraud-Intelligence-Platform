@@ -8,7 +8,6 @@ import time
 # --- PAGE SETUP ---
 st.set_page_config(page_title="DATA 298A Fraud Platform", layout="wide", initial_sidebar_state="expanded")
 
-import os
 from dotenv import load_dotenv
 load_dotenv()
 PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))

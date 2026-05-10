@@ -9,7 +9,6 @@ import time
 import logging
 from datetime import datetime
 
-import os
 from dotenv import load_dotenv
 load_dotenv()
 PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))
@@ -99,10 +98,11 @@ try:
     logger.info(f"Ingested {len(df)} feature-engineered records successfully.")
     
     logger.info("Connecting to Neo4j Graph Warehouse...")
-    driver = GraphDatabase.driver(os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687"), auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "fraud2026")))
+    driver = None
+    driver = GraphDatabase.driver(os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687"), auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD") or (_ for _ in ()).throw(EnvironmentError("NEO4J_PASSWORD not set in .env"))))
     driver.verify_connectivity()
     
-    with driver.session(database="fraudgraph") as session:
+    with driver.session(database=os.getenv("NEO4J_DB", "fraudgraph")) as session:
         logger.info("Injecting transformed records into Knowledge Graph (fraudgraph QA database)...")
         
         # Load Accounts 
@@ -141,7 +141,8 @@ try:
 except Exception as e:
     logger.error(f"WAREHOUSE CONNECTION FAILED: {e}")
 finally:
-    driver.close()
+    if driver is not None:
+        driver.close()
 
 logger.info(f"Full operational logs saved to: {LOG_FILE}")
 print("\n" + "="*80)
