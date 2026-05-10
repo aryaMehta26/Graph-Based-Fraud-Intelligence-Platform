@@ -250,9 +250,9 @@ Tabular features (amount, payment type, time) describe a single transaction in i
 |---|---|---|---|
 | Tabular baseline (11 features) | 0.3043 | 0.9447 | 0.9142 |
 | + Degree features (19 features) | 0.4590 | 0.9845 | 0.9840 |
-| + Community features (23 features) | **0.5599** | **0.9885** | **0.9880** |
+| + Community features (23 features) | **0.5363** | **0.9872** | **0.9829** |
 
-Adding graph structure produces an **84% improvement in PR-AUC** over the tabular baseline. The community features alone contributed +22% on top of degree features.
+Adding graph structure produces a **76% improvement in PR-AUC** over the tabular baseline. The community features alone contributed +17% on top of degree features.
 
 ### Top features by SHAP importance
 

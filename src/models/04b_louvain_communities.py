@@ -41,6 +41,11 @@ data/processed/graph_features_accounts.csv  (updated in-place)
     Adds / overwrites columns:
         community_id, community_size, community_fraud_rate
 
+Note: Issue #4 originally specified separate communities.csv and
+community_fraud_scores.csv outputs. These were consolidated into
+graph_features_accounts.csv so that script 05 has a single join source
+for all per-account graph features (degree + community).
+
 Usage
 -----
     python3 src/models/04b_louvain_communities.py
@@ -141,8 +146,8 @@ def build_graph(txns_graph: pd.DataFrame):
     edge_weights = txns.groupby(["ea", "eb"]).size().reset_index(name="weight")
     log.info("  Unique account pairs (edges): %d  (%.1fs)", len(edge_weights), time.time() - t0)
 
-    # Map account IDs to integer indices
-    all_accounts = sorted(set(txns["src_acct"]) | set(txns["dst_acct"]))
+    # Map account IDs to integer indices — np.unique stays in NumPy, avoids large Python sets
+    all_accounts = np.unique(np.concatenate([txns["src_acct"].values, txns["dst_acct"].values])).tolist()
     acct_to_idx  = {a: i for i, a in enumerate(all_accounts)}
     log.info("  Unique accounts (nodes): %d", len(all_accounts))
 
@@ -161,7 +166,7 @@ def build_graph(txns_graph: pd.DataFrame):
     G.vs["name"]   = all_accounts
     log.info("  Graph ready: %d nodes, %d edges  (%.1fs)", G.vcount(), G.ecount(), time.time() - t0)
 
-    return G, acct_to_idx, all_accounts
+    return G, all_accounts
 
 
 # ---------------------------------------------------------------------------
@@ -267,7 +272,10 @@ def update_graph_features(df_comm: pd.DataFrame):
     df_merged["community_size"]       = df_merged["community_size"].fillna(0).astype("int32")
     df_merged["community_fraud_rate"] = df_merged["community_fraud_rate"].fillna(0.0).astype("float32")
 
-    assert len(df_merged) == len(df_existing), "Row count changed after merge — check for duplicates."
+    if len(df_merged) != len(df_existing):
+        raise ValueError(
+            f"Row count changed after merge ({len(df_existing)} → {len(df_merged)}) — check for duplicate account_ids in df_comm."
+        )
 
     df_merged.to_csv(GRAPH_FEATURES_CSV, index=False)
     log.info(
@@ -296,7 +304,7 @@ def main():
 
     # Step 2
     log.info("=== Step 2: Build graph ===")
-    G, acct_to_idx, all_accounts = build_graph(txns_graph)
+    G, all_accounts = build_graph(txns_graph)
 
     # Step 3
     log.info("=== Step 3: Leiden community detection ===")
