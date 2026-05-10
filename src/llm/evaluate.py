@@ -42,7 +42,6 @@ from itertools import combinations
 PROJ        = Path(__file__).resolve().parents[2]
 OUTPUT_DIR  = PROJ / "artifacts" / "llm_outputs"
 METRICS_DIR = PROJ / "artifacts" / "metrics"
-METRICS_DIR.mkdir(parents=True, exist_ok=True)
 
 CONSISTENCY_TARGET = 0.80   # Jaccard similarity target per issue #14 spec
 VALID_RISK_LEVELS  = {"LOW", "MEDIUM", "HIGH", "CRITICAL"}
@@ -161,6 +160,8 @@ def extract_subgraph_values(subgraph: dict) -> dict:
             amounts.add(str(int(amt)))
             amounts.add(f"{amt:,.2f}")
             amounts.add(f"{int(amt):,}")
+            amounts.add(f"{amt:.2f}")
+            amounts.add(f"{amt:.0f}")
             # Also add partial matches for large numbers (e.g. "9800" matches "$9,800.00")
             amounts.add(str(int(amt)).replace(",", ""))
 
@@ -366,8 +367,8 @@ def evaluate_variant(variant_key: str, subgraph_name: str, subgraph: dict) -> di
 
     # Token usage stats
     token_stats = {}
-    input_tokens  = [r["_meta"]["input_tokens"]  for r in valid_reports if "_meta" in r]
-    output_tokens = [r["_meta"]["output_tokens"] for r in valid_reports if "_meta" in r]
+    input_tokens  = [r["_meta"].get("input_tokens")  for r in valid_reports if "_meta" in r and r["_meta"].get("input_tokens") is not None]
+    output_tokens = [r["_meta"].get("output_tokens") for r in valid_reports if "_meta" in r and r["_meta"].get("output_tokens") is not None]
     if input_tokens:
         token_stats = {
             "avg_input_tokens":  round(sum(input_tokens)  / len(input_tokens)),
@@ -491,6 +492,7 @@ def main():
         result = evaluate_variant(vk, args.subgraph, subgraph)
         all_results[vk] = result
 
+    METRICS_DIR.mkdir(parents=True, exist_ok=True)
     # Save full results
     eval_path = METRICS_DIR / "llm_eval.json"
     with open(eval_path, "w") as f:

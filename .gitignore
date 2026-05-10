@@ -42,3 +42,7 @@ Thumbs.db
 !data/processed/.gitkeep
 !data/neo4j_bulk_import/.gitkeep
 .env
+
+# Generated LLM outputs
+artifacts/llm_outputs/
+artifacts/metrics/
