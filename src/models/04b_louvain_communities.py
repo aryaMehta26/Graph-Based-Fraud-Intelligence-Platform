@@ -146,8 +146,8 @@ def build_graph(txns_graph: pd.DataFrame):
     edge_weights = txns.groupby(["ea", "eb"]).size().reset_index(name="weight")
     log.info("  Unique account pairs (edges): %d  (%.1fs)", len(edge_weights), time.time() - t0)
 
-    # Map account IDs to integer indices — np.unique stays in NumPy, avoids large Python sets
-    all_accounts = np.unique(np.concatenate([txns["src_acct"].values, txns["dst_acct"].values])).tolist()
+    # np.unique on concatenated arrays avoids materializing large Python sets
+    all_accounts = np.unique(np.concatenate([txns["src_acct"].values, txns["dst_acct"].values]))
     acct_to_idx  = {a: i for i, a in enumerate(all_accounts)}
     log.info("  Unique accounts (nodes): %d", len(all_accounts))
 
@@ -259,6 +259,10 @@ def update_graph_features(df_comm: pd.DataFrame):
 
     df_existing = pd.read_csv(GRAPH_FEATURES_CSV)
     log.info("Existing graph features: %d accounts", len(df_existing))
+
+    # Align account_id dtype so the merge doesn't silently produce all-NaN rows
+    df_existing["account_id"] = df_existing["account_id"].astype(str)
+    df_comm["account_id"]     = df_comm["account_id"].astype(str)
 
     # Drop old stub community columns if present
     drop_cols = [c for c in ["community_id", "community_size", "community_fraud_rate"] if c in df_existing.columns]

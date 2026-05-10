@@ -81,8 +81,6 @@ GRAPH_COLS = [
     "community_fraud_rate",
 ]
 
-COMMUNITY_STUB_COLS = ["community_id", "community_size", "community_fraud_rate"]
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
@@ -114,8 +112,18 @@ def load_graph_features() -> pd.DataFrame:
     import csv
     with open(GRAPH_FEATURES_FILE, "r") as f:
         header = next(csv.reader(f))
-    available_cols = [c for c in GRAPH_COLS if c in header]
-    missing_cols   = [c for c in GRAPH_COLS if c not in header]
+    DEGREE_COLS    = ["out_degree", "in_degree", "total_degree", "degree_centrality"]
+    COMMUNITY_COLS = ["community_id", "community_size", "community_fraud_rate"]
+
+    available_cols    = [c for c in GRAPH_COLS if c in header]
+    missing_community = [c for c in COMMUNITY_COLS if c not in header]
+    missing_degree    = [c for c in DEGREE_COLS if c not in header]
+
+    if missing_degree:
+        raise FileNotFoundError(
+            f"Required degree columns missing from graph_features_accounts.csv: {missing_degree}\n"
+            "Run 04_extract_graph_features.py first."
+        )
 
     df = pd.read_csv(GRAPH_FEATURES_FILE, usecols=available_cols)
     log.info("Graph features loaded: %d accounts | columns: %s", len(df), available_cols)
@@ -125,9 +133,9 @@ def load_graph_features() -> pd.DataFrame:
     df["total_degree"]      = df["total_degree"].astype("int32")
     df["degree_centrality"] = df["degree_centrality"].astype("float32")
 
-    if missing_cols:
-        log.warning("Community columns not found — stubbing to 0. Run 04b_louvain_communities.py to populate: %s", missing_cols)
-        for col in missing_cols:
+    if missing_community:
+        log.warning("Community columns not found — stubbing to 0. Run 04b_louvain_communities.py to populate: %s", missing_community)
+        for col in missing_community:
             df[col] = 0
 
     df["community_id"]         = df["community_id"].astype("int32")
