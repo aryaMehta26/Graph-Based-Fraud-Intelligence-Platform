@@ -10,6 +10,9 @@ Runs Leiden community detection (an improved Louvain variant) on the full
 account-to-account transaction graph and computes per-account community
 features that replace the zero stubs in graph_features_accounts.csv.
 
+The filename keeps the original "louvain" stage name for pipeline/backward
+compatibility, but the implementation here is Leiden.
+
 Why Leiden over Louvain
 -----------------------
 Leiden fixes a connectivity flaw in Louvain where communities can become

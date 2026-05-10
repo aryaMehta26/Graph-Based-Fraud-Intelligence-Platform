@@ -6,8 +6,9 @@ Team 2 | San José State University
 --------------------------
 Closes Issue #5.
 
-Merges the graph-derived account features (degree centrality, Louvain
-community membership) produced by 04_extract_graph_features.py back into
+Merges the graph-derived account features (degree centrality + Leiden
+community features) produced by 04_extract_graph_features.py and
+04b_louvain_communities.py back into
 the three transaction parquet splits (train / val / test).
 
 The join is performed twice per split — once on src_acct (sender) and once
@@ -26,6 +27,10 @@ New columns added (prefixed src_ / dst_):
     src_community_id, src_community_size, src_community_fraud_rate,
     dst_out_degree, dst_in_degree, dst_total_degree, dst_degree_centrality,
     dst_community_id, dst_community_size, dst_community_fraud_rate
+
+Note: community_id columns are joined into the enriched parquets for analysis
+and debugging, but the graph-enhanced XGBoost model trains on
+community_size/community_fraud_rate (not community_id).
 
 Usage
 -----

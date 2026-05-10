@@ -8,8 +8,10 @@ Closes Issue #6.
 
 Trains an XGBoost classifier on the graph-enriched feature store produced by
 05_build_feature_store.py. Every transaction row now includes structural
-features from Neo4j (degree centrality, Louvain community ID/size/fraud rate)
-for both the sender and receiver accounts.
+features from Neo4j/parquets (degree centrality + Leiden community features)
+for both the sender and receiver accounts. The model uses
+community_size/community_fraud_rate; community_id is joined upstream but
+intentionally excluded from training.
 
 This is the model that proves the core thesis: adding graph structure
 improves fraud detection beyond what tabular features alone can achieve.
