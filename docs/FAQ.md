@@ -61,8 +61,9 @@ The IBM dataset has transactions as first-class entities with their own properti
 
 Yes. Scripts 05 → 07 only need the parquet files in `data/processed/`. Neo4j is only required for:
 - `04_extract_graph_features.py` (degree features extraction)
-- `04b_louvain_communities.py` (community detection uses parquets directly, no Neo4j)
 - `src/graph/load_fraud_patterns.py` (fraud pattern loading)
+
+`04b_louvain_communities.py` does **not** require Neo4j — it runs Leiden community detection in Python using `igraph` and `leidenalg` directly on the parquet files.
 
 If `graph_features_accounts.csv` already exists (committed or shared), teammates can skip straight to script 05.
 
@@ -102,9 +103,9 @@ We use **Leiden** (an improved version of Louvain that produces better-quality, 
 
 ### What is `community_fraud_rate`?
 
-For each community, what fraction of transactions involving community members are flagged as laundering. This is the most powerful community feature because money launderers tend to operate in tight clusters. A transaction is much more suspicious if both parties are in a community where 30% of activity is fraud.
+For each community, what fraction of **training** transactions involving community members are flagged as laundering. Computed from training labels only — val/test labels are never used — so it functions as a train-derived prior that the model can generalise from. A transaction is more suspicious if both parties belong to a community where a large share of historical (training) activity was fraud.
 
-### Why did PR-AUC jump from 0.4590 to 0.5599 after adding community features?
+### Why did PR-AUC improve after adding community features?
 
 `community_fraud_rate` gives the model "guilt by association" — the ability to flag transactions based on the fraud history of the surrounding network, not just the individual account's behaviour. Degree features alone tell you how connected someone is; community features tell you who they're connected to and whether those people launder money.
 

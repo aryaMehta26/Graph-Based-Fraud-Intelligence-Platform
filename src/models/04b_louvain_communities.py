@@ -18,8 +18,9 @@ computational cost and is the current standard in graph ML.
 
 Algorithm
 ---------
-1. Load all three transaction splits (train/val/test) — same transductive
-   approach as degree features in 04_extract_graph_features.py.
+1. Load all three splits (train/val/test) for graph topology only — no labels
+   read here. This is the standard transductive setting for community detection.
+   Load train split separately with labels to compute community_fraud_rate.
 2. Build an undirected weighted account-to-account graph:
    - Nodes  : unique accounts
    - Edges  : one per unique (src_acct, dst_acct) pair, weighted by
@@ -28,8 +29,9 @@ Algorithm
 4. For each community compute:
    - community_id         : integer community label
    - community_size       : number of member accounts
-   - community_fraud_rate : fraction of transactions (where src OR dst is a
-                            member) flagged as laundering
+   - community_fraud_rate : fraction of TRAINING transactions (where src OR
+                            dst is a member) flagged as laundering.
+                            Train-only to avoid leaking val/test labels.
 5. Merge these three columns into graph_features_accounts.csv, replacing
    the zero stubs written by 04_extract_graph_features.py.
 
@@ -69,11 +71,15 @@ import leidenalg
 PROJ     = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROC_DIR = os.path.join(PROJ, "data", "processed")
 
-SPLITS = [
+# All splits — used for graph topology only (no labels read)
+GRAPH_SPLITS = [
     os.path.join(PROC_DIR, "split_train.parquet"),
     os.path.join(PROC_DIR, "split_val.parquet"),
     os.path.join(PROC_DIR, "split_test.parquet"),
 ]
+
+# Train only — used to compute community_fraud_rate without leaking val/test labels
+TRAIN_SPLIT = os.path.join(PROC_DIR, "split_train.parquet")
 
 GRAPH_FEATURES_CSV = os.path.join(PROC_DIR, "graph_features_accounts.csv")
 
@@ -91,36 +97,48 @@ log = logging.getLogger(__name__)
 # Step 1: Load all transactions
 # ---------------------------------------------------------------------------
 
-def load_transactions() -> pd.DataFrame:
-    frames = []
-    for path in SPLITS:
+def load_transactions():
+    """Return two DataFrames:
+    - txns_graph : all splits, columns src_acct/dst_acct only (no labels)
+    - txns_train : train split only, includes Is Laundering for fraud-rate computation
+    """
+    # Graph topology — load all splits without labels
+    graph_frames = []
+    for path in GRAPH_SPLITS:
         if not os.path.exists(path):
             raise FileNotFoundError(f"Split not found: {path}\nRun 02_data_cleaning.py first.")
-        df = pd.read_parquet(path, columns=["src_acct", "dst_acct", "Is Laundering"])
-        frames.append(df)
+        df = pd.read_parquet(path, columns=["src_acct", "dst_acct"])
+        graph_frames.append(df)
         log.info("  Loaded %s  (%d rows)", os.path.basename(path), len(df))
 
-    txns = pd.concat(frames, ignore_index=True)
-    log.info("Total transactions: %d", len(txns))
-    return txns
+    txns_graph = pd.concat(graph_frames, ignore_index=True)
+    log.info("Graph transactions (all splits, no labels): %d", len(txns_graph))
+
+    # Train labels — only for community_fraud_rate, never val/test
+    if not os.path.exists(TRAIN_SPLIT):
+        raise FileNotFoundError(f"Train split not found: {TRAIN_SPLIT}\nRun 02_data_cleaning.py first.")
+    txns_train = pd.read_parquet(TRAIN_SPLIT, columns=["src_acct", "dst_acct", "Is Laundering"])
+    log.info("Train transactions (for fraud rate): %d", len(txns_train))
+
+    return txns_graph, txns_train
 
 
 # ---------------------------------------------------------------------------
 # Step 2: Build account-to-account graph
 # ---------------------------------------------------------------------------
 
-def build_graph(txns: pd.DataFrame):
+def build_graph(txns_graph: pd.DataFrame):
     log.info("Building account-to-account edge list ...")
     t0 = time.time()
 
-    # Remove self-loops (same account sends to itself — not useful for communities)
-    txns = txns[txns["src_acct"] != txns["dst_acct"]].copy()
+    # Remove self-loops
+    txns = txns_graph[txns_graph["src_acct"] != txns_graph["dst_acct"]].copy()
 
-    # Aggregate: count transactions between each unique account pair (undirected)
-    txns["pair"] = txns.apply(
-        lambda r: tuple(sorted([r["src_acct"], r["dst_acct"]])), axis=1
-    )
-    edge_weights = txns.groupby("pair").size().reset_index(name="weight")
+    # Vectorized undirected edge key — elementwise min/max avoids Python-level loop
+    a, b = txns["src_acct"].values, txns["dst_acct"].values
+    txns["ea"] = np.where(a <= b, a, b)
+    txns["eb"] = np.where(a <= b, b, a)
+    edge_weights = txns.groupby(["ea", "eb"]).size().reset_index(name="weight")
     log.info("  Unique account pairs (edges): %d  (%.1fs)", len(edge_weights), time.time() - t0)
 
     # Map account IDs to integer indices
@@ -130,8 +148,8 @@ def build_graph(txns: pd.DataFrame):
 
     # Build igraph
     log.info("Building igraph object ...")
-    src_idx = edge_weights["pair"].apply(lambda p: acct_to_idx[p[0]]).tolist()
-    dst_idx = edge_weights["pair"].apply(lambda p: acct_to_idx[p[1]]).tolist()
+    src_idx = edge_weights["ea"].map(acct_to_idx).tolist()
+    dst_idx = edge_weights["eb"].map(acct_to_idx).tolist()
     weights = edge_weights["weight"].tolist()
 
     G = ig.Graph(
@@ -175,31 +193,26 @@ def run_leiden(G: ig.Graph) -> list[int]:
 # ---------------------------------------------------------------------------
 
 def compute_community_features(
-    txns: pd.DataFrame,
+    txns_train: pd.DataFrame,
     all_accounts: list,
     membership: list[int],
 ) -> pd.DataFrame:
     log.info("Computing community features ...")
 
     # account → community_id
-    acct_community = {acct: cid for acct, cid in zip(all_accounts, membership)}
+    acct_community = dict(zip(all_accounts, membership))
 
-    # community_size
-    community_size_map = {}
+    # community_size via Counter
     from collections import Counter
-    size_counts = Counter(membership)
-    community_size_map = dict(size_counts)
+    community_size_map = dict(Counter(membership))
 
-    # community_fraud_rate
-    # For each transaction, tag community of src and dst
-    # A transaction contributes to its community's fraud count if is_laundering=1
-    txns = txns[txns["src_acct"] != txns["dst_acct"]].copy()
-    txns["src_community"] = txns["src_acct"].map(acct_community)
-    txns["dst_community"] = txns["dst_acct"].map(acct_community)
+    # community_fraud_rate — TRAIN LABELS ONLY, never val/test
+    train = txns_train[txns_train["src_acct"] != txns_train["dst_acct"]].copy()
+    train["src_community"] = train["src_acct"].map(acct_community)
+    train["dst_community"] = train["dst_acct"].map(acct_community)
 
-    # Melt so each transaction appears once per unique community it touches
-    src_side = txns[["src_community", "Is Laundering"]].rename(columns={"src_community": "community_id"})
-    dst_side = txns[["dst_community", "Is Laundering"]].rename(columns={"dst_community": "community_id"})
+    src_side = train[["src_community", "Is Laundering"]].rename(columns={"src_community": "community_id"})
+    dst_side = train[["dst_community", "Is Laundering"]].rename(columns={"dst_community": "community_id"})
     combined = pd.concat([src_side, dst_side], ignore_index=True).dropna(subset=["community_id"])
     combined["community_id"] = combined["community_id"].astype(int)
 
@@ -207,17 +220,14 @@ def compute_community_features(
     community_stats["fraud_rate"] = community_stats["sum"] / community_stats["count"]
     community_fraud_map = community_stats["fraud_rate"].to_dict()
 
-    # Build per-account feature DataFrame
-    rows = []
-    for acct, cid in acct_community.items():
-        rows.append({
-            "account_id":            acct,
-            "community_id":          cid,
-            "community_size":        community_size_map.get(cid, 0),
-            "community_fraud_rate":  community_fraud_map.get(cid, 0.0),
-        })
+    # Build per-account DataFrame vectorized via Series.map (avoids 1.7M-row Python loop)
+    df_comm = pd.DataFrame({
+        "account_id":   list(acct_community.keys()),
+        "community_id": list(acct_community.values()),
+    })
+    df_comm["community_size"]       = df_comm["community_id"].map(community_size_map).fillna(0)
+    df_comm["community_fraud_rate"] = df_comm["community_id"].map(community_fraud_map).fillna(0.0)
 
-    df_comm = pd.DataFrame(rows)
     df_comm["community_id"]         = df_comm["community_id"].astype("int32")
     df_comm["community_size"]       = df_comm["community_size"].astype("int32")
     df_comm["community_fraud_rate"] = df_comm["community_fraud_rate"].astype("float32")
@@ -282,11 +292,11 @@ def main():
 
     # Step 1
     log.info("=== Step 1: Load transactions ===")
-    txns = load_transactions()
+    txns_graph, txns_train = load_transactions()
 
     # Step 2
     log.info("=== Step 2: Build graph ===")
-    G, acct_to_idx, all_accounts = build_graph(txns)
+    G, acct_to_idx, all_accounts = build_graph(txns_graph)
 
     # Step 3
     log.info("=== Step 3: Leiden community detection ===")
@@ -294,7 +304,7 @@ def main():
 
     # Step 4
     log.info("=== Step 4: Compute community features ===")
-    df_comm = compute_community_features(txns, all_accounts, membership)
+    df_comm = compute_community_features(txns_train, all_accounts, membership)
 
     # Step 5
     log.info("=== Step 5: Update graph_features_accounts.csv ===")
