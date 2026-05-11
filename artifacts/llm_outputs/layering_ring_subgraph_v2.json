@@ -1,0 +1,114 @@
+[
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15",
+      "Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48",
+      "Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle",
+      "All 3 transactions occurred within a 67-minute window between 02:15 and 03:22",
+      "All 3 transactions are flagged is_laundering=1",
+      "Total amount cycled through the ring is $132700.0 across 3 cross-bank wire transfers",
+      "Each transfer shows a slight reduction in amount ($45000.0 \u2192 $44200.0 \u2192 $43500.0), consistent with layering fees or skimming",
+      "All 3 accounts span different banks (bank_id 10, 20, and 30), indicating deliberate cross-institution obfuscation",
+      "Community 112 has a fraud rate of 0.671, and all 3 accounts carry the role 'layering_node'",
+      "All transactions occurred in the early morning hours (hour 2 and hour 3), a common off-hours evasion tactic",
+      "Account 900A1B2 has degree_centrality of 0.743, account 900C5D6 has 0.712, and account 900B3C4 has 0.698, all highly central within the community"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze accounts 900A1B2, 900B3C4, and 900C5D6 immediately pending full investigation",
+      "File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103",
+      "Notify compliance teams at bank_id 10, bank_id 20, and bank_id 30 of the cross-institution layering ring",
+      "Trace the origin of the $45000.0 entering account 900A1B2 prior to transaction T_101 to identify the placement stage",
+      "Investigate the $1500.0 net reduction across the cycle ($45000.0 to $43500.0) to determine if funds were siphoned to additional undiscovered accounts",
+      "Expand graph analysis to identify any additional accounts connected to 900A1B2, 900B3C4, or 900C5D6 outside community_id 112",
+      "Escalate to law enforcement given 100% fraud transaction rate (3 of 3 transactions flagged) and CRITICAL community fraud rate of 0.671"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-09T17:17:29.823269",
+      "input_tokens": 1348,
+      "output_tokens": 739,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15\",\n    \"Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48\",\n    \"Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle\",\n    \"All 3 transactions occurred within a 67-minute window between 02:15 and 03:22\",\n    \"All 3 transactions are flagged is_laundering=1\",\n    \"Total amount cycled through the ring is $132700.0 across 3 cross-bank wire transfers\",\n    \"Each transfer shows a slight reduction in amount ($45000.0 \u2192 $44200.0 \u2192 $43500.0), consistent with layering fees or skimming\",\n    \"All 3 accounts span different banks (bank_id 10, 20, and 30), indicating deliberate cross-institution obfuscation\",\n    \"Community 112 has a fraud rate of 0.671, and all 3 accounts carry the role 'layering_node'\",\n    \"All transactions occurred in the early morning hours (hour 2 and hour 3), a common off-hours evasion tactic\",\n    \"Account 900A1B2 has degree_centrality of 0.743, account 900C5D6 has 0.712, and account 900B3C4 has 0.698, all highly central within the community\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze accounts 900A1B2, 900B3C4, and 900C5D6 immediately pending full investigation\",\n    \"File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103\",\n    \"Notify compliance teams at bank_id 10, bank_id 20, and bank_id 30 of the cross-institution layering ring\",\n    \"Trace the origin of the $45000.0 entering account 900A1B2 prior to transaction T_101 to identify the placement stage\",\n    \"Investigate the $1500.0 net reduction across the cycle ($45000.0 to $43500.0) to determine if funds were siphoned to additional undiscovered accounts\",\n    \"Expand graph analysis to identify any additional accounts connected to 900A1B2, 900B3C4, or 900C5D6 outside community_id 112\",\n    \"Escalate to law enforcement given 100% fraud transaction rate (3 of 3 transactions flagged) and CRITICAL community fraud rate of 0.671\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15",
+      "Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48",
+      "Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle",
+      "The full cycle 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2 completed within 67 minutes",
+      "All 3 transactions flagged as is_laundering=1",
+      "All 3 transactions occurred between 02:15 and 03:22, during off-hours (hours 2\u20133)",
+      "All 3 transactions used Wire payment format across 3 different banks (bank_id 10, 20, 30)",
+      "Total amount cycled through subgraph is $132700.0 with a slight reduction per hop ($45000.0 \u2192 $44200.0 \u2192 $43500.0), consistent with fee skimming during layering",
+      "Community 112 has a fraud rate of 0.671, with all 3 of 3 transactions confirmed fraudulent",
+      "All three accounts (900A1B2, 900B3C4, 900C5D6) are explicitly labeled with role 'layering_node'",
+      "Degree centrality for 900A1B2 is 0.743, 900B3C4 is 0.698, and 900C5D6 is 0.712, indicating tightly interconnected nodes",
+      "All 3 transfers are cross-bank, spanning bank_id 10, 20, and 30, obfuscating the trail across institutions"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze accounts 900A1B2, 900B3C4, and 900C5D6 immediately pending full investigation",
+      "File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 covering transactions T_101, T_102, and T_103",
+      "Notify compliance teams at bank_id 10, bank_id 20, and bank_id 30 of the cross-institution layering ring",
+      "Trace the origin of the $45000.0 entering account 900A1B2 prior to transaction T_101 to identify the placement stage",
+      "Investigate whether the incremental amount reductions ($45000.0 \u2192 $44200.0 \u2192 $43500.0) correspond to fee payments to intermediaries or structuring behavior",
+      "Expand graph analysis to identify any additional accounts connected to 900A1B2, 900B3C4, or 900C5D6 outside community 112 that may be part of a broader laundering network",
+      "Escalate to law enforcement given the 100% fraud transaction rate and CRITICAL community fraud rate of 0.671",
+      "Review all off-hours wire activity (hours 0\u20135) across bank_id 10, 20, and 30 for similar cyclic patterns"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-09T17:17:42.831609",
+      "input_tokens": 1348,
+      "output_tokens": 840,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15\",\n    \"Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48\",\n    \"Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle\",\n    \"The full cycle 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2 completed within 67 minutes\",\n    \"All 3 transactions flagged as is_laundering=1\",\n    \"All 3 transactions occurred between 02:15 and 03:22, during off-hours (hours 2\u20133)\",\n    \"All 3 transactions used Wire payment format across 3 different banks (bank_id 10, 20, 30)\",\n    \"Total amount cycled through subgraph is $132700.0 with a slight reduction per hop ($45000.0 \u2192 $44200.0 \u2192 $43500.0), consistent with fee skimming during layering\",\n    \"Community 112 has a fraud rate of 0.671, with all 3 of 3 transactions confirmed fraudulent\",\n    \"All three accounts (900A1B2, 900B3C4, 900C5D6) are explicitly labeled with role 'layering_node'\",\n    \"Degree centrality for 900A1B2 is 0.743, 900B3C4 is 0.698, and 900C5D6 is 0.712, indicating tightly interconnected nodes\",\n    \"All 3 transfers are cross-bank, spanning bank_id 10, 20, and 30, obfuscating the trail across institutions\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze accounts 900A1B2, 900B3C4, and 900C5D6 immediately pending full investigation\",\n    \"File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 covering transactions T_101, T_102, and T_103\",\n    \"Notify compliance teams at bank_id 10, bank_id 20, and bank_id 30 of the cross-institution layering ring\",\n    \"Trace the origin of the $45000.0 entering account 900A1B2 prior to transaction T_101 to identify the placement stage\",\n    \"Investigate whether the incremental amount reductions ($45000.0 \u2192 $44200.0 \u2192 $43500.0) correspond to fee payments to intermediaries or structuring behavior\",\n    \"Expand graph analysis to identify any additional accounts connected to 900A1B2, 900B3C4, or 900C5D6 outside community 112 that may be part of a broader laundering network\",\n    \"Escalate to law enforcement given the 100% fraud transaction rate and CRITICAL community fraud rate of 0.671\",\n    \"Review all off-hours wire activity (hours 0\u20135) across bank_id 10, 20, and 30 for similar cyclic patterns\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15",
+      "Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48",
+      "Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle",
+      "All 3 transactions occurred within a 67-minute window between 02:15 and 03:22",
+      "All 3 transactions are flagged is_laundering=1",
+      "Total amount cycled through the ring is $132700.0 across 3 cross-bank wire transfers",
+      "Accounts 900A1B2, 900B3C4, and 900C5D6 span three different banks (bank_id 10, 20, and 30 respectively), all 3 transfers are cross-bank",
+      "Community 112 has a fraud rate of 0.671, and all 3 of 3 transactions in the subgraph are fraudulent",
+      "Account 900A1B2 has degree_centrality of 0.743 and is assigned role layering_node",
+      "Account 900B3C4 has degree_centrality of 0.698 and is assigned role layering_node",
+      "Account 900C5D6 has degree_centrality of 0.712 and is assigned role layering_node",
+      "Transactions T_101, T_102, and T_103 all occurred in the early morning hours (hour 2 or 3), a low-activity period consistent with deliberate obfuscation"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 900A1B2 at bank_id 10 immediately pending full investigation",
+      "Freeze account 900B3C4 at bank_id 20 immediately pending full investigation",
+      "Freeze account 900C5D6 at bank_id 30 immediately pending full investigation",
+      "File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103",
+      "Coordinate with bank_id 10, bank_id 20, and bank_id 30 compliance teams to share transaction records and identify beneficial owners",
+      "Trace the origin of the $45000.0 entering the ring via account 900A1B2 to identify the primary illicit funding source",
+      "Investigate whether additional accounts outside community_112 are connected to 900A1B2, 900B3C4, or 900C5D6 to detect broader layering infrastructure",
+      "Escalate to law enforcement given 100% fraud transaction rate, cross-bank structuring, and off-hours activity pattern"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-09T17:17:53.150722",
+      "input_tokens": 1348,
+      "output_tokens": 761,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15\",\n    \"Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48\",\n    \"Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle\",\n    \"All 3 transactions occurred within a 67-minute window between 02:15 and 03:22\",\n    \"All 3 transactions are flagged is_laundering=1\",\n    \"Total amount cycled through the ring is $132700.0 across 3 cross-bank wire transfers\",\n    \"Accounts 900A1B2, 900B3C4, and 900C5D6 span three different banks (bank_id 10, 20, and 30 respectively), all 3 transfers are cross-bank\",\n    \"Community 112 has a fraud rate of 0.671, and all 3 of 3 transactions in the subgraph are fraudulent\",\n    \"Account 900A1B2 has degree_centrality of 0.743 and is assigned role layering_node\",\n    \"Account 900B3C4 has degree_centrality of 0.698 and is assigned role layering_node\",\n    \"Account 900C5D6 has degree_centrality of 0.712 and is assigned role layering_node\",\n    \"Transactions T_101, T_102, and T_103 all occurred in the early morning hours (hour 2 or 3), a low-activity period consistent with deliberate obfuscation\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 900A1B2 at bank_id 10 immediately pending full investigation\",\n    \"Freeze account 900B3C4 at bank_id 20 immediately pending full investigation\",\n    \"Freeze account 900C5D6 at bank_id 30 immediately pending full investigation\",\n    \"File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103\",\n    \"Coordinate with bank_id 10, bank_id 20, and bank_id 30 compliance teams to share transaction records and identify beneficial owners\",\n    \"Trace the origin of the $45000.0 entering the ring via account 900A1B2 to identify the primary illicit funding source\",\n    \"Investigate whether additional accounts outside community_112 are connected to 900A1B2, 900B3C4, or 900C5D6 to detect broader layering infrastructure\",\n    \"Escalate to law enforcement given 100% fraud transaction rate, cross-bank structuring, and off-hours activity pattern\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]

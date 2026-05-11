@@ -1,0 +1,111 @@
+[
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2",
+      "Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2",
+      "Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role",
+      "Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph",
+      "Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes",
+      "Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 within 1.5 hours of receiving funds",
+      "All 5 transactions in subgraph marked as is_laundering: 1",
+      "Community fraud_rate is 0.423 with community_size of 12",
+      "Cross-bank transfers: 2 (account 800C4D1 from bank 3196, account 800D7E8 from bank 1208)"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 800A3F2 pending investigation",
+      "Freeze accounts 800B1C9 and 800C4D1 as feeder accounts",
+      "Freeze account 800D7E8 as ultimate beneficiary",
+      "File Suspicious Activity Report (SAR) for all four accounts",
+      "Conduct enhanced due diligence on beneficial owners of accounts 800A3F2, 800B1C9, and 800C4D1",
+      "Coordinate with banks 20, 3196, and 1208 for account holder verification",
+      "Trace source of funds in feeder accounts 800B1C9 and 800C4D1",
+      "Investigate destination and use of $48,200 wire transfer to account 800D7E8",
+      "Review all historical transactions for these four accounts for additional suspicious patterns"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 1,
+      "timestamp": "2026-05-09T16:58:50.553309",
+      "input_tokens": 1582,
+      "output_tokens": 552,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2\",\n    \"Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2\",\n    \"Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role\",\n    \"Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph\",\n    \"Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes\",\n    \"Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 within 1.5 hours of receiving funds\",\n    \"All 5 transactions in subgraph marked as is_laundering: 1\",\n    \"Community fraud_rate is 0.423 with community_size of 12\",\n    \"Cross-bank transfers: 2 (account 800C4D1 from bank 3196, account 800D7E8 from bank 1208)\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 800A3F2 pending investigation\",\n    \"Freeze accounts 800B1C9 and 800C4D1 as feeder accounts\",\n    \"Freeze account 800D7E8 as ultimate beneficiary\",\n    \"File Suspicious Activity Report (SAR) for all four accounts\",\n    \"Conduct enhanced due diligence on beneficial owners of accounts 800A3F2, 800B1C9, and 800C4D1\",\n    \"Coordinate with banks 20, 3196, and 1208 for account holder verification\",\n    \"Trace source of funds in feeder accounts 800B1C9 and 800C4D1\",\n    \"Investigate destination and use of $48,200 wire transfer to account 800D7E8\",\n    \"Review all historical transactions for these four accounts for additional suspicious patterns\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2",
+      "Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2",
+      "Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role",
+      "Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph",
+      "Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes",
+      "Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 at 04:45:00",
+      "All 5 transactions in subgraph marked as is_laundering: 1",
+      "Community fraud_rate is 0.423",
+      "Transactions occurred during early morning hours (03:12 to 04:45) on weekday"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 800A3F2 pending investigation",
+      "Freeze account 800B1C9 pending investigation",
+      "Freeze account 800C4D1 pending investigation",
+      "Freeze account 800D7E8 pending investigation",
+      "File Suspicious Activity Report (SAR) for community 447",
+      "Conduct enhanced due diligence on all four accounts to identify beneficial owners",
+      "Subpoena transaction records for accounts 800A3F2, 800B1C9, 800C4D1 for past 12 months",
+      "Coordinate with banks 20, 3196, and 1208 for account holder verification",
+      "Investigate source of funds for feeder accounts 800B1C9 and 800C4D1",
+      "Trace destination and ultimate beneficiary of $48,200 wire to account 800D7E8"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 2,
+      "timestamp": "2026-05-09T16:58:55.849189",
+      "input_tokens": 1582,
+      "output_tokens": 536,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2\",\n    \"Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2\",\n    \"Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role\",\n    \"Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph\",\n    \"Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes\",\n    \"Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 at 04:45:00\",\n    \"All 5 transactions in subgraph marked as is_laundering: 1\",\n    \"Community fraud_rate is 0.423\",\n    \"Transactions occurred during early morning hours (03:12 to 04:45) on weekday\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 800A3F2 pending investigation\",\n    \"Freeze account 800B1C9 pending investigation\",\n    \"Freeze account 800C4D1 pending investigation\",\n    \"Freeze account 800D7E8 pending investigation\",\n    \"File Suspicious Activity Report (SAR) for community 447\",\n    \"Conduct enhanced due diligence on all four accounts to identify beneficial owners\",\n    \"Subpoena transaction records for accounts 800A3F2, 800B1C9, 800C4D1 for past 12 months\",\n    \"Coordinate with banks 20, 3196, and 1208 for account holder verification\",\n    \"Investigate source of funds for feeder accounts 800B1C9 and 800C4D1\",\n    \"Trace destination and ultimate beneficiary of $48,200 wire to account 800D7E8\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2",
+      "Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2",
+      "Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role",
+      "Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph",
+      "Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes",
+      "Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 within 1.5 hours of receiving funds",
+      "All 5 transactions in subgraph marked as is_laundering: 1",
+      "Community fraud_rate is 0.423 with community_size of 12",
+      "Cross-bank transfers: 2 (account 800C4D1 from bank 3196, account 800D7E8 from bank 1208)"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 800A3F2 pending investigation",
+      "Freeze accounts 800B1C9 and 800C4D1 as feeder accounts",
+      "Freeze account 800D7E8 as ultimate receiver",
+      "File Suspicious Activity Report (SAR) for all four accounts",
+      "Conduct enhanced due diligence on beneficial owners of accounts 800A3F2, 800B1C9, and 800C4D1",
+      "Coordinate with banks 20, 3196, and 1208 for account holder verification",
+      "Trace source of funds in feeder accounts 800B1C9 and 800C4D1",
+      "Investigate destination and use of $48,200 wire transfer to account 800D7E8",
+      "Review all historical transactions for these four accounts for additional suspicious patterns"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 3,
+      "timestamp": "2026-05-09T16:59:00.848858",
+      "input_tokens": 1582,
+      "output_tokens": 551,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2\",\n    \"Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2\",\n    \"Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role\",\n    \"Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph\",\n    \"Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes\",\n    \"Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 within 1.5 hours of receiving funds\",\n    \"All 5 transactions in subgraph marked as is_laundering: 1\",\n    \"Community fraud_rate is 0.423 with community_size of 12\",\n    \"Cross-bank transfers: 2 (account 800C4D1 from bank 3196, account 800D7E8 from bank 1208)\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 800A3F2 pending investigation\",\n    \"Freeze accounts 800B1C9 and 800C4D1 as feeder accounts\",\n    \"Freeze account 800D7E8 as ultimate receiver\",\n    \"File Suspicious Activity Report (SAR) for all four accounts\",\n    \"Conduct enhanced due diligence on beneficial owners of accounts 800A3F2, 800B1C9, and 800C4D1\",\n    \"Coordinate with banks 20, 3196, and 1208 for account holder verification\",\n    \"Trace source of funds in feeder accounts 800B1C9 and 800C4D1\",\n    \"Investigate destination and use of $48,200 wire transfer to account 800D7E8\",\n    \"Review all historical transactions for these four accounts for additional suspicious patterns\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]

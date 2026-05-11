@@ -1,0 +1,82 @@
+{
+  "subgraph_id": "community_112",
+  "community_id": 112,
+  "community_fraud_rate": 0.671,
+  "community_size": 6,
+  "flagged_by": "xgboost_layer1 + louvain_layer2",
+  "accounts": [
+    {
+      "account_id": "900A1B2",
+      "bank_id": 10,
+      "out_degree": 3,
+      "in_degree": 2,
+      "total_degree": 5,
+      "degree_centrality": 0.743,
+      "community_id": 112,
+      "role": "layering_node"
+    },
+    {
+      "account_id": "900B3C4",
+      "bank_id": 20,
+      "out_degree": 2,
+      "in_degree": 3,
+      "total_degree": 5,
+      "degree_centrality": 0.698,
+      "community_id": 112,
+      "role": "layering_node"
+    },
+    {
+      "account_id": "900C5D6",
+      "bank_id": 30,
+      "out_degree": 3,
+      "in_degree": 2,
+      "total_degree": 5,
+      "degree_centrality": 0.712,
+      "community_id": 112,
+      "role": "layering_node"
+    }
+  ],
+  "transactions": [
+    {
+      "txn_id": "T_101",
+      "src_acct": "900A1B2",
+      "dst_acct": "900B3C4",
+      "amount": 45000.00,
+      "payment_format": "Wire",
+      "timestamp": "2022-09-10T02:15:00",
+      "is_laundering": 1,
+      "hour": 2,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_102",
+      "src_acct": "900B3C4",
+      "dst_acct": "900C5D6",
+      "amount": 44200.00,
+      "payment_format": "Wire",
+      "timestamp": "2022-09-10T02:48:00",
+      "is_laundering": 1,
+      "hour": 2,
+      "is_weekend": 0
+    },
+    {
+      "txn_id": "T_103",
+      "src_acct": "900C5D6",
+      "dst_acct": "900A1B2",
+      "amount": 43500.00,
+      "payment_format": "Wire",
+      "timestamp": "2022-09-10T03:22:00",
+      "is_laundering": 1,
+      "hour": 3,
+      "is_weekend": 0
+    }
+  ],
+  "graph_stats": {
+    "total_amount_in_subgraph": 132700.00,
+    "transaction_count": 3,
+    "fraud_transaction_count": 3,
+    "time_window_minutes": 67,
+    "dominant_payment_format": "Wire",
+    "cross_bank_transfers": 3
+  }
+}

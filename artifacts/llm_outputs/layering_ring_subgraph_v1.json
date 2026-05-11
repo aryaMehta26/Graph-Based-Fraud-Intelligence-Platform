@@ -1,0 +1,118 @@
+[
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00",
+      "Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00",
+      "Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00",
+      "Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2",
+      "All 3 transactions marked as laundering (is_laundering=1)",
+      "All transactions executed via Wire format within 67-minute window",
+      "All 3 transactions are cross-bank transfers (bank_id: 10, 20, 30)",
+      "Community fraud rate is 0.671 (67.1%)",
+      "Account 900A1B2 has degree centrality of 0.743",
+      "Account 900B3C4 has degree centrality of 0.698",
+      "Account 900C5D6 has degree centrality of 0.712"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation",
+      "File Suspicious Activity Report (SAR) for all three accounts citing layering ring pattern",
+      "Initiate enhanced due diligence on beneficial owners of accounts 900A1B2, 900B3C4, and 900C5D6",
+      "Coordinate with banks 10, 20, and 30 for account holder verification and transaction source documentation",
+      "Trace origin of initial $45,000.00 deposit into account 900A1B2",
+      "Analyze historical transaction patterns for all three accounts prior to 2022-09-10",
+      "Review all other accounts in community 112 for related suspicious activity",
+      "Escalate to Financial Crimes Enforcement Network (FinCEN) given cross-bank nature and high fraud rate"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 1,
+      "timestamp": "2026-05-09T17:17:08.144211",
+      "input_tokens": 1347,
+      "output_tokens": 582,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00\",\n    \"Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00\",\n    \"Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00\",\n    \"Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2\",\n    \"All 3 transactions marked as laundering (is_laundering=1)\",\n    \"All transactions executed via Wire format within 67-minute window\",\n    \"All 3 transactions are cross-bank transfers (bank_id: 10, 20, 30)\",\n    \"Community fraud rate is 0.671 (67.1%)\",\n    \"Account 900A1B2 has degree centrality of 0.743\",\n    \"Account 900B3C4 has degree centrality of 0.698\",\n    \"Account 900C5D6 has degree centrality of 0.712\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation\",\n    \"File Suspicious Activity Report (SAR) for all three accounts citing layering ring pattern\",\n    \"Initiate enhanced due diligence on beneficial owners of accounts 900A1B2, 900B3C4, and 900C5D6\",\n    \"Coordinate with banks 10, 20, and 30 for account holder verification and transaction source documentation\",\n    \"Trace origin of initial $45,000.00 deposit into account 900A1B2\",\n    \"Analyze historical transaction patterns for all three accounts prior to 2022-09-10\",\n    \"Review all other accounts in community 112 for related suspicious activity\",\n    \"Escalate to Financial Crimes Enforcement Network (FinCEN) given cross-bank nature and high fraud rate\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00",
+      "Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00",
+      "Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00",
+      "Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2",
+      "All 3 transactions marked as laundering (is_laundering=1)",
+      "All transactions use Wire payment format",
+      "All 3 transactions are cross-bank transfers",
+      "Community fraud rate is 0.671",
+      "Total amount cycled through ring: $132,700.00",
+      "Time window for complete cycle: 67 minutes",
+      "Account 900A1B2 has degree centrality of 0.743",
+      "Account 900B3C4 has degree centrality of 0.698",
+      "Account 900C5D6 has degree centrality of 0.712"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation",
+      "File Suspicious Activity Report (SAR) for the layering ring involving accounts 900A1B2, 900B3C4, and 900C5D6",
+      "Conduct enhanced due diligence on beneficial owners of all three accounts",
+      "Coordinate with banks 10, 20, and 30 to obtain complete account documentation and transaction history",
+      "Investigate source of initial funds into account 900A1B2",
+      "Trace destination and ultimate beneficiary of funds exiting account 900A1B2 after the cycle completes",
+      "Review all other transactions for these accounts over the past 12 months for additional layering patterns",
+      "Consider referral to law enforcement for potential money laundering prosecution"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 2,
+      "timestamp": "2026-05-09T17:17:12.726370",
+      "input_tokens": 1347,
+      "output_tokens": 579,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00\",\n    \"Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00\",\n    \"Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00\",\n    \"Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2\",\n    \"All 3 transactions marked as laundering (is_laundering=1)\",\n    \"All transactions use Wire payment format\",\n    \"All 3 transactions are cross-bank transfers\",\n    \"Community fraud rate is 0.671\",\n    \"Total amount cycled through ring: $132,700.00\",\n    \"Time window for complete cycle: 67 minutes\",\n    \"Account 900A1B2 has degree centrality of 0.743\",\n    \"Account 900B3C4 has degree centrality of 0.698\",\n    \"Account 900C5D6 has degree centrality of 0.712\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation\",\n    \"File Suspicious Activity Report (SAR) for the layering ring involving accounts 900A1B2, 900B3C4, and 900C5D6\",\n    \"Conduct enhanced due diligence on beneficial owners of all three accounts\",\n    \"Coordinate with banks 10, 20, and 30 to obtain complete account documentation and transaction history\",\n    \"Investigate source of initial funds into account 900A1B2\",\n    \"Trace destination and ultimate beneficiary of funds exiting account 900A1B2 after the cycle completes\",\n    \"Review all other transactions for these accounts over the past 12 months for additional layering patterns\",\n    \"Consider referral to law enforcement for potential money laundering prosecution\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Layering Ring",
+    "evidence": [
+      "Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00",
+      "Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00",
+      "Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00",
+      "Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2",
+      "All 3 transactions marked as laundering (is_laundering=1)",
+      "All transactions use Wire payment format",
+      "All 3 transactions are cross-bank transfers",
+      "Community fraud rate is 0.671",
+      "Total amount cycled through ring: $132,700.00",
+      "Time window for complete cycle: 67 minutes",
+      "All transactions occurred during early morning hours (02:15-03:22)",
+      "Account 900A1B2 has degree centrality of 0.743",
+      "Account 900B3C4 has degree centrality of 0.698",
+      "Account 900C5D6 has degree centrality of 0.712"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation",
+      "File Suspicious Activity Report (SAR) for all three accounts",
+      "Initiate enhanced due diligence on beneficial owners of accounts 900A1B2, 900B3C4, and 900C5D6",
+      "Coordinate with banks 10, 20, and 30 for account holder verification and transaction source documentation",
+      "Trace the origin of the initial $45,000.00 deposit into account 900A1B2",
+      "Analyze historical transaction patterns for all three accounts for the past 12 months",
+      "Flag all counterparties and beneficiaries associated with these accounts for review",
+      "Escalate to law enforcement and financial intelligence unit given clear cyclic laundering pattern"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 3,
+      "timestamp": "2026-05-09T17:17:17.436592",
+      "input_tokens": 1347,
+      "output_tokens": 596,
+      "raw_response": "```json\n{\n  \"pattern\": \"Layering Ring\",\n  \"evidence\": [\n    \"Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00\",\n    \"Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00\",\n    \"Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00\",\n    \"Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2\",\n    \"All 3 transactions marked as laundering (is_laundering=1)\",\n    \"All transactions use Wire payment format\",\n    \"All 3 transactions are cross-bank transfers\",\n    \"Community fraud rate is 0.671\",\n    \"Total amount cycled through ring: $132,700.00\",\n    \"Time window for complete cycle: 67 minutes\",\n    \"All transactions occurred during early morning hours (02:15-03:22)\",\n    \"Account 900A1B2 has degree centrality of 0.743\",\n    \"Account 900B3C4 has degree centrality of 0.698\",\n    \"Account 900C5D6 has degree centrality of 0.712\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation\",\n    \"File Suspicious Activity Report (SAR) for all three accounts\",\n    \"Initiate enhanced due diligence on beneficial owners of accounts 900A1B2, 900B3C4, and 900C5D6\",\n    \"Coordinate with banks 10, 20, and 30 for account holder verification and transaction source documentation\",\n    \"Trace the origin of the initial $45,000.00 deposit into account 900A1B2\",\n    \"Analyze historical transaction patterns for all three accounts for the past 12 months\",\n    \"Flag all counterparties and beneficiaries associated with these accounts for review\",\n    \"Escalate to law enforcement and financial intelligence unit given clear cyclic laundering pattern\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]

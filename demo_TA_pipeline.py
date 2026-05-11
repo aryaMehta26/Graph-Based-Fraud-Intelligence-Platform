@@ -9,7 +9,10 @@ import time
 import logging
 from datetime import datetime
 
-PROJ = "/Users/aryaaa/Desktop/DATA 298"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))
 PROCESSED_FILE = os.path.join(PROJ, "data", "processed", "transactions_graph.parquet")
 LOG_DIR = os.path.join(PROJ, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -96,7 +99,7 @@ try:
     logger.info(f"Ingested {len(df)} feature-engineered records successfully.")
     
     logger.info("Connecting to Neo4j Graph Warehouse...")
-    driver = GraphDatabase.driver("neo4j://127.0.0.1:7687", auth=("neo4j", "Aryamehta@26"))
+    driver = GraphDatabase.driver(os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687"), auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "fraud2026")))
     driver.verify_connectivity()
     
     with driver.session(database="fraudgraph") as session:

@@ -1,33 +1,45 @@
-<div align="center">
-
 # Graph-Based Fraud Intelligence Platform
 
-**Detecting money laundering at scale using Knowledge Graphs and Deep Graph Learning**
+**Detecting money laundering at scale using Knowledge Graphs, Graph Analytics, and LLM Investigation**
 
-*DATA 298A · San José State University · *
+*DATA 298A · San José State University · Team 2 · Spring 2026*
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
 [![Neo4j](https://img.shields.io/badge/Neo4j-5.x-008CC1?style=flat&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![GDS](https://img.shields.io/badge/Graph_Data_Science-2.27.0-4CAF50?style=flat)](https://neo4j.com/docs/graph-data-science)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
-[![License: Apache_2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-
-</div>
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/aryaMehta26/Graph-Based-Fraud-Intelligence-Platform/blob/main/LICENSE)
 
 ---
 
 ## Why This Exists
 
-Banks lose **$3.1 trillion** to money laundering every year. Traditional fraud detection systems look at every transaction in isolation — one row, one decision. They cannot see the patterns that sophisticated laundering operations depend on:
+Banks lose **$3.1 trillion** to money laundering every year. Traditional fraud detection systems evaluate every transaction in isolation — one row, one decision. They cannot see the coordinated patterns that sophisticated laundering operations depend on:
 
 - **Layering rings** — A sends to B, B sends to C, C sends back to A. Clean.
-- **Smurfing (account funneling)** — 50 accounts all draining into one mule account.
-- **Cyclic chains** — Money travels through 8 accounts before surfacing clean.
+- **Smurfing** — 50 accounts all draining into one mule account below reporting thresholds.
+- **Fan-out distribution** — One source account rapidly distributing to dozens of recipients.
 
 These patterns are invisible to tabular models. They are immediately obvious in a graph.
 
-Inspired by how **Palantir Gotham** and enterprise financial intelligence platforms model the world as entities and relationships — not rows and columns — we built a **Knowledge Graph** on top of 31.9 million IBM AML transactions. Every account is a node. Every transaction is an edge. Every pattern is a shape we can detect.
+Inspired by how **Palantir Gotham** models the world as entities and relationships — not rows and columns — we built a **Knowledge Graph** on top of 31.9 million IBM AML transactions and layered four detection models on top of it.
+
+---
+
+## The Core Thesis
+
+> **Fraud is relational, not independent.**
+
+A transaction processed in isolation looks normal. The same transaction, viewed inside a network of 47 connected accounts moving $97,000 between 3 AM and 5 AM, looks like exactly what it is.
+
+This platform proves that thesis in numbers:
+
+| Model Layer | PR-AUC | vs. Baseline |
+|---|---|---|
+| Tabular XGBoost (baseline) | 0.3043 | — |
+| + Degree centrality features | 0.4590 | +51% |
+| + Louvain community features | 0.5599 | +84% |
 
 ---
 
@@ -37,172 +49,132 @@ Inspired by how **Palantir Gotham** and enterprise financial intelligence platfo
 |---|---|
 | **Source** | [IBM Anti-Money Laundering Dataset](https://www.kaggle.com/datasets/ealtman2019/ibm-transactions-for-anti-money-laundering-aml) on Kaggle |
 | **Author** | Erik Altman, IBM Research |
-| **Pattern Set Used** | `HI-Medium` — High Illicit ratio, Medium complexity laundering patterns |
-| **Available Pattern Sets** | LI-Small, LI-Medium, HI-Small, HI-Medium, HI-Large |
+| **Pattern Set** | `HI-Medium` — High Illicit ratio, Medium complexity laundering patterns |
 | **Total Transactions** | **31,898,238** |
 | **Total Accounts** | **1,757,942** |
 | **Fraud Transactions** | **35,158** |
-| **Fraud Rings (Patterns)** | **2,756 identified laundering patterns** |
-| **Fraud Rate** | **0.1102%** (906 legitimate transactions for every 1 fraudulent one) |
+| **Fraud Rate** | **0.1102%** (904 legitimate transactions per 1 fraudulent) |
 | **Payment Formats** | ACH, Cheque, Credit Card, Wire, Bitcoin, Reinvestment |
-| **Currencies** | 8 currencies across 27 days of transaction history |
-| **Raw File Size** | **5.45 GB** across 3 files |
 | **Date Range** | September 2022 (27 days) |
-
-### Raw File Inventory
-
-| File | Size | Contents |
-|---|---|---|
-| `HI-Medium_Trans.csv` | 4.0 GB | All 31.9M transaction records |
-| `HI-Medium_accounts.csv` | 63.5 MB | 1.76M unique account + bank mappings |
-| `HI-Medium_Patterns.txt` | 0.2 MB | 2,756 ground-truth laundering ring definitions |
-
-### Why This Dataset?
-
-Most public fraud datasets have tens of thousands of rows. This one has **31.9 million**, with real synthetic laundering ring structures defined by IBM researchers. It mirrors real enterprise-scale financial data, which is exactly what makes the engineering problem hard and the solution valuable.
 
 ---
 
-## Architecture Overview
+## 4-Layer Architecture
 
-The system is split into two parallel pipelines that share the same cleaned, engineered data:
+The platform implements four detection layers in sequence. Each layer feeds signal into the next.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                        5-STAGE DATA PIPELINE                                  │
-│                                                                                │
-│  ┌─────────────┐   ┌─────────────┐   ┌──────────────────┐                    │
-│  │  1. COLLECT  │──▶│  2. CLEAN   │──▶│  3. ENGINEER      │                    │
-│  │             │   │             │   │                  │                    │
-│  │ Kaggle API  │   │ Timestamps  │   │ log_amount       │                    │
-│  │ 31.9M rows  │   │ Self-loops  │   │ is_ACH           │                    │
-│  │ 5.45 GB     │   │ Null checks │   │ hour / weekend   │                    │
-│  │             │   │ Log-norm    │   │ amount_bucket    │                    │
-│  └─────────────┘   └─────────────┘   └────────┬─────────┘                    │
-│                                                │                              │
-│                                   ┌────────────┴────────────┐                │
-│                                   │  CENTRAL PIPELINE FORK  │                │
-│                                   └────────────┬────────────┘                │
-│                                                │                              │
-│                        ┌───────────────────────┴───────────────────────┐     │
-│                        ▼                                               ▼     │
-│              PATH A: TABULAR ML                           PATH B: GRAPH ML   │
-│              ─────────────────                            ───────────────     │
-│         4a. Time-Aware Split                         4b. Ontology Mapping    │
-│              70% Train                                4 CSV components        │
-│              15% Val                                  Nodes + Edges           │
-│              15% Test                                                          │
-│                   │                                          │                │
-│                   ▼                                          ▼                │
-│           XGBoost Parquets                        Neo4j 31M Bulk Load        │
-│           (Fraud Classifier)                      (~2 hours, batched)         │
-└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                     4-LAYER FRAUD DETECTION SYSTEM                   │
+│                                                                       │
+│  ┌──────────────────┐                                                 │
+│  │  DATA PIPELINE   │  31.9M rows → cleaned → feature-engineered     │
+│  │  notebooks/01-03 │  → time-aware 70/15/15 splits (parquet)        │
+│  │                  │  → ontology-shattered → Neo4j bulk load        │
+│  └────────┬─────────┘                                                 │
+│           │                                                           │
+│           ▼                                                           │
+│  ┌──────────────────┐                                                 │
+│  │   LAYER 1        │  XGBoost on tabular features                   │
+│  │   XGBoost        │  scale_pos_weight=904 | PR-AUC: 0.3043         │
+│  │   Baseline       │  11 features: log_amount, is_ACH, hour, etc.   │
+│  └────────┬─────────┘                                                 │
+│           │                                                           │
+│           ▼                                                           │
+│  ┌──────────────────┐                                                 │
+│  │   LAYER 2        │  Neo4j GDS: Degree Centrality                  │
+│  │   Graph          │  in_degree, out_degree, degree_centrality       │
+│  │   Features       │  per account → joined to transaction splits    │
+│  └────────┬─────────┘                                                 │
+│           │                                                           │
+│           ▼                                                           │
+│  ┌──────────────────┐                                                 │
+│  │   LAYER 3        │  Neo4j GDS: Louvain Community Detection        │
+│  │   Community      │  community_id, community_size,                 │
+│  │   Detection      │  community_fraud_rate → PR-AUC: 0.5599 (+84%) │
+│  └────────┬─────────┘                                                 │
+│           │                                                           │
+│           ▼                                                           │
+│  ┌──────────────────┐                                                 │
+│  │   LAYER 4        │  Claude LLM Investigator                       │
+│  │   LLM            │  Subgraph JSON → structured report             │
+│  │   Investigator   │  pattern + evidence + risk + actions           │
+│  └──────────────────┘                                                 │
+└─────────────────────────────────────────────────────────────────────┘
 ```
+
+### Layer 1 — XGBoost Baseline (Trainable)
+
+Trains on 11 tabular features extracted during data cleaning. Handles 904:1 class imbalance via `scale_pos_weight`. Primary metric is PR-AUC — accuracy is meaningless at 0.11% fraud rate.
+
+**Key features by SHAP importance:** `is_ACH` > `log_amount` > `is_Wire` > `hour` > `is_cross_currency`
+
+### Layer 2 — Graph Features (Non-Trainable)
+
+Runs Neo4j GDS degree centrality on the full Account graph. Extracts `in_degree`, `out_degree`, `total_degree`, and `degree_centrality` per account, then joins them onto every transaction row. A hub account with 500 outgoing transactions looks completely different from a normal account with 3.
+
+### Layer 3 — Louvain Community Detection (Non-Trainable)
+
+Runs Louvain community detection on the Account graph. Assigns every account a `community_id` and computes `community_fraud_rate` — what fraction of that community's transactions are fraudulent. An account in a community with 42% fraud rate is not the same as one in a community with 0.1% fraud rate.
+
+### Layer 4 — LLM Investigator (Trainable via Prompt)
+
+Takes a pre-computed subgraph JSON (flagged by Layers 1–3) and produces a structured investigation report. Four Claude model variants compared for consistency, faithfulness, and schema compliance.
+
+**LLM Evaluation Results:**
+
+| Variant | Model | Schema | Faithfulness | Consistency | Meets Target |
+|---|---|---|---|---|---|
+| v1 | claude-haiku-4-5 | 1.00 | 0.89 | 0.95 | ✓ |
+| v2 | claude-sonnet-4-6 | 1.00 | 1.00 | 0.89 | ✓ |
+| v3 | claude-sonnet-4-6 + enhanced prompt | 1.00 | 1.00 | 0.87 | ✓ |
+| v4 | claude-sonnet-4-6 + chain-of-thought | 1.00 | 1.00 | 0.84 | ✓ |
+
+Consistency target: Jaccard ≥ 0.8 across 3 runs. **Recommended variant: v2** (composite score 0.967).
 
 ---
 
 ## Graph Ontology
 
-This is the core intellectual contribution of the data engineering phase. Inspired by the entity-relationship modeling philosophy of **Palantir Gotham** — where the world is modeled as objects and connections, not tables and rows — we defined a strict **3-component ontology** to represent the financial network:
+Inspired by the entity-relationship modeling philosophy of **Palantir Gotham** — where the world is modeled as objects and connections, not tables and rows — we defined a strict ontology to represent the financial network:
 
 ```
-                    [:SENT]                    [:RECEIVED_BY]
-  (Account) ─────────────────▶ (Transaction) ─────────────────▶ (Account)
-      │                               │
-      │ Properties:                   │ Properties:
-      │  • account_id (unique)        │  • txn_id (unique)
-      │  • bank_id                    │  • amount (raw USD)
-                                      │  • log_amount (normalized)
-                                      │  • timestamp (datetime)
-                                      │  • payment_format (ACH/Wire/etc)
-                                      │  • currency
-                                      │  • is_ACH (1-hot encoded)
-                                      │  • is_laundering (ground truth label)
-                                      │  • hour (extracted from timestamp)
-                                      │  • is_weekend (temporal signal)
-                                      │  • amount_bucket (categorical range)
+                  [:SENT]                    [:RECEIVED_BY]
+(Account) ─────────────────▶ (Transaction) ─────────────────▶ (Account)
+    │                               │
+    │ Properties:                   │ Properties:
+    │  • account_id (unique)        │  • txn_id (unique)
+    │  • bank_id                    │  • amount (raw USD)
+    │  • degree_centrality          │  • log_amount (normalized)
+    │  • louvain_community_id       │  • timestamp (datetime)
+                                    │  • payment_format
+                                    │  • is_laundering (ground truth)
+                                    │  • hour, is_weekend
+                                    │  • amount_bucket
 ```
 
-### Why Not Just Load the CSV Into Neo4j?
-
-This is the most common mistake people make with Graph Databases. If you load a flat table directly, Neo4j creates a brand new Account node for every row where that account appears. Account `10A2B3C` appears 50 times in the CSV if it made 50 transfers — so you get 50 duplicate nodes. The graph becomes corrupt and cycle detection fails entirely.
-
-**The Solution: Ontology Shattering.** We took the flat Parquet lake and split it into exactly 4 CSV files, each serving one specific purpose in the graph structure:
+**Ontology Shattering** — the flat CSV is split into exactly 4 files before loading:
 
 | File | Role | Rows |
 |---|---|---|
 | `nodes_accounts.csv` | De-duplicated Account node definitions | 1,758,573 |
-| `nodes_transactions.csv` | Transaction node definitions with all feature properties | 29,336,378 |
-| `edges_sent.csv` | Geometric pointer: Account → Transaction | 29,336,378 |
-| `edges_received.csv` | Geometric pointer: Transaction → Account | 29,336,378 |
+| `nodes_transactions.csv` | Transaction nodes with all feature properties | 29,336,378 |
+| `edges_sent.csv` | Account → Transaction pointers | 29,336,378 |
+| `edges_received.csv` | Transaction → Account pointers | 29,336,378 |
 
-Each account exists **exactly once**. All 11 engineered features live on the Transaction nodes. The edges contain zero data — they are pure structural connections.
+Each account exists exactly once. Loading a flat CSV directly creates duplicate nodes and corrupts cycle detection.
 
 ---
 
 ## EDA Key Findings
 
-Running `03_eda_visualizations.py` on the full dataset revealed 5 critical signals:
-
 | Signal | Finding | Implication |
 |---|---|---|
-| **Class Imbalance** | 906:1 ratio (0.11% fraud) | Accuracy is useless. Use PR-AUC + F1-Macro |
-| **Payment Format** | ACH = **87.3% of all fraud** | `is_ACH` is the single strongest tabular predictor |
-| **Amount Distribution** | Fraud transactions are **6x larger** on average | `log_amount` required to suppress outlier noise |
-| **Cross-Currency** | 0% fraud rate on cross-currency transactions | Powerful negative predictor for XGBoost |
-| **Temporal Patterns** | Fraud spikes at 3–5 AM | `hour` and `is_weekend` are key temporal signals |
-
----
-
-## The 31M Engineering Challenge
-
-> "Just load the CSV into Neo4j." — Everyone who has never tried it with 31 million rows.
-
-Naively loading 31.9M rows causes an **Out-Of-Memory (OOM) crash**. Mapping 58 million edges simultaneously exceeds Java heap limits. The server freezes. Data is lost.
-
-**The Engineering Solution — Cypher Micro-Batching:**
-
-We engineered a Cypher query pattern that forces Neo4j to **commit and flush memory every 10,000 records**. This keeps RAM usage bounded regardless of total dataset size:
-
-```cypher
-LOAD CSV WITH HEADERS FROM 'file:///nodes_transactions.csv' AS row
-CALL {
-    WITH row
-    CREATE (t:Transaction {
-        txn_id:        row.`txn_id:ID(Transaction)`,
-        amount:        toFloat(row.`amount:float`),
-        timestamp:     datetime(row.`timestamp:datetime`),
-        is_laundering: toInteger(row.`is_laundering:int`)
-    })
-} IN TRANSACTIONS OF 10000 ROWS;
-```
-
-**Total ingest time: ~2 hours.** Final graph state:
-
-| Component | Count |
-|---|---|
-| Account Nodes | 1,758,573 |
-| Transaction Nodes | 29,336,378 |
-| SENT Edges | 29,336,378 |
-| RECEIVED_BY Edges | 29,336,378 |
-| Fraud Transactions | 35,158 |
-| **Total Graph Objects** | **~89 Million** |
-
----
-
-## Pipeline Data Decay Table
-
-Tracking exactly how the record count transforms at each stage:
-
-| Stage | Records | Retention |
-|---|---|---|
-| Raw Kaggle Extract | 31,898,238 | 100% |
-| After Cleaning (self-loops removed for graph) | 29,336,378 | 91.97% |
-| Account Nodes (de-duplicated) | 1,758,573 | — |
-| Transaction Nodes | 29,336,378 | — |
-| SENT Edges | 29,336,378 | — |
-| RECEIVED_BY Edges | 29,336,378 | — |
-| Total Objects in Neo4j | ~89,000,000 | — |
+| **Class Imbalance** | 904:1 ratio (0.11% fraud) | Accuracy is useless — use PR-AUC |
+| **Payment Format** | ACH = 87.3% of all fraud | `is_ACH` is the strongest single feature |
+| **Amount Distribution** | Fraud transactions 6x larger on average | `log_amount` suppresses outlier noise |
+| **Cross-Currency** | 0% fraud rate on cross-currency transactions | Strong negative predictor |
+| **Temporal Patterns** | Fraud spikes at 3–5 AM | `hour` and `is_weekend` are key signals |
 
 ---
 
@@ -213,79 +185,113 @@ Tracking exactly how the record count transforms at each stage:
 ├── README.md
 ├── requirements.txt
 ├── docker-compose.yml              # Neo4j with GDS + APOC plugins
-├── .gitignore                      # Excludes 5.4GB dataset, logs, .docx files
+├── .env.example                    # Environment variable template
+├── .gitignore
 │
 ├── notebooks/
-│   ├── 01_data_extraction.py       # Kaggle API download + file validation
-│   ├── 02_data_cleaning.py         # Schema cleaning, self-loop removal, feature engineering, splits
-│   └── 03_eda_visualizations.py    # 16-chart EDA suite (class imbalance, distributions, temporal)
+│   ├── 01_data_extraction.py       # Kaggle API download + validation
+│   ├── 02_data_cleaning.py         # Cleaning, feature engineering, splits
+│   └── 03_eda_visualizations.py    # 16-chart EDA suite
 │
-├── src/graph/
-│   ├── export_bulk_neo4j.py        # Shatter parquet into 4 ontology CSVs
-│   ├── bulk_load_cypher.py         # 31M node micro-batch Cypher ingestor (~2 hrs)
-│   ├── load_neo4j.py               # Live 5K-row demo loader for presentations
-│   ├── run_analytics.py            # GDS: Louvain community detection + Degree centrality
-│   └── visualize_graph.py          # PyVis interactive graph visualization
+├── src/
+│   ├── graph/
+│   │   ├── export_bulk_neo4j.py    # Shatter parquet → 4 ontology CSVs
+│   │   ├── bulk_load_cypher.py     # 31M node micro-batch Cypher loader (~2 hrs)
+│   │   ├── run_analytics.py        # GDS: degree centrality + Louvain
+│   │   └── visualize_graph.py      # PyVis interactive graph explorer
+│   │
+│   ├── models/
+│   │   ├── 04_extract_graph_features.py   # Pull degree + Louvain from Neo4j → CSV
+│   │   ├── 05_build_feature_store.py      # Join graph features onto transaction splits
+│   │   ├── 06_train_xgboost_baseline.py   # Layer 1: tabular XGBoost
+│   │   ├── 07_train_graph_enhanced_model.py # Layer 1+2+3: XGBoost + graph features
+│   │   └── tune_threshold.py              # PR curve threshold optimisation
+│   │
+│   └── llm/
+│       ├── investigator.py         # Layer 4: 4-variant Claude LLM investigator
+│       └── evaluate.py             # Consistency + faithfulness + schema evaluation
 │
-├── dashboard_app.py                # 7-phase Streamlit intelligence dashboard
-├── demo_TA_pipeline.py             # Full pipeline orchestrator with live streaming logs
-├── run_all_backend_eda.py          # Master runner: executes 01 → 02 → 03 in sequence
+├── artifacts/
+│   ├── sample_subgraph.json        # Smurfing test case
+│   ├── layering_ring_subgraph.json # Layering Ring test case
+│   ├── fan_out_subgraph.json       # Fan-Out test case
+│   ├── llm_outputs/                # Saved LLM responses per variant
+│   └── metrics/                    # llm_eval.json + comparison table
 │
-└── data/                           # Gitignored — 5.4GB lives on local machine only
-    ├── processed/                  # Parquet outputs (transactions_clean, splits)
-    └── neo4j_bulk_import/          # 4 ontology CSVs for Neo4j import
+├── data/models/                    # Gitignored — trained model artifacts
+│   ├── xgboost_baseline.json
+│   ├── xgboost_baseline_metrics.json
+│   ├── xgboost_graph_enhanced.json
+│   └── model_comparison.json
+│
+├── dashboard_app.py                # Streamlit intelligence dashboard
+└── data/                           # Gitignored — 5.4GB dataset lives locally
+    ├── processed/                  # Parquet splits
+    └── neo4j_bulk_import/          # 4 ontology CSVs
 ```
 
 ---
 
 ## How to Run
 
-### Step 1 — Start Neo4j via Docker
-```bash
-docker-compose up -d
-```
-This launches Neo4j at `http://localhost:7474` with the **Graph Data Science 2.27.0** and **APOC** plugins pre-configured.
+### Step 1 — Environment setup
 
-Verify GDS is active in the Neo4j Browser:
-```cypher
-RETURN gds.version()
--- Expected output: "2.27.0"
-```
-
-### Step 2 — Install Python dependencies
 ```bash
+cp .env.example .env
+# Edit .env and set NEO4J_PASSWORD and ANTHROPIC_API_KEY
 pip install -r requirements.txt
 ```
 
-### Step 3 — Run the Full Data Pipeline
+### Step 2 — Start Neo4j
+
 ```bash
-# Download and validate raw dataset from Kaggle
-python3 notebooks/01_data_extraction.py
-
-# Clean, engineer features, generate Parquet files
-python3 notebooks/02_data_cleaning.py
-
-# Generate all 16 EDA charts
-python3 notebooks/03_eda_visualizations.py
-
-# Or run all 3 in sequence automatically:
-python3 run_all_backend_eda.py
+docker-compose up -d
+# Verify at http://localhost:7474 — login: neo4j / fraud2026
 ```
 
-### Step 4 — Prepare and Load the Knowledge Graph
-```bash
-# Shatter parquet into 4 ontology CSVs
-python3 src/graph/export_bulk_neo4j.py
+### Step 3 — Data pipeline
 
-# Bulk load 31M records into Neo4j (takes ~2 hours)
-python3 src/graph/bulk_load_cypher.py
+```bash
+python3 notebooks/01_data_extraction.py    # Download 7.6GB from Kaggle
+python3 notebooks/02_data_cleaning.py      # Clean + engineer features + split
+python3 notebooks/03_eda_visualizations.py # Generate 16 EDA charts
 ```
 
-### Step 5 — Launch the Intelligence Dashboard
+### Step 4 — Load Knowledge Graph (~2 hours)
+
+```bash
+python3 src/graph/export_bulk_neo4j.py     # Shatter parquet → 4 CSVs
+python3 src/graph/bulk_load_cypher.py      # Load 31M records into Neo4j
+```
+
+### Step 5 — Train models
+
+```bash
+# Layer 1: XGBoost baseline
+python3 src/models/06_train_xgboost_baseline.py
+
+# Layers 2+3: Extract graph features and train enhanced model
+python3 src/models/04_extract_graph_features.py
+python3 src/models/05_build_feature_store.py
+python3 src/models/07_train_graph_enhanced_model.py
+```
+
+### Step 6 — Run LLM Investigator
+
+```bash
+# Run all 4 variants against a subgraph
+python3 src/llm/investigator.py --variant all --input artifacts/sample_subgraph.json --runs 3
+
+# Evaluate
+python3 src/llm/evaluate.py --subgraph sample_subgraph
+```
+
+### Step 7 — Launch Dashboard
+
 ```bash
 python3 -m streamlit run dashboard_app.py
+# Open http://localhost:8501
 ```
-Open `http://localhost:8501` — the 7-phase dashboard walks through the complete pipeline.
 
 ---
 
@@ -294,71 +300,80 @@ Open `http://localhost:8501` — the 7-phase dashboard walks through the complet
 | Layer | Technology | Purpose |
 |---|---|---|
 | Data Sourcing | Kaggle Hub API | Authenticated dataset download |
-| Data Lake | Apache Parquet (PyArrow) | Compressed, fast columnar storage |
-| Processing | Pandas 2.0, NumPy | Vectorized data transformations |
-| Graph Database | Neo4j 5.x | Entity-relationship knowledge graph |
-| Graph ML Engine | Neo4j GDS 2.27.0 | Louvain, Centrality, FastRP in-database |
-| Visualization | Matplotlib, Seaborn, PyVis | EDA charts + interactive graph explorer |
-| Dashboard | Streamlit 1.30 | Live presentation interface |
+| Data Lake | Apache Parquet (PyArrow) | Compressed columnar storage |
+| Processing | Pandas 2.0, NumPy | Vectorized transformations |
+| Graph Database | Neo4j 5.x | Knowledge graph |
+| Graph ML | Neo4j GDS 2.27.0 | Louvain + Degree Centrality |
+| ML Layer | XGBoost 2.0 + SHAP | Fraud classification |
+| LLM Layer | Anthropic Claude (claude-sonnet-4-6) | Structured investigation reports |
+| Visualization | Matplotlib, PyVis | EDA + graph explorer |
+| Dashboard | Streamlit 1.30 | Intelligence interface |
 | Container | Docker + Compose | Reproducible Neo4j environment |
-| ML (Next Phase) | XGBoost, GraphSAGE | Fraud classification models |
 
 ---
 
-## Current Progress & Roadmap
+## Current Progress
 
-### Phase 1 — Data Engineering (COMPLETE)
+### Phase 1 — Data Engineering ✅
+
 - [x] Raw dataset extraction from Kaggle (31.9M rows, 5.45GB)
 - [x] Schema cleaning, self-loop removal, null validation
-- [x] Feature engineering (11 new columns: log_amount, is_ACH, hour, etc.)
-- [x] Time-aware chronological splits (70/15/15) for tabular ML
+- [x] Feature engineering (13 columns: log_amount, is_ACH, hour, dow, is_cross_currency, etc.)
+- [x] Time-aware chronological splits (70/15/15) — zero temporal leakage
 - [x] Ontology mapping — flat CSV → 4-component graph structure
 - [x] 31M node bulk load into Neo4j via micro-batching (~2 hours)
-- [x] EDA suite — 16 charts covering class imbalance, distributions, temporal patterns
-- [x] Streamlit intelligence dashboard
+- [x] 16-chart EDA suite
 
-### Phase 2 — Graph Analytics (IN PROGRESS)
-- [x] Degree Centrality — identify high-volume hub accounts
-- [x] Louvain Community Detection — map potential fraud rings
-- [ ] Community fraud scoring — rank communities by fraud concentration
-- [ ] Graph visualization — interactive PyVis network explorer
+### Phase 2 — Graph Analytics ✅
 
-### Phase 3 — Model Development (PLANNED)
-- [ ] **XGBoost Classifier** — tabular fraud detection on the 70/15/15 splits, with `scale_pos_weight=906` to handle class imbalance
-- [ ] **GraphSAGE** — graph neural network trained on node embeddings from the Neo4j knowledge graph
-- [ ] **FastRP Embeddings** — in-database graph embeddings via GDS, fed into downstream classifiers
-- [ ] **Ensemble Model** — combine tabular XGBoost (real-time speed) with GraphSAGE (structural depth) for production-grade fraud scoring
+- [x] Degree centrality — identify high-volume hub accounts
+- [x] Louvain community detection — map fraud rings
+- [x] Community fraud rate computation
+- [x] Graph features joined onto transaction splits (feature store)
 
-### Phase 4 — Production Intelligence Platform (PLANNED)
-- [ ] Real-time transaction scoring API (FastAPI)
-- [ ] Streaming pipeline (Kafka / Flink) for live transaction monitoring
-- [ ] Alert dashboard with fraud probability scores and ring visualizations
-- [ ] Model retraining pipeline with drift detection
+### Phase 3 — Model Development ✅
+
+- [x] XGBoost baseline — PR-AUC 0.3043 on tabular features
+- [x] Graph-enhanced XGBoost — PR-AUC 0.4590 with degree features (+51%)
+- [x] Community-enhanced XGBoost — PR-AUC 0.5599 with Louvain features (+84%)
+- [x] SHAP feature importance analysis
+- [x] Threshold tuning via PR curve
+
+### Phase 4 — LLM Investigator ✅
+
+- [x] 4-variant Claude investigator (Haiku, Sonnet, Sonnet+prompt, Sonnet+CoT)
+- [x] Structured output schema: pattern, evidence, risk_level, actions
+- [x] Evaluation framework: consistency (Jaccard), faithfulness, schema compliance
+- [x] Tested on 3 subgraph types: Smurfing, Layering Ring, Fan-Out
+- [x] All 4 variants meet consistency target (≥ 0.8 Jaccard)
 
 ---
 
 ## Team
 
-**Team 12 — DATA 298A Applied Data Science Capstone**
+**Team 2 — DATA 298A Applied Data Science Capstone**
 **San José State University · Spring 2026**
 
-| Name | Role |
+| Name | Contributions |
 |---|---|
-| Arya Mehta | Data Engineering, Graph Architecture, Pipeline Orchestration |
+| Arya Mehta | Data engineering, graph architecture, pipeline orchestration, graph-enhanced model |
+| Aishwarya | XGBoost baseline training, LLM investigator layer, evaluation framework |
+| Prajwal Dambalkar | Graph features, Louvain community detection, model comparison |
+| Keith Gonsalves | Dashboard, model metrics visualisation |
+| Om Dankhara | Supporting infrastructure |
 
 ---
 
 ## Academic Context
 
-This repository covers the data engineering and knowledge graph foundation phase of a multi-phase research initiative. The work specifically satisfies:
+This project satisfies the following DATA 298A capstone sections:
 
-- **3.1** Data Process — pipeline flowchart, exact steps from intake to splits
-- **3.2** Data Collection — dataset sourcing, parameters, quantities, raw samples
-- **3.3** Pre-Processing — schema validation, self-loop handling, null checks, log normalization
-- **3.4** Transformation — CSV → Parquet conversion, 11-feature engineering pass, ontology shattering
-- **3.5** Data Preparation — time-aware 70/15/15 chronological splits with zero temporal leakage
-- **3.6** Data Statistics — 16-chart EDA suite, class imbalance analysis, pipeline decay table
-- **4.5** Pipeline Demo — live Streamlit dashboard with real-time log streaming to Neo4j
+- **3.1–3.6** — Data pipeline: collection, cleaning, transformation, splits, EDA
+- **4.1** — XGBoost baseline model with PR-AUC evaluation
+- **4.2** — Graph feature extraction (degree centrality, Louvain)
+- **4.3** — Graph-enhanced model — baseline vs. graph comparison
+- **4.4** — LLM investigator layer with structured output and multi-variant evaluation
+- **4.5** — Pipeline demo via Streamlit dashboard
 
 ---
 

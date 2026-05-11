@@ -1,0 +1,114 @@
+[
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern",
+      "Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession",
+      "Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00",
+      "Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00",
+      "Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00",
+      "All 3 transactions occurred within a 4-minute time window",
+      "Total amount distributed: $54,600.00",
+      "All transactions marked as is_laundering: 1",
+      "All 3 transactions are cross-bank transfers (banks 50, 51, 52, 53)",
+      "Community fraud_rate is 0.512 (51.2%)",
+      "All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and minimal degree_centrality (0.098-0.112)"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 700X9Y1 pending investigation",
+      "Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds",
+      "Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1",
+      "Conduct enhanced due diligence on account 700X9Y1 to identify beneficial owner and source of funds",
+      "Investigate the relationship between 700X9Y1 and recipient accounts 700X9Y2, 700X9Y3, 700X9Y4",
+      "Coordinate with banks 50, 51, 52, and 53 for cross-bank investigation",
+      "Review transaction history of 700X9Y1 for the past 90 days to identify additional suspicious patterns",
+      "Examine destination accounts for rapid onward transfers or cash withdrawals",
+      "Flag all accounts in community_id 289 for enhanced monitoring"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 1,
+      "timestamp": "2026-05-09T17:11:13.538283",
+      "input_tokens": 1343,
+      "output_tokens": 648,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern\",\n    \"Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession\",\n    \"Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00\",\n    \"Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00\",\n    \"Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00\",\n    \"All 3 transactions occurred within a 4-minute time window\",\n    \"Total amount distributed: $54,600.00\",\n    \"All transactions marked as is_laundering: 1\",\n    \"All 3 transactions are cross-bank transfers (banks 50, 51, 52, 53)\",\n    \"Community fraud_rate is 0.512 (51.2%)\",\n    \"All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and minimal degree_centrality (0.098-0.112)\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 700X9Y1 pending investigation\",\n    \"Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds\",\n    \"Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1\",\n    \"Conduct enhanced due diligence on account 700X9Y1 to identify beneficial owner and source of funds\",\n    \"Investigate the relationship between 700X9Y1 and recipient accounts 700X9Y2, 700X9Y3, 700X9Y4\",\n    \"Coordinate with banks 50, 51, 52, and 53 for cross-bank investigation\",\n    \"Review transaction history of 700X9Y1 for the past 90 days to identify additional suspicious patterns\",\n    \"Examine destination accounts for rapid onward transfers or cash withdrawals\",\n    \"Flag all accounts in community_id 289 for enhanced monitoring\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern",
+      "Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession",
+      "Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00",
+      "Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00",
+      "Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00",
+      "All 3 transactions occurred within a 4-minute time window",
+      "Total amount distributed: $54,600.00",
+      "All transactions marked as is_laundering: 1",
+      "All 3 transactions are cross-bank transfers across banks 51, 52, and 53",
+      "Community fraud_rate is 0.512 (51.2%)",
+      "All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and zero out_degree, indicating terminal endpoints"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 700X9Y1 pending investigation",
+      "Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds",
+      "Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1 with FinCEN",
+      "Conduct enhanced due diligence on account 700X9Y1 including beneficial ownership verification",
+      "Contact banks 51, 52, and 53 to obtain detailed account holder information for 700X9Y2, 700X9Y3, and 700X9Y4",
+      "Analyze historical transaction patterns for account 700X9Y1 to identify additional suspicious activity",
+      "Investigate potential structuring scheme given similar transaction amounts ($17,900-$18,500) just below $20,000 threshold",
+      "Coordinate with law enforcement given confirmed is_laundering flags on all 3 transactions"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 2,
+      "timestamp": "2026-05-09T17:11:18.889023",
+      "input_tokens": 1343,
+      "output_tokens": 638,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern\",\n    \"Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession\",\n    \"Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00\",\n    \"Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00\",\n    \"Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00\",\n    \"All 3 transactions occurred within a 4-minute time window\",\n    \"Total amount distributed: $54,600.00\",\n    \"All transactions marked as is_laundering: 1\",\n    \"All 3 transactions are cross-bank transfers across banks 51, 52, and 53\",\n    \"Community fraud_rate is 0.512 (51.2%)\",\n    \"All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and zero out_degree, indicating terminal endpoints\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 700X9Y1 pending investigation\",\n    \"Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds\",\n    \"Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1 with FinCEN\",\n    \"Conduct enhanced due diligence on account 700X9Y1 including beneficial ownership verification\",\n    \"Contact banks 51, 52, and 53 to obtain detailed account holder information for 700X9Y2, 700X9Y3, and 700X9Y4\",\n    \"Analyze historical transaction patterns for account 700X9Y1 to identify additional suspicious activity\",\n    \"Investigate potential structuring scheme given similar transaction amounts ($17,900-$18,500) just below $20,000 threshold\",\n    \"Coordinate with law enforcement given confirmed is_laundering flags on all 3 transactions\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern",
+      "Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession",
+      "Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00",
+      "Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00",
+      "Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00",
+      "All 3 transactions occurred within a 4-minute time window",
+      "Total amount distributed: $54,600.00",
+      "All transactions marked as is_laundering: 1",
+      "All 3 transactions are cross-bank transfers across banks 50, 51, 52, and 53",
+      "Community fraud_rate is 0.512 with community_size of 9",
+      "All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and out_degree of 0, indicating terminal recipients"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 700X9Y1 pending investigation",
+      "Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds",
+      "Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1 and all related transactions",
+      "Conduct enhanced due diligence on account 700X9Y1 to identify beneficial owner and source of funds",
+      "Coordinate with banks 50, 51, 52, and 53 for transaction reversal and account investigation",
+      "Investigate the structuring pattern: amounts ($18,500, $17,900, $18,200) suggest deliberate structuring to avoid reporting thresholds",
+      "Review account 700X9Y1 transaction history for prior similar fan-out patterns",
+      "Obtain customer identification and beneficial ownership information for all four accounts"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v1",
+      "model": "claude-haiku-4-5-20251001",
+      "run_id": 3,
+      "timestamp": "2026-05-09T17:11:24.467384",
+      "input_tokens": 1343,
+      "output_tokens": 631,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Account 700X9Y1 has out_degree of 6 and degree_centrality of 0.923, indicating a hub distribution pattern\",\n    \"Account 700X9Y1 distributed funds to 3 recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) in rapid succession\",\n    \"Transaction T_201: 700X9Y1 sent $18,500.00 to 700X9Y2 at 2022-09-20T04:05:00\",\n    \"Transaction T_202: 700X9Y1 sent $17,900.00 to 700X9Y3 at 2022-09-20T04:07:00\",\n    \"Transaction T_203: 700X9Y1 sent $18,200.00 to 700X9Y4 at 2022-09-20T04:09:00\",\n    \"All 3 transactions occurred within a 4-minute time window\",\n    \"Total amount distributed: $54,600.00\",\n    \"All transactions marked as is_laundering: 1\",\n    \"All 3 transactions are cross-bank transfers across banks 50, 51, 52, and 53\",\n    \"Community fraud_rate is 0.512 with community_size of 9\",\n    \"All recipient accounts (700X9Y2, 700X9Y3, 700X9Y4) have in_degree of 1 and out_degree of 0, indicating terminal recipients\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 700X9Y1 pending investigation\",\n    \"Freeze recipient accounts 700X9Y2, 700X9Y3, and 700X9Y4 to prevent further movement of funds\",\n    \"Initiate Suspicious Activity Report (SAR) filing for account 700X9Y1 and all related transactions\",\n    \"Conduct enhanced due diligence on account 700X9Y1 to identify beneficial owner and source of funds\",\n    \"Coordinate with banks 50, 51, 52, and 53 for transaction reversal and account investigation\",\n    \"Investigate the structuring pattern: amounts ($18,500, $17,900, $18,200) suggest deliberate structuring to avoid reporting thresholds\",\n    \"Review account 700X9Y1 transaction history for prior similar fan-out patterns\",\n    \"Obtain customer identification and beneficial ownership information for all four accounts\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]

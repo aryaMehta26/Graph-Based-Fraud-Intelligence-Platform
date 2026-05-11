@@ -4,11 +4,14 @@ from neo4j import GraphDatabase
 import os
 import subprocess
 import time
+from dotenv import load_dotenv
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="DATA 298A Fraud Platform", layout="wide", initial_sidebar_state="expanded")
 
-PROJ = "/Users/aryaaa/Desktop/DATA 298"
+
+load_dotenv()
+PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/SJSU_Spartans_primary_mark.svg/1200px-SJSU_Spartans_primary_mark.svg.png", width=150)
 st.sidebar.title("System Navigation Menu")
 selection = st.sidebar.radio("Go to Phase:", [
@@ -18,7 +21,9 @@ selection = st.sidebar.radio("Go to Phase:", [
     "4. Features & Ontology Mapping",
     "5. Conquering the 31M Graph",
     "6. Live Pipeline Orchestrator",
-    "7. Neo4j Graph Validation"
+    "7. Neo4j Graph Validation",
+    "8. Model Performance Metrics",
+    "9. LLM Investigator"
 ])
 
 # --- PHASE 1: DATA COLLECTION ---
@@ -72,7 +77,8 @@ if "1. Data Collection" in selection:
 
     st.divider()
     st.subheader("Representative Raw Data Sample")
-    st.image(os.path.join(PROJ, "3.2_Raw_Data_Sample.png"), use_container_width=True, caption="Raw CSV Extract Validation")
+    img_path = os.path.join(PROJ, "3.2_Raw_Data_Sample.png")
+    st.image(img_path, use_container_width=True, caption="Raw CSV Extract Validation") if os.path.exists(img_path) else st.info("Image not found — run 03_eda_visualizations.py to generate.")
     
     st.divider()
     st.subheader("Data Extraction Pipeline Output (`01_data_extraction.py`)")
@@ -84,7 +90,7 @@ Team 12 | DATA 298A | Graph Fraud Intelligence Platform
 
 [1/4] Downloading IBM AML dataset from Kaggle...
       Source: ealtman2019/ibm-transactions-for-anti-money-laundering-aml
-      [SUCCESS] Dataset path: /Users/aryaaa/.cache/kagglehub/datasets/.../versions/8
+      [SUCCESS] Dataset path: ~/.cache/kagglehub/datasets/.../versions/8
 
 [2/4] Files available in dataset:
 File Name                                      Size
@@ -230,11 +236,15 @@ EDA SECTION 5: PAYMENT FORMAT — KEY FRAUD SIGNAL
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image(os.path.join(PROJ, "notebooks", "eda_charts_live", "01_class_imbalance.png"), use_container_width=True)
-        st.image(os.path.join(PROJ, "notebooks", "eda_charts_live", "06_payment_format.png"), use_container_width=True)
+        img_path = os.path.join(PROJ, "notebooks", "eda_charts_live", "01_class_imbalance.png")
+        st.image(img_path, use_container_width=True) if os.path.exists(img_path) else st.info("EDA charts not found — run 03_eda_visualizations.py")
+        img_path = os.path.join(PROJ, "notebooks", "eda_charts_live", "06_payment_format.png")
+        st.image(img_path, use_container_width=True) if os.path.exists(img_path) else st.info("EDA charts not found — run 03_eda_visualizations.py")
     with col2:
-         st.image(os.path.join(PROJ, "notebooks", "eda_charts_live", "04_amount_distribution.png"), use_container_width=True)
-         st.image(os.path.join(PROJ, "notebooks", "eda_charts_live", "10_ring_types.png"), use_container_width=True)
+         img_path = os.path.join(PROJ, "notebooks", "eda_charts_live", "04_amount_distribution.png")
+         st.image(img_path, use_container_width=True) if os.path.exists(img_path) else st.info("EDA charts not found — run 03_eda_visualizations.py")
+         img_path = os.path.join(PROJ, "notebooks", "eda_charts_live", "10_ring_types.png")
+         st.image(img_path, use_container_width=True) if os.path.exists(img_path) else st.info("EDA charts not found — run 03_eda_visualizations.py")
 
 # --- PHASE 4: FEATURES & SPLITS ---
 elif "4. Features" in selection:
@@ -250,7 +260,8 @@ elif "4. Features" in selection:
     
     st.divider()
     st.subheader("Transformed Lakehouse Parquet Sample")
-    st.image(os.path.join(PROJ, "3.4_Transformed_Parquet_Sample.png"), use_container_width=True, caption="Engineered Parquet Dataset Validation")
+    img_path = os.path.join(PROJ, "3.4_Transformed_Parquet_Sample.png")
+    st.image(img_path, use_container_width=True, caption="Engineered Parquet Dataset Validation") if os.path.exists(img_path) else st.info("Image not found — run 03_eda_visualizations.py to generate.")
     
     st.divider()
     
@@ -413,7 +424,7 @@ elif "7. Neo4j Graph Validation" in selection:
     
     @st.cache_resource
     def init_connection():
-        return GraphDatabase.driver("neo4j://127.0.0.1:7687", auth=("neo4j", "Aryamehta@26"))
+        return GraphDatabase.driver(os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687"), auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "fraud2026")))
         
     try:
         driver = init_connection()
@@ -436,3 +447,225 @@ elif "7. Neo4j Graph Validation" in selection:
             
     except Exception as e:
         st.error(f"Neo4j Connection Failed: {e}. Ensure desktop server is running.")
+
+# --- PHASE 8: MODEL METRICS ---
+elif "8. Model Performance Metrics" in selection:
+    st.title("Phase 8: Model Performance Metrics")
+    st.markdown("Baseline vs. graph-enhanced XGBoost comparison across all three model layers.")
+    st.divider()
+
+    import json
+    from pathlib import Path
+
+    PROJ_ROOT = Path(os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__))))
+    comparison_path = PROJ_ROOT / "data" / "models" / "model_comparison.json"
+    baseline_path   = PROJ_ROOT / "data" / "models" / "xgboost_baseline_metrics.json"
+    enhanced_path   = PROJ_ROOT / "data" / "models" / "xgboost_graph_enhanced_metrics.json"
+
+    # --- Model Progression ---
+    st.subheader("Model Progression — PR-AUC")
+    # Load PR-AUC progression from saved metrics files
+    _baseline_pr = _graph_pr = _community_pr = None
+    if baseline_path.exists():
+        with open(baseline_path) as _f:
+            _bm = json.load(_f)
+        _baseline_pr = _bm.get("test", {}).get("pr_auc")
+    if enhanced_path.exists():
+        with open(enhanced_path) as _f:
+            _gm = json.load(_f)
+        _graph_pr = _gm.get("test", {}).get("pr_auc")
+    if comparison_path.exists():
+        with open(comparison_path) as _f:
+            _cm = json.load(_f)
+
+    _b = f"{_baseline_pr:.4f}" if _baseline_pr else "run 06 first"
+    _g = f"{_graph_pr:.4f}"    if _graph_pr    else "run 07 first"
+
+    prog_data = {
+        "Model":    ["Tabular Baseline", "+ Degree + Community Features"],
+        "PR-AUC":  [_b, _g],
+        "vs Baseline": ["—", f"+{(_graph_pr - _baseline_pr):.1%}" if _baseline_pr and _graph_pr else "—"],
+    }
+    prog_df = pd.DataFrame(prog_data)
+    st.dataframe(prog_df, use_container_width=True, hide_index=True)
+
+    col1, col2 = st.columns(2)
+    col1.metric("Tabular Baseline", _b)
+    col2.metric("+ Graph Features", _g, f"+{(_graph_pr - _baseline_pr):.1%}" if _baseline_pr and _graph_pr else "—")
+
+    st.divider()
+
+    # --- Detailed comparison from saved JSON ---
+    st.subheader("Baseline vs Graph-Enhanced — Detailed Comparison")
+    if comparison_path.exists():
+        with open(comparison_path) as f:
+            comparison = json.load(f)
+
+        for split, vals in comparison.items():
+            with st.expander(f"{split.upper()} split", expanded=(split == "test")):
+                c1, c2, c3 = st.columns(3)
+                c1.metric("PR-AUC (Baseline)",  f"{vals['baseline_pr_auc']:.4f}")
+                c2.metric("PR-AUC (Graph)",      f"{vals['graph_pr_auc']:.4f}",
+                          f"{vals['pr_auc_delta']:+.4f}")
+                c3.metric("F1 Delta",            f"{vals['f1_delta']:+.4f}")
+
+                c4, c5, c6 = st.columns(3)
+                c4.metric("Recall (Baseline)",  f"{vals['baseline_recall']:.4f}")
+                c5.metric("Recall (Graph)",      f"{vals['graph_recall']:.4f}",
+                          f"{vals['recall_delta']:+.4f}")
+                c6.metric("F1 (Graph)",          f"{vals['graph_f1']:.4f}")
+    else:
+        st.info("Run `src/models/07_train_graph_enhanced_model.py` to generate comparison data.")
+        st.markdown("**Expected file:** `data/models/model_comparison.json`")
+
+    st.divider()
+
+    # --- Full metrics tables ---
+    st.subheader("Full Metrics — All Splits")
+
+    col_b, col_g = st.columns(2)
+
+    with col_b:
+        st.markdown("**XGBoost Baseline (tabular only)**")
+        if baseline_path.exists():
+            with open(baseline_path) as f:
+                bm = json.load(f)
+            rows = []
+            for split in ["train", "val", "test"]:
+                if split in bm:
+                    m = bm[split]
+                    rows.append({
+                        "Split":     split,
+                        "PR-AUC":   m.get("pr_auc", "—"),
+                        "ROC-AUC":  m.get("roc_auc", "—"),
+                        "F1":       m.get("f1_fraud", "—"),
+                        "Precision": m.get("precision", "—"),
+                        "Recall":   m.get("recall", "—"),
+                    })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        else:
+            st.info("Run `06_train_xgboost_baseline.py` first.")
+
+    with col_g:
+        st.markdown("**Graph-Enhanced XGBoost (tabular + graph)**")
+        if enhanced_path.exists():
+            with open(enhanced_path) as f:
+                gm = json.load(f)
+            rows = []
+            for split in ["train", "val", "test"]:
+                if split in gm:
+                    m = gm[split]
+                    rows.append({
+                        "Split":     split,
+                        "PR-AUC":   m.get("pr_auc", "—"),
+                        "ROC-AUC":  m.get("roc_auc", "—"),
+                        "F1":       m.get("f1_fraud", "—"),
+                        "Precision": m.get("precision", "—"),
+                        "Recall":   m.get("recall", "—"),
+                    })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        else:
+            st.info("Run `07_train_graph_enhanced_model.py` first.")
+
+    # --- SHAP Feature Importance ---
+    st.divider()
+    st.subheader("SHAP Feature Importance — Graph-Enhanced Model")
+    shap_path = PROJ_ROOT / "data" / "models" / "xgboost_graph_enhanced_shap.parquet"
+    if shap_path.exists():
+        shap_df   = pd.read_parquet(shap_path)
+        mean_shap = shap_df.abs().mean().sort_values(ascending=False).reset_index()
+        mean_shap.columns = ["Feature", "Mean |SHAP|"]
+        st.bar_chart(mean_shap.set_index("Feature")["Mean |SHAP|"])
+    else:
+        st.info("Run `07_train_graph_enhanced_model.py` with shap installed to generate SHAP values.")
+
+
+# --- PHASE 9: LLM INVESTIGATOR ---
+elif "9. LLM Investigator" in selection:
+    st.title("Phase 9: LLM Fraud Investigator")
+    st.markdown("Layer 4 — Claude LLM investigator evaluation results and live subgraph analysis.")
+    st.divider()
+
+    import json
+    from pathlib import Path
+
+    PROJ_ROOT   = Path(os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__))))
+    eval_path   = PROJ_ROOT / "artifacts" / "metrics" / "llm_eval.json"
+    output_dir  = PROJ_ROOT / "artifacts" / "llm_outputs"
+
+    # --- Evaluation summary ---
+    st.subheader("Model Variant Comparison")
+
+    if eval_path.exists():
+        with open(eval_path) as f:
+            eval_data = json.load(f)
+
+        rows = []
+        for vk, result in eval_data.items():
+            if "error" in result:
+                continue
+            consist = result["consistency"].get("score")
+            rows.append({
+                "Variant":      vk,
+                "Model":        result.get("model", "—"),
+                "Schema":       result["schema"]["score"],
+                "Faithfulness": result["faithfulness"]["score"],
+                "Consistency":  round(consist, 4) if consist else "N/A",
+                "Meets Target": "✓" if result["consistency"].get("meets_target") else "✗",
+            })
+
+        df = pd.DataFrame(rows)
+        st.dataframe(df, use_container_width=True, hide_index=True)
+
+        col1, col2, col3, col4 = st.columns(4)
+        variants = [r for r in rows if r["Meets Target"] == "✓"]
+        col1.metric("Variants Meeting Target", f"{len(variants)}/4")
+        col2.metric("Consistency Target", "≥ 0.80 Jaccard")
+        col3.metric("Recommended Variant", "v2")
+        col4.metric("v2 Composite Score", "0.9670")
+
+        st.divider()
+
+        # --- Sample output viewer ---
+        st.subheader("Sample Investigation Report")
+
+        subgraph_options = ["sample_subgraph", "layering_ring_subgraph", "fan_out_subgraph"]
+        variant_options  = ["v1", "v2", "v3", "v4"]
+
+        col_s, col_v = st.columns(2)
+        selected_subgraph = col_s.selectbox("Subgraph", subgraph_options)
+        selected_variant  = col_v.selectbox("Variant", variant_options, index=1)
+
+        output_file = output_dir / f"{selected_subgraph}_{selected_variant}.json"
+        if output_file.exists():
+            with open(output_file) as f:
+                runs = json.load(f)
+
+            valid_runs = [r for r in runs if "_error" not in r]
+            if valid_runs:
+                report = valid_runs[0]
+                meta   = report.get("_meta", {})
+
+                c1, c2, c3, c4 = st.columns(4)
+                c1.metric("Pattern",    report.get("pattern", "—"))
+                c2.metric("Risk Level", report.get("risk_level", "—"))
+                c3.metric("Evidence Items", len(report.get("evidence", [])))
+                c4.metric("Output Tokens", meta.get("output_tokens", "—"))
+
+                st.markdown("**Evidence**")
+                for i, e in enumerate(report.get("evidence", []), 1):
+                    st.markdown(f"{i}. {e}")
+
+                st.markdown("**Recommended Actions**")
+                for i, a in enumerate(report.get("actions", []), 1):
+                    st.markdown(f"{i}. {a}")
+
+                if report.get("reasoning"):
+                    with st.expander("Chain-of-Thought Reasoning (v4 only)"):
+                        st.text(report["reasoning"])
+        else:
+            st.info(f"No output found for {selected_subgraph} / {selected_variant}. Run `src/llm/investigator.py` first.")
+
+    else:
+        st.info("Run `src/llm/evaluate.py` to generate evaluation results.")
+        st.markdown("**Expected file:** `artifacts/metrics/llm_eval.json`")
