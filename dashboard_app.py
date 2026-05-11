@@ -4,12 +4,12 @@ from neo4j import GraphDatabase
 import os
 import subprocess
 import time
+from dotenv import load_dotenv
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="DATA 298A Fraud Platform", layout="wide", initial_sidebar_state="expanded")
 
-import os
-from dotenv import load_dotenv
+
 load_dotenv()
 PROJ = os.getenv("PROJ_ROOT", os.path.dirname(os.path.abspath(__file__)))
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/SJSU_Spartans_primary_mark.svg/1200px-SJSU_Spartans_primary_mark.svg.png", width=150)
@@ -417,9 +417,7 @@ elif "6. Live Pipeline Orchestrator" in selection:
                 st.error(f"Pipeline Failed: {e}")
 
 # --- PHASE 7: NEO4J VALIDATION ---
-elif "7. Neo4j Graph Validation",
-    "8. Model Performance Metrics",
-    "9. LLM Investigator" in selection:
+elif "7. Neo4j Graph Validation" in selection:
     st.title("Phase 7: Neo4j Knowledge Graph Validation")
     st.markdown("Connecting directly to the highly-scalable Neo4j Warehouse to verify injection integrity and production limits.")
     st.divider()
@@ -571,15 +569,15 @@ elif "8. Model Performance Metrics" in selection:
 
     # --- SHAP Feature Importance ---
     st.divider()
-    st.subheader("SHAP Feature Importance — Baseline Model")
-    shap_path = PROJ_ROOT / "data" / "models" / "xgboost_baseline_shap.parquet"
+    st.subheader("SHAP Feature Importance — Graph-Enhanced Model")
+    shap_path = PROJ_ROOT / "data" / "models" / "xgboost_graph_enhanced_shap.parquet"
     if shap_path.exists():
         shap_df   = pd.read_parquet(shap_path)
         mean_shap = shap_df.abs().mean().sort_values(ascending=False).reset_index()
         mean_shap.columns = ["Feature", "Mean |SHAP|"]
         st.bar_chart(mean_shap.set_index("Feature")["Mean |SHAP|"])
     else:
-        st.info("Run `06_train_xgboost_baseline.py` with shap installed to generate SHAP values.")
+        st.info("Run `07_train_graph_enhanced_model.py` with shap installed to generate SHAP values.")
 
 
 # --- PHASE 9: LLM INVESTIGATOR ---
