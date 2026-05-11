@@ -45,6 +45,7 @@ def check(name, fn):
     except Exception as e:
         results.append((name, False, str(e)))
         print(f"  {FAIL} {name} — {e}")
+        raise AssertionError(f"{name}: {e}") from e
 
 
 # ---------------------------------------------------------------------------
@@ -411,11 +412,13 @@ if __name__ == "__main__":
     print("  DATA 298A | Team 2 | Issue #11")
     print("=" * 60)
 
-    test_imports()
-    test_feature_consistency()
-    test_llm_schema()
-    test_llm_evaluation()
-    test_artifacts()
+    # Run all groups even if one fails so the full summary is always shown
+    for test_fn in [test_imports, test_feature_consistency, test_llm_schema,
+                    test_llm_evaluation, test_artifacts]:
+        try:
+            test_fn()
+        except AssertionError:
+            pass
 
     passed = sum(1 for _, ok, _ in results if ok)
     failed = sum(1 for _, ok, _ in results if not ok)
