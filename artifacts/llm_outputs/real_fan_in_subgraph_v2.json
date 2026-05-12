@@ -1,0 +1,127 @@
+[
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts",
+      "19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks",
+      "Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455",
+      "Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions",
+      "Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume",
+      "Account 822F7EDA0 is labeled a layering_node with out_degree 130 and in_degree 84 (total_degree 214), the highest connectivity in the subgraph, and is both a feeder (T_013: $1,306.38 into 824BF8940) and a recipient (T_018: $13,479.11 outbound from 824BF8940)",
+      "Only one outbound transaction from 824BF8940 is present in the transaction list: T_018 sending $13,479.11 to 822F7EDA0, suggesting funds are being consolidated before onward movement",
+      "All 20 fraudulent transactions use ACH payment format, indicating systematic use of a single payment rail",
+      "Transactions occur across a compressed 77.8-hour window (2022-09-15 13:16 to 2022-09-18 19:06), indicating rapid aggregation",
+      "Account 8000DE230 belongs to community 13 (fraud_rate 0.000517) while most other accounts are in community 5 (fraud_rate 0.001786), indicating cross-community fund flows into 824BF8940",
+      "Account 8225DAE10 belongs to community 336 (community_size 995, fraud_rate 0.001135), further confirming multi-community convergence at 824BF8940",
+      "Multiple transactions arrive within the same hour on 2022-09-16: T_002 and T_003 both at hour 8, T_007 at hour 14, suggesting coordinated timing",
+      "Account 844098B40 has bank_id null and an in_degree of 33 with out_degree 0, indicating it is a pure receiver with no identifiable bank affiliation, which is anomalous",
+      "Distributor accounts 8230E3350 (out_degree 52), 822266F70 (out_degree 82), and 822577140 (out_degree 54) each have high out-degrees, consistent with prior fan-out stages feeding into 824BF8940"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 824BF8940 at bank 99677 pending full AML investigation",
+      "File a Suspicious Activity Report (SAR) on account 824BF8940 citing aggregation of $4,397,156.39 in ACH inflows over 77.8 hours",
+      "Freeze and investigate account 8225DB4C0 (bank 192597) as the source of the anomalous $4,267,906.65 transaction T_012",
+      "Freeze and investigate layering_node account 822F7EDA0 (bank 294136) given its role as both feeder and recipient and its extreme connectivity (total_degree 214)",
+      "Investigate the single outbound transaction T_018 of $13,479.11 from 824BF8940 to 822F7EDA0 to determine if funds have already been further dispersed",
+      "Investigate account 844098B40 with null bank_id to determine its true institutional affiliation and ownership",
+      "Subpoena transaction records for all distributor accounts: 8230E3350 (bank 293268), 822266F70 (bank 293268), 8227615D0 (bank 192419), 8230E32B0 (bank 195134), 8000DE230 (bank 213), 8225DAE10 (bank 25268), and 822577140 (bank 6)",
+      "Notify bank 99677 compliance team of the full 21-account network and request a hold on any pending outbound transfers from 824BF8940",
+      "Escalate cross-community activity involving accounts from community 13 (8000DE230) and community 336 (8225DAE10) to respective bank compliance officers at bank 213 and bank 25268",
+      "Conduct KYC/beneficial ownership review on all 21 unique accounts in the subgraph to identify common controllers or shell entity linkages"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-12T04:16:30.894785",
+      "input_tokens": 4775,
+      "output_tokens": 1237,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts\",\n    \"19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks\",\n    \"Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455\",\n    \"Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions\",\n    \"Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume\",\n    \"Account 822F7EDA0 is labeled a layering_node with out_degree 130 and in_degree 84 (total_degree 214), the highest connectivity in the subgraph, and is both a feeder (T_013: $1,306.38 into 824BF8940) and a recipient (T_018: $13,479.11 outbound from 824BF8940)\",\n    \"Only one outbound transaction from 824BF8940 is present in the transaction list: T_018 sending $13,479.11 to 822F7EDA0, suggesting funds are being consolidated before onward movement\",\n    \"All 20 fraudulent transactions use ACH payment format, indicating systematic use of a single payment rail\",\n    \"Transactions occur across a compressed 77.8-hour window (2022-09-15 13:16 to 2022-09-18 19:06), indicating rapid aggregation\",\n    \"Account 8000DE230 belongs to community 13 (fraud_rate 0.000517) while most other accounts are in community 5 (fraud_rate 0.001786), indicating cross-community fund flows into 824BF8940\",\n    \"Account 8225DAE10 belongs to community 336 (community_size 995, fraud_rate 0.001135), further confirming multi-community convergence at 824BF8940\",\n    \"Multiple transactions arrive within the same hour on 2022-09-16: T_002 and T_003 both at hour 8, T_007 at hour 14, suggesting coordinated timing\",\n    \"Account 844098B40 has bank_id null and an in_degree of 33 with out_degree 0, indicating it is a pure receiver with no identifiable bank affiliation, which is anomalous\",\n    \"Distributor accounts 8230E3350 (out_degree 52), 822266F70 (out_degree 82), and 822577140 (out_degree 54) each have high out-degrees, consistent with prior fan-out stages feeding into 824BF8940\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 824BF8940 at bank 99677 pending full AML investigation\",\n    \"File a Suspicious Activity Report (SAR) on account 824BF8940 citing aggregation of $4,397,156.39 in ACH inflows over 77.8 hours\",\n    \"Freeze and investigate account 8225DB4C0 (bank 192597) as the source of the anomalous $4,267,906.65 transaction T_012\",\n    \"Freeze and investigate layering_node account 822F7EDA0 (bank 294136) given its role as both feeder and recipient and its extreme connectivity (total_degree 214)\",\n    \"Investigate the single outbound transaction T_018 of $13,479.11 from 824BF8940 to 822F7EDA0 to determine if funds have already been further dispersed\",\n    \"Investigate account 844098B40 with null bank_id to determine its true institutional affiliation and ownership\",\n    \"Subpoena transaction records for all distributor accounts: 8230E3350 (bank 293268), 822266F70 (bank 293268), 8227615D0 (bank 192419), 8230E32B0 (bank 195134), 8000DE230 (bank 213), 8225DAE10 (bank 25268), and 822577140 (bank 6)\",\n    \"Notify bank 99677 compliance team of the full 21-account network and request a hold on any pending outbound transfers from 824BF8940\",\n    \"Escalate cross-community activity involving accounts from community 13 (8000DE230) and community 336 (8225DAE10) to respective bank compliance officers at bank 213 and bank 25268\",\n    \"Conduct KYC/beneficial ownership review on all 21 unique accounts in the subgraph to identify common controllers or shell entity linkages\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts",
+      "19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks",
+      "Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455",
+      "Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions",
+      "Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume",
+      "All 20 transactions use ACH payment format, indicating a consistent and deliberate transfer mechanism",
+      "Transactions occurred within a compressed 77.8-hour window between 2022-09-15 13:16:00 and 2022-09-18 19:06:00",
+      "Account 822F7EDA0 is designated as a layering_node with out_degree 130 and in_degree 84 (total_degree 214), and also receives an outbound transfer T_018 of $13,479.11 from 824BF8940, suggesting onward layering",
+      "Account 824BF8940 has only one outbound transaction in the flagged set (T_018 to 822F7EDA0 for $13,479.11), consistent with a collection hub holding accumulated funds",
+      "Multiple distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) all feed into 824BF8940",
+      "Account 8000DE230 belongs to community 13 (fraud_rate 0.000517) while most other accounts are in community 5 (fraud_rate 0.001786), indicating cross-community fund aggregation",
+      "Account 8225DAE10 belongs to community 336 (community_size 995, fraud_rate 0.001135), further confirming multi-community convergence into 824BF8940",
+      "Transactions T_002 and T_003 occurred within 30 minutes of each other on 2022-09-16, and T_013 and T_014 occurred within 5 minutes of each other on 2022-09-17, suggesting coordinated timing",
+      "Transaction T_017 was sent at hour 22 (10:07 PM) and T_018 was sent at hour 4 (4:00 AM), indicating off-hours activity consistent with automated or deliberate concealment"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 824BF8940 immediately pending full AML investigation due to its role as a high-volume collection hub with $4,397,156.39 in confirmed fraudulent inflows",
+      "Freeze account 822F7EDA0 pending investigation given its layering_node designation, extremely high total_degree of 214, and receipt of $13,479.11 outbound from 824BF8940 in T_018",
+      "Investigate account 8225DB4C0 as a priority source given the anomalous single transaction T_012 of $4,267,906.65 which constitutes approximately 97% of total fraud volume",
+      "File a Suspicious Activity Report (SAR) with FinCEN covering all 20 flagged transactions in subgraph real_fan_in_824BF8940 totaling $4,397,156.39",
+      "Investigate all distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) for upstream sourcing of illicit funds",
+      "Request transaction records from banks 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455 for all accounts involved",
+      "Conduct enhanced due diligence (EDD) on account 844098B40 which has in_degree 33 and no outbound transactions, suggesting it may be a dormant collection or staging account",
+      "Trace downstream flows from account 822F7EDA0 given its out_degree of 130 to identify potential final beneficiaries of laundered funds",
+      "Alert cross-community monitoring teams for communities 5, 13, and 336 given that source accounts span all three communities converging on 824BF8940",
+      "Escalate off-hours transaction T_018 (04:00 AM) for review as a potential automated sweep of collected funds from 824BF8940 to layering node 822F7EDA0"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-12T04:16:53.170109",
+      "input_tokens": 4775,
+      "output_tokens": 1286,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts\",\n    \"19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks\",\n    \"Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455\",\n    \"Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions\",\n    \"Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume\",\n    \"All 20 transactions use ACH payment format, indicating a consistent and deliberate transfer mechanism\",\n    \"Transactions occurred within a compressed 77.8-hour window between 2022-09-15 13:16:00 and 2022-09-18 19:06:00\",\n    \"Account 822F7EDA0 is designated as a layering_node with out_degree 130 and in_degree 84 (total_degree 214), and also receives an outbound transfer T_018 of $13,479.11 from 824BF8940, suggesting onward layering\",\n    \"Account 824BF8940 has only one outbound transaction in the flagged set (T_018 to 822F7EDA0 for $13,479.11), consistent with a collection hub holding accumulated funds\",\n    \"Multiple distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) all feed into 824BF8940\",\n    \"Account 8000DE230 belongs to community 13 (fraud_rate 0.000517) while most other accounts are in community 5 (fraud_rate 0.001786), indicating cross-community fund aggregation\",\n    \"Account 8225DAE10 belongs to community 336 (community_size 995, fraud_rate 0.001135), further confirming multi-community convergence into 824BF8940\",\n    \"Transactions T_002 and T_003 occurred within 30 minutes of each other on 2022-09-16, and T_013 and T_014 occurred within 5 minutes of each other on 2022-09-17, suggesting coordinated timing\",\n    \"Transaction T_017 was sent at hour 22 (10:07 PM) and T_018 was sent at hour 4 (4:00 AM), indicating off-hours activity consistent with automated or deliberate concealment\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 824BF8940 immediately pending full AML investigation due to its role as a high-volume collection hub with $4,397,156.39 in confirmed fraudulent inflows\",\n    \"Freeze account 822F7EDA0 pending investigation given its layering_node designation, extremely high total_degree of 214, and receipt of $13,479.11 outbound from 824BF8940 in T_018\",\n    \"Investigate account 8225DB4C0 as a priority source given the anomalous single transaction T_012 of $4,267,906.65 which constitutes approximately 97% of total fraud volume\",\n    \"File a Suspicious Activity Report (SAR) with FinCEN covering all 20 flagged transactions in subgraph real_fan_in_824BF8940 totaling $4,397,156.39\",\n    \"Investigate all distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) for upstream sourcing of illicit funds\",\n    \"Request transaction records from banks 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455 for all accounts involved\",\n    \"Conduct enhanced due diligence (EDD) on account 844098B40 which has in_degree 33 and no outbound transactions, suggesting it may be a dormant collection or staging account\",\n    \"Trace downstream flows from account 822F7EDA0 given its out_degree of 130 to identify potential final beneficiaries of laundered funds\",\n    \"Alert cross-community monitoring teams for communities 5, 13, and 336 given that source accounts span all three communities converging on 824BF8940\",\n    \"Escalate off-hours transaction T_018 (04:00 AM) for review as a potential automated sweep of collected funds from 824BF8940 to layering node 822F7EDA0\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-In",
+    "evidence": [
+      "Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts",
+      "19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks",
+      "Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455",
+      "Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions",
+      "Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume",
+      "Account 822F7EDA0 is labeled a layering_node with out_degree 130 and in_degree 84 (total_degree 214), the highest connectivity in the subgraph, and also receives an outbound transfer of $13,479.11 from 824BF8940 in T_018",
+      "T_018 shows 824BF8940 sending $13,479.11 to 822F7EDA0 at 04:00 on 2022-09-18, an off-hours transaction suggesting rapid onward movement after accumulation",
+      "Multiple inbound transactions to 824BF8940 occurred within a compressed 77.8-hour window between 2022-09-15 13:16 and 2022-09-18 19:06",
+      "Accounts 8230E3120, 8227615D0, 822266F70, 8230E32B0, 8230E3350, 8225DAE10, 822577140, and 8000DE230 are all labeled as distributors funneling funds into 824BF8940",
+      "Account 844098B40 has bank_id null, in_degree 33, and out_degree 0, indicating a structurally opaque feeder account with no outbound activity on record",
+      "All 20 fraudulent transactions use ACH payment format, indicating systematic use of a single payment rail",
+      "Fraud transactions account for $4,397,156.39 versus only $11,095.38 in legitimate transaction amounts, a fraud-to-legit ratio exceeding 396:1",
+      "Account 8000DE230 belongs to community_id 13 (community_fraud_rate 0.000517) while all other accounts are in community_id 5 (community_fraud_rate 0.001786), indicating cross-community fund aggregation into 824BF8940"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 824BF8940 at bank 99677 pending full AML investigation",
+      "Freeze account 822F7EDA0 at bank 294136 due to its layering_node designation, extremely high connectivity (total_degree 214), and receipt of $13,479.11 from 824BF8940 in T_018",
+      "File a Suspicious Activity Report (SAR) on account 824BF8940 citing aggregation of $4,397,156.39 in fraudulent ACH inflows over 77.8 hours",
+      "Investigate account 8225DB4C0 at bank 192597 as the source of the anomalous $4,267,906.65 transaction T_012 and determine the origin of those funds",
+      "Investigate account 844098B40 (bank_id null) given its 33 in-degree, zero out-degree, and missing bank identifier \u2014 escalate for identity verification",
+      "Trace all outbound transactions from 824BF8940 beyond T_018 to identify additional downstream layering destinations",
+      "Issue information requests to banks 94047, 192419, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455 for KYC records on all sending accounts",
+      "Escalate account 8000DE230 at bank 213 (community_id 13) for cross-community laundering network analysis",
+      "Review all distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) for structuring behavior and file SARs as warranted",
+      "Conduct temporal analysis on the cluster of ACH transactions between 2022-09-16 08:10 and 2022-09-16 15:50 where six inbound transfers occurred within a single business day"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-12T04:17:14.794073",
+      "input_tokens": 4775,
+      "output_tokens": 1216,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-In\",\n  \"evidence\": [\n    \"Focal account 824BF8940 has an in_degree of 64, receiving funds from a large number of source accounts\",\n    \"19 out of 20 flagged transactions flow INTO account 824BF8940 from multiple distinct source accounts across different banks\",\n    \"Source accounts span at least 15 different banks including bank 94047, 192419, 18, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455\",\n    \"Total fraud amount aggregated at 824BF8940 is $4,397,156.39 across 20 fraudulent transactions\",\n    \"Single anomalous inbound transaction T_012 from account 8225DB4C0 for $4,267,906.65 represents the dominant share of total fraud volume\",\n    \"Account 822F7EDA0 is labeled a layering_node with out_degree 130 and in_degree 84 (total_degree 214), the highest connectivity in the subgraph, and also receives an outbound transfer of $13,479.11 from 824BF8940 in T_018\",\n    \"T_018 shows 824BF8940 sending $13,479.11 to 822F7EDA0 at 04:00 on 2022-09-18, an off-hours transaction suggesting rapid onward movement after accumulation\",\n    \"Multiple inbound transactions to 824BF8940 occurred within a compressed 77.8-hour window between 2022-09-15 13:16 and 2022-09-18 19:06\",\n    \"Accounts 8230E3120, 8227615D0, 822266F70, 8230E32B0, 8230E3350, 8225DAE10, 822577140, and 8000DE230 are all labeled as distributors funneling funds into 824BF8940\",\n    \"Account 844098B40 has bank_id null, in_degree 33, and out_degree 0, indicating a structurally opaque feeder account with no outbound activity on record\",\n    \"All 20 fraudulent transactions use ACH payment format, indicating systematic use of a single payment rail\",\n    \"Fraud transactions account for $4,397,156.39 versus only $11,095.38 in legitimate transaction amounts, a fraud-to-legit ratio exceeding 396:1\",\n    \"Account 8000DE230 belongs to community_id 13 (community_fraud_rate 0.000517) while all other accounts are in community_id 5 (community_fraud_rate 0.001786), indicating cross-community fund aggregation into 824BF8940\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 824BF8940 at bank 99677 pending full AML investigation\",\n    \"Freeze account 822F7EDA0 at bank 294136 due to its layering_node designation, extremely high connectivity (total_degree 214), and receipt of $13,479.11 from 824BF8940 in T_018\",\n    \"File a Suspicious Activity Report (SAR) on account 824BF8940 citing aggregation of $4,397,156.39 in fraudulent ACH inflows over 77.8 hours\",\n    \"Investigate account 8225DB4C0 at bank 192597 as the source of the anomalous $4,267,906.65 transaction T_012 and determine the origin of those funds\",\n    \"Investigate account 844098B40 (bank_id null) given its 33 in-degree, zero out-degree, and missing bank identifier \u2014 escalate for identity verification\",\n    \"Trace all outbound transactions from 824BF8940 beyond T_018 to identify additional downstream layering destinations\",\n    \"Issue information requests to banks 94047, 192419, 25268, 213, 293268, 195134, 6, 192597, 294136, 10, 293924, 27, 24168, and 193455 for KYC records on all sending accounts\",\n    \"Escalate account 8000DE230 at bank 213 (community_id 13) for cross-community laundering network analysis\",\n    \"Review all distributor-role accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) for structuring behavior and file SARs as warranted\",\n    \"Conduct temporal analysis on the cluster of ACH transactions between 2022-09-16 08:10 and 2022-09-16 15:50 where six inbound transfers occurred within a single business day\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]

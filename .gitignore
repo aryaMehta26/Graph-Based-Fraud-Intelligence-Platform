@@ -43,6 +43,17 @@ Thumbs.db
 !data/neo4j_bulk_import/.gitkeep
 .env
 
-# Generated LLM outputs
-artifacts/llm_outputs/
-artifacts/metrics/
+# LaTeX build artifacts and source
+T2_A7.tex
+T2_A7.aux
+T2_A7.out
+T2_A7.log
+T2_A7.pdf
+
+# Report generation scripts (moved to docs/)
+docs/generate_report.py
+docs/generate_report_figures.py
+docs/generate_report_latex.py
+docs/generate_data_mgmt_figures.py
+report_figures/
+workbook_images/

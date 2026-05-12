@@ -1,0 +1,184 @@
+{
+  "v1": {
+    "variant": "v1",
+    "model": "claude-haiku-4-5-20251001",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 0.8889,
+      "grounded": 8,
+      "total": 9,
+      "ungrounded_items": [
+        "Community fraud_rate is 0.423 with community_size of 12"
+      ]
+    },
+    "consistency": {
+      "score": 0.9467,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.8222,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1582,
+      "avg_output_tokens": 546
+    },
+    "sample_output": {
+      "pattern": "Fan-In",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2",
+        "Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2"
+      ],
+      "actions": [
+        "Immediately freeze account 800A3F2 pending investigation",
+        "Freeze accounts 800B1C9 and 800C4D1 as feeder accounts"
+      ]
+    }
+  },
+  "v2": {
+    "variant": "v2",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 1.0,
+      "grounded": 10,
+      "total": 10,
+      "ungrounded_items": []
+    },
+    "consistency": {
+      "score": 0.8899,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.633,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1583,
+      "avg_output_tokens": 890
+    },
+    "sample_output": {
+      "pattern": "Smurfing",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 800B1C9 sent two ACH transactions of $9,800.0 (T_001) and $9,900.0 (T_004) to account 800A3F2, both just below the $10,000 CTR reporting threshold",
+        "Account 800C4D1 sent two ACH transactions of $9,750.0 (T_002) and $9,600.0 (T_005) to account 800A3F2, also structured below the $10,000 reporting threshold"
+      ],
+      "actions": [
+        "Freeze account 800A3F2 at bank 20 immediately pending full AML investigation, given its role as the primary funnel with degree_centrality of 0.891",
+        "Freeze account 800D7E8 at bank 1208 to prevent further dissipation of the $48,200.0 wire received via T_003"
+      ]
+    }
+  },
+  "v3": {
+    "variant": "v3",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 1.0,
+      "grounded": 11,
+      "total": 11,
+      "ungrounded_items": []
+    },
+    "consistency": {
+      "score": 0.8698,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.5659,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1530,
+      "avg_output_tokens": 1471
+    },
+    "sample_output": {
+      "pattern": "Smurfing",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 800A3F2 carries role 'suspected_funnel' with out_degree 47 and degree_centrality 0.891, consistent with a central aggregation node",
+        "Account 800B1C9 carries role 'feeder' with in_degree 18, sending $9,800.00 (T_001) and $9,900.00 (T_004) to 800A3F2"
+      ],
+      "actions": [
+        "File a Suspicious Activity Report (SAR) immediately covering accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8, referencing transactions T_001 through T_005 and the aggregate flow of $97,250.00",
+        "Place a real-time transaction hold on account 800A3F2 (bank_id 20) pending full KYC/CDD review; its out_degree of 47 suggests additional undisclosed outbound flows beyond this subgraph"
+      ]
+    }
+  },
+  "v4": {
+    "variant": "v4",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 1.0,
+      "grounded": 8,
+      "total": 8,
+      "ungrounded_items": []
+    },
+    "consistency": {
+      "score": 0.841,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.47,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 1606,
+      "avg_output_tokens": 2206
+    },
+    "sample_output": {
+      "pattern": "Smurfing",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Account 800B1C9 sent $9800.0 (T_001) and $9900.0 (T_004) to 800A3F2 \u2014 both just below the $10,000 CTR reporting threshold",
+        "Account 800C4D1 sent $9750.0 (T_002) and $9600.0 (T_005) to 800A3F2 \u2014 both just below the $10,000 CTR reporting threshold"
+      ],
+      "actions": [
+        "File a Suspicious Activity Report (SAR) immediately for accounts 800A3F2, 800B1C9, and 800C4D1 citing structured transactions below the $10,000 CTR threshold",
+        "Freeze outbound wire capabilities on account 800A3F2 (bank_id: 20) pending full investigation, given its role as suspected_funnel with degree_centrality 0.891"
+      ]
+    }
+  }
+}

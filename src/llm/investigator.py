@@ -166,13 +166,13 @@ VARIANTS = {
         "model":         "claude-haiku-4-5-20251001",
         "system_prompt": SYSTEM_PROMPT_V1_V2,
         "description":   "Haiku — speed + cost baseline",
-        "max_tokens":    1000,
+        "max_tokens":    2000,
     },
     "v2": {
         "model":         "claude-sonnet-4-6",
         "system_prompt": SYSTEM_PROMPT_V1_V2,
         "description":   "Sonnet — balanced performance",
-        "max_tokens":    1000,
+        "max_tokens":    2000,
     },
     "v3": {
         "model":         "claude-sonnet-4-6",
@@ -310,7 +310,14 @@ def run_variant(variant_key: str, subgraph: dict, n_runs: int = 3) -> list:
             )
         except Exception as e:
             log.error("  %s run %d failed: %s", variant_key, run_id, e)
-            results.append({"_error": str(e), "_meta": {"variant": variant_key, "run_id": run_id}})
+            results.append({
+                "_error": str(e),
+                "_meta": {
+                    "variant":      variant_key,
+                    "run_id":       run_id,
+                    "raw_response": getattr(e, "raw_response", None),
+                },
+            })
     return results
 
 
