@@ -43,12 +43,13 @@ Thumbs.db
 !data/neo4j_bulk_import/.gitkeep
 .env
 
-# LaTeX build artifacts and source
-T2_A7.tex
-T2_A7.aux
-T2_A7.out
-T2_A7.log
-T2_A7.pdf
+# LaTeX build artifacts and source (in docs/)
+docs/T2_A7.tex
+docs/T2_A7.aux
+docs/T2_A7.out
+docs/T2_A7.log
+docs/T2_A7.pdf
+docs/missfont.log
 
 # Report generation scripts (moved to docs/)
 docs/generate_report.py
