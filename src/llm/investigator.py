@@ -223,8 +223,12 @@ def call_llm(variant_key: str, subgraph: dict, run_id: int = 1) -> dict:
 
     raw_text = message.content[0].text
 
-    # Parse JSON — handle v4 CoT format where JSON follows <reasoning> block
-    report = parse_response(raw_text, variant_key)
+    # Parse JSON — attach raw_text to any exception so the caller can preserve it
+    try:
+        report = parse_response(raw_text, variant_key)
+    except Exception as e:
+        e.raw_response = raw_text
+        raise
 
     # Attach metadata
     report["_meta"] = {
@@ -260,7 +264,16 @@ def parse_response(raw_text: str, variant_key: str) -> dict:
             text = text[4:]
         text = text.strip()
 
-    report = json.loads(text)
+    # Try direct parse; fall back to extracting the first {...} block
+    try:
+        report = json.loads(text)
+    except json.JSONDecodeError:
+        start = text.find("{")
+        end   = text.rfind("}") + 1
+        if start != -1 and end > start:
+            report = json.loads(text[start:end])
+        else:
+            raise
 
     # Populate reasoning from CoT if available and not already in JSON
     if reasoning_text and not report.get("reasoning"):
