@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "generated_at": "2026-05-12T17:22:39.080567",
+    "subgraph": "real_fan_in_subgraph",
+    "total_variants_seen": 1,
+    "total_runs_seen": 3,
+    "total_successful_runs": 3,
+    "total_input_tokens": 14397,
+    "total_output_tokens": 1895,
+    "avg_input_tokens_per_success": 4799,
+    "avg_output_tokens_per_success": 632
+  },
+  "runs": [
+    {
+      "subgraph": "real_fan_in_subgraph",
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-12T05:56:49.763101",
+      "input_tokens": 4799,
+      "output_tokens": 607,
+      "successful": true,
+      "pattern": "Fan-In",
+      "risk_level": "CRITICAL",
+      "error": null
+    },
+    {
+      "subgraph": "real_fan_in_subgraph",
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-12T05:57:03.670898",
+      "input_tokens": 4799,
+      "output_tokens": 628,
+      "successful": true,
+      "pattern": "Fan-In",
+      "risk_level": "CRITICAL",
+      "error": null
+    },
+    {
+      "subgraph": "real_fan_in_subgraph",
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-12T05:57:17.330890",
+      "input_tokens": 4799,
+      "output_tokens": 660,
+      "successful": true,
+      "pattern": "Fan-In",
+      "risk_level": "CRITICAL",
+      "error": null
+    }
+  ]
+}

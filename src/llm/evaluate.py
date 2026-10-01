@@ -19,6 +19,7 @@ Output
 ------
 artifacts/metrics/llm_eval.json     — full evaluation results
 artifacts/metrics/llm_eval_table.txt — human-readable comparison table
+artifacts/metrics/llm_usage_log.json — token and run-level usage summary
 
 Usage
 -----
@@ -35,6 +36,7 @@ import argparse
 import logging
 from pathlib import Path
 from itertools import combinations
+from datetime import datetime
 
 # ---------------------------------------------------------------------------
 # Config
@@ -393,6 +395,75 @@ def evaluate_variant(variant_key: str, subgraph_name: str, subgraph: dict) -> di
     }
 
 
+def build_usage_log(subgraph_name: str, results: dict) -> dict:
+    """
+    Build a lightweight run log from saved LLM outputs.
+    This is intentionally token-focused so the team can track usage even when
+    exact provider pricing changes over time.
+    """
+    usage_rows = []
+    summary = {
+        "generated_at": datetime.now().isoformat(),
+        "subgraph": subgraph_name,
+        "total_variants_seen": 0,
+        "total_runs_seen": 0,
+        "total_successful_runs": 0,
+        "total_input_tokens": 0,
+        "total_output_tokens": 0,
+    }
+
+    for variant_key, result in results.items():
+        output_file = OUTPUT_DIR / f"{subgraph_name}_{variant_key}.json"
+        if not output_file.exists():
+            continue
+
+        with open(output_file) as f:
+            reports = json.load(f)
+
+        summary["total_variants_seen"] += 1
+        summary["total_runs_seen"] += len(reports)
+
+        for report in reports:
+            meta = report.get("_meta", {})
+            row = {
+                "subgraph": subgraph_name,
+                "variant": variant_key,
+                "model": meta.get("model"),
+                "run_id": meta.get("run_id"),
+                "timestamp": meta.get("timestamp"),
+                "input_tokens": meta.get("input_tokens"),
+                "output_tokens": meta.get("output_tokens"),
+                "successful": "_error" not in report,
+                "pattern": report.get("pattern"),
+                "risk_level": report.get("risk_level"),
+                "error": report.get("_error"),
+            }
+            usage_rows.append(row)
+
+            if row["successful"]:
+                summary["total_successful_runs"] += 1
+            if isinstance(row["input_tokens"], int):
+                summary["total_input_tokens"] += row["input_tokens"]
+            if isinstance(row["output_tokens"], int):
+                summary["total_output_tokens"] += row["output_tokens"]
+
+    if summary["total_successful_runs"] > 0:
+        summary["avg_input_tokens_per_success"] = round(
+            summary["total_input_tokens"] / summary["total_successful_runs"]
+        )
+        summary["avg_output_tokens_per_success"] = round(
+            summary["total_output_tokens"] / summary["total_successful_runs"]
+        )
+    else:
+        summary["avg_input_tokens_per_success"] = None
+        summary["avg_output_tokens_per_success"] = None
+
+    return {
+        "summary": summary,
+        "runs": usage_rows,
+    }
+
+
 # ---------------------------------------------------------------------------
 # Comparison table
 # ---------------------------------------------------------------------------
@@ -508,6 +579,12 @@ def main():
     with open(table_path, "w") as f:
         f.write(table)
     log.info("Comparison table saved: %s", table_path)
+
+    usage_log = build_usage_log(args.subgraph, all_results)
+    usage_log_path = METRICS_DIR / "llm_usage_log.json"
+    with open(usage_log_path, "w") as f:
+        json.dump(usage_log, f, indent=2)
+    log.info("Usage log saved: %s", usage_log_path)
 
     print(f"\n  Artifacts saved to: {METRICS_DIR}")
 

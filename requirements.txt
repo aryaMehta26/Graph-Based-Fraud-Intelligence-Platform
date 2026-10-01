@@ -20,5 +20,8 @@ matplotlib>=3.7.0
 streamlit>=1.30.0
 pyvis>=0.3.2
 
+# LLM
+anthropic>=0.101.0
+
 # Experiment tracking (planned)
 mlflow>=2.10.0

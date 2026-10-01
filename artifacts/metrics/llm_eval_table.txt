@@ -1,0 +1,15 @@
+==========================================================================================
+  LLM INVESTIGATOR — MODEL COMPARISON TABLE
+  DATA 298A | Team 2 | Issue #14
+==========================================================================================
+  Variant  Model                            Schema   Faithful    Consist   Target
+  ----------------------------------------------------------------------------
+  v1       ERROR: No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v1.json
+  v2       claude-sonnet-4-6                1.0000     1.0000     0.8854        ✓
+  v3       ERROR: No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v3.json
+  v4       ERROR: No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v4.json
+==========================================================================================
+  Consistency target: ≥ 0.8  (✓ = meets target, ✗ = below target)
+==========================================================================================
+
+  Recommended variant: v2 (composite score: 0.9656)

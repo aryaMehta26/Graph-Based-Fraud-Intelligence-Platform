@@ -1,0 +1,59 @@
+{
+  "v1": {
+    "variant": "v1",
+    "error": "No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v1.json"
+  },
+  "v2": {
+    "variant": "v2",
+    "model": "claude-sonnet-4-6",
+    "n_runs": 3,
+    "n_successful": 3,
+    "schema": {
+      "has_all_fields": true,
+      "risk_level_valid": true,
+      "evidence_non_empty": true,
+      "actions_non_empty": true,
+      "pattern_valid": true,
+      "score": 1.0,
+      "issues": []
+    },
+    "faithfulness": {
+      "score": 1.0,
+      "grounded": 6,
+      "total": 6,
+      "ungrounded_items": []
+    },
+    "consistency": {
+      "score": 0.8854,
+      "pattern_agreement": true,
+      "risk_agreement": true,
+      "evidence_jaccard": 0.6182,
+      "meets_target": true,
+      "n_runs": 3
+    },
+    "token_stats": {
+      "avg_input_tokens": 4799,
+      "avg_output_tokens": 632
+    },
+    "sample_output": {
+      "pattern": "Fan-In",
+      "risk_level": "CRITICAL",
+      "evidence": [
+        "Focal account 824BF8940 has an in_degree of 64, receiving funds from at least 19 distinct source accounts across 20 flagged transactions within 77.8 hours",
+        "Account 8225DB4C0 sent a single anomalous transfer of $4,267,906.65 to 824BF8940 (T_012), representing the dominant share of total fraud amount $4,397,156.39"
+      ],
+      "actions": [
+        "Freeze account 824BF8940 immediately and file a Suspicious Activity Report (SAR) citing $4,397,156.39 in confirmed laundering transactions",
+        "Freeze and investigate account 8225DB4C0 as the source of the $4,267,906.65 single-transaction anomaly (T_012) and trace its upstream funding"
+      ]
+    }
+  },
+  "v3": {
+    "variant": "v3",
+    "error": "No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v3.json"
+  },
+  "v4": {
+    "variant": "v4",
+    "error": "No output file: /opt/project/artifacts/llm_outputs/real_fan_in_subgraph_v4.json"
+  }
+}

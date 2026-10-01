@@ -39,7 +39,7 @@ import os
 import json
 import argparse
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
 import anthropic
@@ -60,6 +60,14 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 log = logging.getLogger(__name__)
+
+
+class ResponseParseError(ValueError):
+    """Raised when an LLM response cannot be parsed into the required JSON schema."""
+
+    def __init__(self, message: str, raw_response: str):
+        super().__init__(message)
+        self.raw_response = raw_response
 
 # ---------------------------------------------------------------------------
 # Output schema
@@ -97,6 +105,7 @@ Rules:
 - "pattern" must be EXACTLY one value from this list: Layering Ring, Smurfing, Fan-Out, Fan-In, Rapid Movement, Unknown. No combining, no variations.
 - Layering Ring covers ALL cyclic transfer patterns (A→B→C→A, A→B→A, or any cycle). Do NOT use "Cyclic Transfer" — use "Layering Ring" instead.
 - Smurfing = many accounts feeding one hub. Fan-In = same shape but not necessarily structured below thresholds. When in doubt between the two, use Smurfing if amounts are just below round numbers, Fan-In otherwise.
+- Keep the report concise: include at most 6 evidence items and at most 4 actions.
 - Every item in "evidence" MUST contain the exact account ID or exact dollar amount from the input JSON. Example: "Account 800A3F2 sent 47 transactions" not "the hub account sent many transactions". If a value is not in the input, do not include it.
 - "risk_level" must be exactly one of: LOW, MEDIUM, HIGH, CRITICAL
 - "actions" should be specific and actionable, referencing exact account IDs (e.g. "Freeze account 800A3F2 pending investigation")
@@ -125,6 +134,7 @@ Critical requirements:
 - "pattern" must be EXACTLY one value from the list above. Do not combine patterns or add qualifiers.
 - Layering Ring covers ALL cyclic patterns (A→B→C→A or any cycle). Do NOT say "Cyclic Transfer".
 - Smurfing = many small accounts structuring funds into one hub. Fan-In = same topology but general aggregation.
+- Keep the report concise: include at most 6 evidence items and at most 4 actions.
 - Every evidence item MUST contain the exact account ID (e.g. 800A3F2) or exact dollar amount (e.g. $9,800.00) from the input JSON. Quote the actual value — do not paraphrase or generalize.
 - Actions must reference specific account IDs from the input."""
 
@@ -155,6 +165,7 @@ Critical requirements:
 
 Rules:
 - Evidence must only reference values that appear in the input JSON
+- Keep the report concise: include at most 6 evidence items and at most 4 actions
 - risk_level must be exactly: LOW, MEDIUM, HIGH, or CRITICAL
 - reasoning field in JSON should contain your full thinking process"""
 
@@ -166,13 +177,13 @@ VARIANTS = {
         "model":         "claude-haiku-4-5-20251001",
         "system_prompt": SYSTEM_PROMPT_V1_V2,
         "description":   "Haiku — speed + cost baseline",
-        "max_tokens":    1000,
+        "max_tokens":    1800,
     },
     "v2": {
         "model":         "claude-sonnet-4-6",
         "system_prompt": SYSTEM_PROMPT_V1_V2,
         "description":   "Sonnet — balanced performance",
-        "max_tokens":    1000,
+        "max_tokens":    2200,
     },
     "v3": {
         "model":         "claude-sonnet-4-6",
@@ -231,13 +242,64 @@ def call_llm(variant_key: str, subgraph: dict, run_id: int = 1) -> dict:
         "variant":      variant_key,
         "model":        variant["model"],
         "run_id":       run_id,
-        "timestamp":    datetime.utcnow().isoformat(),
+        "timestamp":    datetime.now(timezone.utc).isoformat(),
         "input_tokens": message.usage.input_tokens,
         "output_tokens": message.usage.output_tokens,
         "raw_response": raw_text,
     }
 
     return report
+
+
+def strip_code_fences(text: str) -> str:
+    """Remove surrounding markdown code fences when present."""
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        lines = stripped.splitlines()
+        if lines:
+            lines = lines[1:]
+        if lines and lines[-1].strip().startswith("```"):
+            lines = lines[:-1]
+        stripped = "\n".join(lines).strip()
+        if stripped.lower().startswith("json"):
+            stripped = stripped[4:].strip()
+    return stripped
+
+
+def extract_json_object(text: str) -> str:
+    """
+    Extract the first balanced JSON object from arbitrary model output.
+    Handles braces inside quoted strings.
+    """
+    start = text.find("{")
+    if start == -1:
+        raise ValueError("No JSON object found in model response.")
+
+    depth = 0
+    in_string = False
+    escape = False
+
+    for idx in range(start, len(text)):
+        ch = text[idx]
+        if escape:
+            escape = False
+            continue
+        if ch == "\\":
+            escape = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:idx + 1]
+
+    raise ValueError("No balanced JSON object found in model response.")
 
 
 def parse_response(raw_text: str, variant_key: str) -> dict:
@@ -253,14 +315,13 @@ def parse_response(raw_text: str, variant_key: str) -> dict:
     else:
         reasoning_text = ""
 
-    # Strip markdown code fences if present
-    if text.startswith("```"):
-        text = text.split("```")[1]
-        if text.startswith("json"):
-            text = text[4:]
-        text = text.strip()
+    text = strip_code_fences(text)
 
-    report = json.loads(text)
+    try:
+        json_text = extract_json_object(text)
+        report = json.loads(json_text)
+    except Exception as exc:
+        raise ResponseParseError(f"Could not parse model response as JSON: {exc}", raw_text) from exc
 
     # Populate reasoning from CoT if available and not already in JSON
     if reasoning_text and not report.get("reasoning"):
@@ -310,7 +371,14 @@ def run_variant(variant_key: str, subgraph: dict, n_runs: int = 3) -> list:
             )
         except Exception as e:
             log.error("  %s run %d failed: %s", variant_key, run_id, e)
-            results.append({"_error": str(e), "_meta": {"variant": variant_key, "run_id": run_id}})
+            results.append({
+                "_error": str(e),
+                "_meta": {
+                    "variant": variant_key,
+                    "run_id": run_id,
+                    "raw_response": getattr(e, "raw_response", None),
+                },
+            })
     return results
 
 
