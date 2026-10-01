@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time
+from pathlib import Path
 
 def run_script(script_name):
     print("\n" + "="*80)
@@ -40,8 +41,7 @@ def main():
     """)
     
     # Ensuring we are executing from the correct path relative to the files
-    proj_dir = "/Users/aryaaa/Desktop/DATA 298"
-    os.chdir(proj_dir)
+    os.chdir(Path(__file__).resolve().parent)
     
     scripts = [
         "notebooks/01_data_extraction.py",

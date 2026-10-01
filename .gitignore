@@ -14,6 +14,7 @@ data/neo4j_import/*.csv
 # Logs
 logs/
 *.log
+airflow/logs/
 
 # Environment
 .env
@@ -43,6 +44,5 @@ Thumbs.db
 !data/neo4j_bulk_import/.gitkeep
 .env
 
-# Generated LLM outputs
-artifacts/llm_outputs/
-artifacts/metrics/
+# Local Airflow authentication
+airflow/simple_auth_manager_passwords.json
