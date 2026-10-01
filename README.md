@@ -293,6 +293,21 @@ python3 -m streamlit run dashboard_app.py
 # Open http://localhost:8501
 ```
 
+The dashboard uses eight sidebar views: Command Center, Pipeline, Model Performance,
+Live Predictions, Graph Communities, LLM Investigator, Operational Readiness, and
+Project Briefing. Saved charts and reports are included; live predictions require
+local processed test data, and live graph views require your Neo4j configuration.
+
+To get the latest dashboard in an existing clone, run `git switch main` and
+`git pull --ff-only origin main`, install `requirements.txt`, and restart Streamlit.
+On macOS, XGBoost also requires `brew install libomp`.
+
+The optional Airflow setup is documented in [airflow/README.md](airflow/README.md).
+The QA sync (`fraud_lakehouse_neo4j_sync.py`) clears its configured Neo4j database
+before loading a sample; use a dedicated QA database via `NEO4J_DATABASE`.
+`demo_TA_pipeline.py` remains a compatibility entry point for that sync.
+
+
 ---
 
 ## Tech Stack

@@ -1,0 +1,29 @@
+services:
+  airflow-standalone:
+    build:
+      context: ..
+      dockerfile: airflow/Dockerfile
+    container_name: fraud-airflow
+    restart: unless-stopped
+    command: standalone
+    ports:
+      - "8080:8080"
+    env_file:
+      - ../.env
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/logs/simple_auth_manager_passwords.json
+      PROJECT_ROOT: /opt/project
+      PROJ_ROOT: /opt/project
+      PYTHONPATH: /opt/project
+      NEO4J_URI: neo4j://host.docker.internal:7687
+      SKIP_HEAVY_STAGES: "1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../:/opt/project
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins

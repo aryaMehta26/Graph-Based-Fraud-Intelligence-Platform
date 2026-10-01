@@ -1,0 +1,127 @@
+[
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating it is primarily a source of outbound transfers",
+      "Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions",
+      "Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions",
+      "Account 80E777630 dispersed funds to at least 12 distinct destination accounts including 80DAB8C70, 81B4C67A0, 8155772D0, 804D720B0, 80CADB870, 80F21A650, 80C19E030, 8155A3150, 801E94250, 805A2F3C0, 80DA69040, 816A55540, 8112BCD60, 811F55770, 80BEF4620, and 8160C4BC0",
+      "Transfers span 13 different destination banks including bank IDs 29723, 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219, indicating deliberate cross-bank dispersal",
+      "Transaction T_002 sent $1,090,233.15 to account 81B4C67A0 at bank 172103, the single largest outbound laundering transfer",
+      "Transaction T_014 sent $852,835.33 to account 805A2F3C0 at bank 14997, the second largest outbound laundering transfer",
+      "All transactions use ACH payment format, consistent with automated or scripted disbursement",
+      "Transfers occurred over a compressed time span of 63.3 hours between 2022-09-16 22:00:00 and 2022-09-19 13:16:00",
+      "Four self-referential transactions (T_003, T_005, T_007, T_010) from 80E777630 to itself totaling $339,643.74 are flagged as non-laundering, suggesting possible balance manipulation or obfuscation",
+      "Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is itself a high-activity node potentially involved in upstream layering",
+      "Account 80E777630 belongs to community 224 with a community_fraud_rate of 0.001664, and multiple feeder accounts (816A55540, 805A2F3C0, 8155A3150) share the same community 224",
+      "Several outbound transfers occur during off-hours: T_001 at hour 22, T_010 at hour 23, T_012 at hour 1, T_017 at hour 0, consistent with attempts to avoid detection"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 80E777630 immediately pending full AML investigation",
+      "File a Suspicious Activity Report (SAR) for account 80E777630 citing $2,278,704.66 in confirmed laundering transactions",
+      "Freeze or place a hold on destination accounts 81B4C67A0 and 805A2F3C0, which received $1,090,233.15 and $852,835.33 respectively",
+      "Investigate feeder account 801E94250 (total_degree 176) for upstream layering activity and trace its inbound funding sources",
+      "Subpoena or request records from destination banks 172103, 14997, 29723, and 25 for accounts 81B4C67A0, 805A2F3C0, 80DAB8C70, and 80CADB870",
+      "Investigate the four self-to-self transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 to determine if they represent balance inflation or internal layering",
+      "Conduct enhanced due diligence on all 16 destination accounts receiving laundering-flagged transfers from 80E777630",
+      "Escalate to law enforcement given the transaction volume exceeding $2.27M in fraud and the cross-bank dispersal pattern across 13+ institutions",
+      "Review all ACH batch submissions originating from bank 235909 during the period 2022-09-16 to 2022-09-19 for related suspicious activity",
+      "Assess community 224 accounts (816A55540, 805A2F3C0, 8155A3150) for coordinated activity with 80E777630"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 1,
+      "timestamp": "2026-05-12T04:17:53.120513",
+      "input_tokens": 4745,
+      "output_tokens": 1201,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating it is primarily a source of outbound transfers\",\n    \"Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions\",\n    \"Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions\",\n    \"Account 80E777630 dispersed funds to at least 12 distinct destination accounts including 80DAB8C70, 81B4C67A0, 8155772D0, 804D720B0, 80CADB870, 80F21A650, 80C19E030, 8155A3150, 801E94250, 805A2F3C0, 80DA69040, 816A55540, 8112BCD60, 811F55770, 80BEF4620, and 8160C4BC0\",\n    \"Transfers span 13 different destination banks including bank IDs 29723, 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219, indicating deliberate cross-bank dispersal\",\n    \"Transaction T_002 sent $1,090,233.15 to account 81B4C67A0 at bank 172103, the single largest outbound laundering transfer\",\n    \"Transaction T_014 sent $852,835.33 to account 805A2F3C0 at bank 14997, the second largest outbound laundering transfer\",\n    \"All transactions use ACH payment format, consistent with automated or scripted disbursement\",\n    \"Transfers occurred over a compressed time span of 63.3 hours between 2022-09-16 22:00:00 and 2022-09-19 13:16:00\",\n    \"Four self-referential transactions (T_003, T_005, T_007, T_010) from 80E777630 to itself totaling $339,643.74 are flagged as non-laundering, suggesting possible balance manipulation or obfuscation\",\n    \"Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is itself a high-activity node potentially involved in upstream layering\",\n    \"Account 80E777630 belongs to community 224 with a community_fraud_rate of 0.001664, and multiple feeder accounts (816A55540, 805A2F3C0, 8155A3150) share the same community 224\",\n    \"Several outbound transfers occur during off-hours: T_001 at hour 22, T_010 at hour 23, T_012 at hour 1, T_017 at hour 0, consistent with attempts to avoid detection\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 80E777630 immediately pending full AML investigation\",\n    \"File a Suspicious Activity Report (SAR) for account 80E777630 citing $2,278,704.66 in confirmed laundering transactions\",\n    \"Freeze or place a hold on destination accounts 81B4C67A0 and 805A2F3C0, which received $1,090,233.15 and $852,835.33 respectively\",\n    \"Investigate feeder account 801E94250 (total_degree 176) for upstream layering activity and trace its inbound funding sources\",\n    \"Subpoena or request records from destination banks 172103, 14997, 29723, and 25 for accounts 81B4C67A0, 805A2F3C0, 80DAB8C70, and 80CADB870\",\n    \"Investigate the four self-to-self transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 to determine if they represent balance inflation or internal layering\",\n    \"Conduct enhanced due diligence on all 16 destination accounts receiving laundering-flagged transfers from 80E777630\",\n    \"Escalate to law enforcement given the transaction volume exceeding $2.27M in fraud and the cross-bank dispersal pattern across 13+ institutions\",\n    \"Review all ACH batch submissions originating from bank 235909 during the period 2022-09-16 to 2022-09-19 for related suspicious activity\",\n    \"Assess community 224 accounts (816A55540, 805A2F3C0, 8155A3150) for coordinated activity with 80E777630\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating it is primarily a source of outbound transfers",
+      "Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions",
+      "Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions",
+      "Account 80E777630 dispersed funds to at least 12 distinct destination accounts including 80DAB8C70, 81B4C67A0, 8155772D0, 804D720B0, 80CADB870, 80F21A650, 80C19E030, 8155A3150, 801E94250, 805A2F3C0, 80DA69040, 816A55540, 8112BCD60, 811F55770, 80BEF4620, and 8160C4BC0",
+      "Transaction T_002 sent $1,090,233.15 from 80E777630 to 81B4C67A0 at bank 172103 via ACH",
+      "Transaction T_014 sent $852,835.33 from 80E777630 to 805A2F3C0 at bank 14997 via ACH",
+      "Transaction T_009 sent $105,864.16 from 80E777630 to 80F21A650 at bank 38319 via ACH",
+      "Outbound laundering transactions span across 13 different destination banks including banks 29723, 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219",
+      "All transactions from 80E777630 use ACH payment format, consistent with systematic automated disbursement",
+      "The fan-out activity occurred over a compressed time window of 63.3 hours between 2022-09-16 22:00:00 and 2022-09-19 13:16:00",
+      "Several outbound transactions occurred during off-hours: T_001 at hour 22, T_012 at hour 1, T_017 at hour 0, T_010 at hour 23",
+      "Account 80E777630 is registered at bank 235909 and all outbound transactions originate from bank 235909",
+      "Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is itself a high-activity node potentially involved in upstream layering",
+      "Four self-referential transactions (T_003, T_005, T_007, T_010) from 80E777630 to 80E777630 totaling $339,643.74 are flagged is_laundering=0, possibly used to obscure the true balance or simulate legitimate activity"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Immediately freeze account 80E777630 at bank 235909 pending full AML investigation",
+      "File a Suspicious Activity Report (SAR) for account 80E777630 citing $2,278,704.66 in confirmed laundering transactions over 63.3 hours",
+      "Freeze or place a hold on destination accounts 81B4C67A0 and 805A2F3C0, which received $1,090,233.15 and $852,835.33 respectively",
+      "Investigate feeder account 801E94250 (total_degree 176) for its role in upstream fund sourcing and potential layering activity",
+      "Trace the two inbound transactions to 80E777630 (in_degree=2) to identify the original source of funds",
+      "Investigate the four self-to-self transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 for potential balance manipulation",
+      "Notify correspondent banks 172103, 29723, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219 of potential receipt of laundered funds",
+      "Conduct KYC review and beneficial ownership analysis on account 80E777630 and all 16 destination accounts",
+      "Escalate to law enforcement given the transaction volume exceeding $2.27M in fraud and the systematic multi-bank dispersal pattern",
+      "Review community 224 (community_fraud_rate 0.001664) for additional accounts connected to 80E777630 that may be part of the same laundering network"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 2,
+      "timestamp": "2026-05-12T04:18:12.414128",
+      "input_tokens": 4745,
+      "output_tokens": 1219,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating it is primarily a source of outbound transfers\",\n    \"Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions\",\n    \"Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions\",\n    \"Account 80E777630 dispersed funds to at least 12 distinct destination accounts including 80DAB8C70, 81B4C67A0, 8155772D0, 804D720B0, 80CADB870, 80F21A650, 80C19E030, 8155A3150, 801E94250, 805A2F3C0, 80DA69040, 816A55540, 8112BCD60, 811F55770, 80BEF4620, and 8160C4BC0\",\n    \"Transaction T_002 sent $1,090,233.15 from 80E777630 to 81B4C67A0 at bank 172103 via ACH\",\n    \"Transaction T_014 sent $852,835.33 from 80E777630 to 805A2F3C0 at bank 14997 via ACH\",\n    \"Transaction T_009 sent $105,864.16 from 80E777630 to 80F21A650 at bank 38319 via ACH\",\n    \"Outbound laundering transactions span across 13 different destination banks including banks 29723, 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219\",\n    \"All transactions from 80E777630 use ACH payment format, consistent with systematic automated disbursement\",\n    \"The fan-out activity occurred over a compressed time window of 63.3 hours between 2022-09-16 22:00:00 and 2022-09-19 13:16:00\",\n    \"Several outbound transactions occurred during off-hours: T_001 at hour 22, T_012 at hour 1, T_017 at hour 0, T_010 at hour 23\",\n    \"Account 80E777630 is registered at bank 235909 and all outbound transactions originate from bank 235909\",\n    \"Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is itself a high-activity node potentially involved in upstream layering\",\n    \"Four self-referential transactions (T_003, T_005, T_007, T_010) from 80E777630 to 80E777630 totaling $339,643.74 are flagged is_laundering=0, possibly used to obscure the true balance or simulate legitimate activity\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Immediately freeze account 80E777630 at bank 235909 pending full AML investigation\",\n    \"File a Suspicious Activity Report (SAR) for account 80E777630 citing $2,278,704.66 in confirmed laundering transactions over 63.3 hours\",\n    \"Freeze or place a hold on destination accounts 81B4C67A0 and 805A2F3C0, which received $1,090,233.15 and $852,835.33 respectively\",\n    \"Investigate feeder account 801E94250 (total_degree 176) for its role in upstream fund sourcing and potential layering activity\",\n    \"Trace the two inbound transactions to 80E777630 (in_degree=2) to identify the original source of funds\",\n    \"Investigate the four self-to-self transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 for potential balance manipulation\",\n    \"Notify correspondent banks 172103, 29723, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219 of potential receipt of laundered funds\",\n    \"Conduct KYC review and beneficial ownership analysis on account 80E777630 and all 16 destination accounts\",\n    \"Escalate to law enforcement given the transaction volume exceeding $2.27M in fraud and the systematic multi-bank dispersal pattern\",\n    \"Review community 224 (community_fraud_rate 0.001664) for additional accounts connected to 80E777630 that may be part of the same laundering network\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  },
+  {
+    "pattern": "Fan-Out",
+    "evidence": [
+      "Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating a strong outward dispersal pattern",
+      "Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions",
+      "Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions",
+      "Account 80E777630 sent $1,090,233.15 to account 81B4C67A0 (T_002, is_laundering=1)",
+      "Account 80E777630 sent $852,835.33 to account 805A2F3C0 (T_014, is_laundering=1)",
+      "Account 80E777630 sent $105,864.16 to account 80F21A650 (T_009, is_laundering=1)",
+      "Account 80E777630 sent $59,516.16 to account 80CADB870 (T_008, is_laundering=1)",
+      "Outbound transactions dispersed across at least 12 distinct destination banks including bank IDs 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, 28219",
+      "All transactions from 80E777630 used ACH payment format, spanning 63.3 hours from 2022-09-16 22:00:00 to 2022-09-19 13:16:00",
+      "Several transactions occurred during off-hours: T_001 at hour 22, T_012 at hour 1, T_017 at hour 0, T_010 at hour 23",
+      "Account 80E777630 sent 4 self-transactions (T_003, T_005, T_007, T_010) totaling $339,643.74 marked as non-laundering, potentially used to obscure the outbound dispersal",
+      "Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is a high-activity node potentially involved in upstream layering",
+      "Account 80E777630 belongs to community 224 with a community_fraud_rate of 0.001664, shared with feeder accounts 816A55540, 805A2F3C0, and 8155A3150"
+    ],
+    "risk_level": "CRITICAL",
+    "actions": [
+      "Freeze account 80E777630 immediately pending full AML investigation due to 16 confirmed laundering transactions totaling $2,278,704.66",
+      "File a Suspicious Activity Report (SAR) for account 80E777630 citing Fan-Out dispersal of over $2.27M across 12+ banks via ACH",
+      "Investigate and place a hold on destination account 81B4C67A0 (received $1,090,233.15 in T_002, is_laundering=1)",
+      "Investigate and place a hold on destination account 805A2F3C0 (received $852,835.33 in T_014, is_laundering=1)",
+      "Investigate destination account 80CADB870 (received $59,516.16 in T_008, is_laundering=1)",
+      "Investigate destination account 80F21A650 (received $105,864.16 in T_009, is_laundering=1)",
+      "Conduct enhanced due diligence on feeder account 801E94250 given its total_degree of 176 and role as a feeder to 80E777630",
+      "Trace the source of funds feeding into account 80E777630 via its 2 inbound connections to identify upstream money laundering layers",
+      "Review the 4 self-transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 for potential structuring or balance manipulation",
+      "Alert bank ID 235909 compliance team to review all ACH activity associated with account 80E777630",
+      "Coordinate with receiving banks (172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, 28219, 28219) to flag and hold inbound funds from 80E777630"
+    ],
+    "reasoning": "",
+    "_meta": {
+      "variant": "v2",
+      "model": "claude-sonnet-4-6",
+      "run_id": 3,
+      "timestamp": "2026-05-12T04:18:30.159465",
+      "input_tokens": 4745,
+      "output_tokens": 1156,
+      "raw_response": "```json\n{\n  \"pattern\": \"Fan-Out\",\n  \"evidence\": [\n    \"Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating a strong outward dispersal pattern\",\n    \"Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions\",\n    \"Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions\",\n    \"Account 80E777630 sent $1,090,233.15 to account 81B4C67A0 (T_002, is_laundering=1)\",\n    \"Account 80E777630 sent $852,835.33 to account 805A2F3C0 (T_014, is_laundering=1)\",\n    \"Account 80E777630 sent $105,864.16 to account 80F21A650 (T_009, is_laundering=1)\",\n    \"Account 80E777630 sent $59,516.16 to account 80CADB870 (T_008, is_laundering=1)\",\n    \"Outbound transactions dispersed across at least 12 distinct destination banks including bank IDs 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, 28219\",\n    \"All transactions from 80E777630 used ACH payment format, spanning 63.3 hours from 2022-09-16 22:00:00 to 2022-09-19 13:16:00\",\n    \"Several transactions occurred during off-hours: T_001 at hour 22, T_012 at hour 1, T_017 at hour 0, T_010 at hour 23\",\n    \"Account 80E777630 sent 4 self-transactions (T_003, T_005, T_007, T_010) totaling $339,643.74 marked as non-laundering, potentially used to obscure the outbound dispersal\",\n    \"Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is a high-activity node potentially involved in upstream layering\",\n    \"Account 80E777630 belongs to community 224 with a community_fraud_rate of 0.001664, shared with feeder accounts 816A55540, 805A2F3C0, and 8155A3150\"\n  ],\n  \"risk_level\": \"CRITICAL\",\n  \"actions\": [\n    \"Freeze account 80E777630 immediately pending full AML investigation due to 16 confirmed laundering transactions totaling $2,278,704.66\",\n    \"File a Suspicious Activity Report (SAR) for account 80E777630 citing Fan-Out dispersal of over $2.27M across 12+ banks via ACH\",\n    \"Investigate and place a hold on destination account 81B4C67A0 (received $1,090,233.15 in T_002, is_laundering=1)\",\n    \"Investigate and place a hold on destination account 805A2F3C0 (received $852,835.33 in T_014, is_laundering=1)\",\n    \"Investigate destination account 80CADB870 (received $59,516.16 in T_008, is_laundering=1)\",\n    \"Investigate destination account 80F21A650 (received $105,864.16 in T_009, is_laundering=1)\",\n    \"Conduct enhanced due diligence on feeder account 801E94250 given its total_degree of 176 and role as a feeder to 80E777630\",\n    \"Trace the source of funds feeding into account 80E777630 via its 2 inbound connections to identify upstream money laundering layers\",\n    \"Review the 4 self-transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 for potential structuring or balance manipulation\",\n    \"Alert bank ID 235909 compliance team to review all ACH activity associated with account 80E777630\",\n    \"Coordinate with receiving banks (172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, 28219, 28219) to flag and hold inbound funds from 80E777630\"\n  ],\n  \"reasoning\": \"\"\n}\n```"
+    }
+  }
+]
