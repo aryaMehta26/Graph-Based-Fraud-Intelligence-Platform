@@ -1,7 +1,7 @@
 """Build leakage-aware SFT/benchmark cases from subgraphs or parquet rows."""
 import argparse, hashlib, json
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Dict, Any
 from .schemas import InvestigationCase
 
 PATTERN_MAP = {"fan_in": "FAN_IN", "fan-in": "FAN_IN", "fan_out": "FAN_OUT", "fan-out": "FAN_OUT", "cycle": "CYCLE", "stack": "STACK", "scatter_gather": "SCATTER_GATHER", "scatter-gather": "SCATTER_GATHER", "gather_scatter": "GATHER_SCATTER", "gather-scatter": "GATHER_SCATTER", "bipartite": "BIPARTITE", "random": "RANDOM"}
@@ -73,8 +73,81 @@ def build_cases_from_processed_data(parquet_path: Path, patterns_file: Path, out
     output.parent.mkdir(parents=True, exist_ok=True); output.write_text("\n".join(case.to_jsonl() for case in cases) + ("\n" if cases else ""))
     return cases
 
+def _reference_report(case: InvestigationCase) -> Dict[str, Any]:
+    """Create a grounded SFT target from visible case facts plus evaluator labels.
+
+    Labels are used only in the assistant target. Evidence and the narrative are
+    generated from the label-free context so the model has useful supervision
+    without putting ground truth into its inference prompt.
+    """
+    context = case.agent_context()
+    transactions = context.get("transactions", [])
+    accounts = context.get("accounts", [])
+    decision = case.ground_truth.get("decision", "SUSPICIOUS")
+    pattern = case.ground_truth.get("pattern", "EMERGING_UNKNOWN")
+    suspicious = decision == "SUSPICIOUS"
+
+    evidence = [
+        f"The case contains {len(transactions)} observed transaction(s) involving {len(accounts)} account(s)."
+    ]
+    if transactions:
+        amounts = [float(tx["amount"]) for tx in transactions if tx.get("amount") is not None]
+        if amounts:
+            evidence.append(
+                f"Observed transaction amounts range from {min(amounts):.2f} to {max(amounts):.2f}, "
+                f"with a total of {sum(amounts):.2f}."
+            )
+        formats = sorted({str(tx["payment_format"]) for tx in transactions if tx.get("payment_format")})
+        if formats:
+            evidence.append(f"Payment formats observed: {', '.join(formats)}.")
+        timestamps = [str(tx["timestamp"]) for tx in transactions if tx.get("timestamp")]
+        if timestamps:
+            evidence.append(f"Observed activity spans {min(timestamps)} through {max(timestamps)}.")
+
+    if accounts:
+        hub = max(accounts, key=lambda account: float(account.get("total_degree") or 0))
+        if hub.get("account_id") is not None:
+            evidence.append(
+                f"Account {hub['account_id']} has total degree {hub.get('total_degree', 0)} "
+                f"({hub.get('out_degree', 0)} outgoing and {hub.get('in_degree', 0)} incoming connection(s))."
+            )
+        communities = sorted({str(a["community_id"]) for a in accounts if a.get("community_id") is not None})
+        if communities:
+            evidence.append(f"The observed accounts belong to community group(s): {', '.join(communities)}.")
+
+    if suspicious:
+        actions = [
+            "Escalate the case for enhanced due diligence.",
+            "Review the linked accounts and transaction provenance.",
+            "Document the observed pattern and supporting transaction evidence before disposition.",
+        ]
+        summary = (
+            f"The observed transaction and graph context is consistent with a {pattern} pattern; "
+            "retain the case for analyst review and corroborate the linked activity."
+        )
+        risk_level, confidence = "HIGH", 0.85
+    else:
+        actions = [
+            "Document the observed activity and close the alert with rationale.",
+            "Continue routine monitoring for additional anomalous activity.",
+        ]
+        summary = "The available transaction and graph context does not support escalation beyond routine monitoring."
+        risk_level, confidence = "LOW", 0.75
+
+    return {
+        "decision": decision,
+        "pattern": pattern,
+        "risk_level": risk_level,
+        "confidence": confidence,
+        "evidence": evidence,
+        "recommended_actions": actions,
+        "summary": summary,
+    }
+
+
 def to_sft_record(case: InvestigationCase) -> dict:
-    return {"case_id": case.case_id, "messages": [{"role": "system", "content": "You are an AML investigator. Return the required structured JSON."}, {"role": "user", "content": json.dumps(case.agent_context(), default=str)}, {"role": "assistant", "content": json.dumps(case.reference_report or {"decision": case.ground_truth.get("decision", "SUSPICIOUS"), "pattern": case.ground_truth.get("pattern", "EMERGING_UNKNOWN"), "risk_level": "HIGH", "confidence": 0.5, "evidence": [], "recommended_actions": [], "summary": ""})}]}
+    report = case.reference_report or _reference_report(case)
+    return {"case_id": case.case_id, "messages": [{"role": "system", "content": "You are an AML investigator. Return the required structured JSON."}, {"role": "user", "content": json.dumps(case.agent_context(), default=str)}, {"role": "assistant", "content": json.dumps(report, default=str)}]}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(); parser.add_argument("--input-dir", type=Path, default=Path("artifacts")); parser.add_argument("--output", type=Path, default=Path("artifacts/datasets/aml_cases.jsonl")); args = parser.parse_args()
