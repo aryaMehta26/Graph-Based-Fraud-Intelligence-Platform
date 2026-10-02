@@ -16,14 +16,23 @@ def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, se
     data = load_dataset("json", data_files=str(dataset), split="train")
     if max_samples is not None:
         data = data.select(range(min(int(max_samples), len(data))))
-    tokenizer = AutoTokenizer.from_pretrained(spec["model_id"], revision=spec["revision"])
-    model = AutoModelForCausalLM.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True), device_map="auto")
+    quantization = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True)
+    if model_name == "ministral":
+        from transformers import AutoProcessor, Mistral3ForConditionalGeneration
+        try:
+            tokenizer = AutoProcessor.from_pretrained(spec["model_id"], revision=spec["revision"], fix_mistral_regex=True)
+        except TypeError:
+            tokenizer = AutoProcessor.from_pretrained(spec["model_id"], revision=spec["revision"])
+        model = Mistral3ForConditionalGeneration.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(spec["model_id"], revision=spec["revision"])
+        model = AutoModelForCausalLM.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
     lora = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, target_modules="all-linear", task_type="CAUSAL_LM")
     args = TrainingArguments(output_dir=str(output_dir), max_steps=max_steps, per_device_train_batch_size=1, gradient_accumulation_steps=8, logging_steps=1, save_strategy="steps", save_steps=max(1, max_steps // 2), seed=seed, report_to=[])
     try:
-        trainer = SFTTrainer(model=model, tokenizer=tokenizer, train_dataset=data, peft_config=lora, args=args)
-    except TypeError:
         trainer = SFTTrainer(model=model, processing_class=tokenizer, train_dataset=data, peft_config=lora, args=args)
+    except TypeError:
+        trainer = SFTTrainer(model=model, tokenizer=tokenizer, train_dataset=data, peft_config=lora, args=args)
     result = trainer.train(); trainer.save_model(str(output_dir)); trainer.save_state(); tokenizer.save_pretrained(str(output_dir))
     (output_dir / "loss_history.json").write_text(json.dumps(trainer.state.log_history, default=str, indent=2))
     (output_dir / "training_run.json").write_text(json.dumps({"model": spec, "dataset": str(dataset), "dataset_rows": len(data), "seed": seed, "max_steps": max_steps, "wall_clock_seconds": time.time() - started, "train_metrics": result.metrics, "output_dir": str(output_dir)}, default=str, indent=2))

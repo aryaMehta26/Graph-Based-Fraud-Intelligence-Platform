@@ -20,8 +20,16 @@ class TransformersBackend(ModelBackend):
             import torch
             from transformers import BitsAndBytesConfig
             model_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
-        self.model = AutoModelForCausalLM.from_pretrained(model_id, revision=revision, **model_kwargs)
+        if "Ministral-3" in model_id:
+            from transformers import AutoProcessor, Mistral3ForConditionalGeneration
+            try:
+                self.tokenizer = AutoProcessor.from_pretrained(model_id, revision=revision, fix_mistral_regex=True, **tokenizer_kwargs)
+            except TypeError:
+                self.tokenizer = AutoProcessor.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
+            self.model = Mistral3ForConditionalGeneration.from_pretrained(model_id, revision=revision, **model_kwargs)
+        else:
+            self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
+            self.model = AutoModelForCausalLM.from_pretrained(model_id, revision=revision, **model_kwargs)
         if adapter_path:
             try:
                 from peft import PeftModel
