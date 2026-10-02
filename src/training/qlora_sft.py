@@ -57,6 +57,14 @@ def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, se
     else:
         tokenizer = AutoTokenizer.from_pretrained(spec["model_id"], revision=spec["revision"])
         model = AutoModelForCausalLM.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
+        if not getattr(tokenizer, "chat_template", None):
+            # Base checkpoints such as the configured Gemma/Qwen variants may
+            # not ship a chat template. Convert conversations to plain text so
+            # TRL does not call apply_chat_template during preprocessing.
+            data = data.map(
+                lambda example: {"text": _format_messages(example)},
+                remove_columns=data.column_names,
+            )
         formatting_func = None
     lora = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, target_modules="all-linear", task_type="CAUSAL_LM")
     args = TrainingArguments(output_dir=str(output_dir), max_steps=max_steps, per_device_train_batch_size=1, gradient_accumulation_steps=8, logging_steps=1, save_strategy="steps", save_steps=max(1, max_steps // 2), seed=seed, report_to=[])
