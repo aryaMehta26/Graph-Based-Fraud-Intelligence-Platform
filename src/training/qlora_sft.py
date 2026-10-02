@@ -1,0 +1,33 @@
+"""QLoRA SFT entry point with a fast dependency/configuration failure mode."""
+import argparse, json, time
+from pathlib import Path
+from ..aml.registry import get_model
+
+def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, seed=42, max_samples=None, **kwargs):
+    try:
+        from datasets import load_dataset
+        from transformers import BitsAndBytesConfig, TrainingArguments, AutoModelForCausalLM, AutoTokenizer
+        import torch
+        from peft import LoraConfig
+        from trl import SFTTrainer
+    except ImportError as exc:
+        raise RuntimeError("QLoRA training requires datasets, transformers, peft, bitsandbytes, and trl") from exc
+    spec = get_model(model_name); started = time.time(); output_dir.mkdir(parents=True, exist_ok=True)
+    data = load_dataset("json", data_files=str(dataset), split="train")
+    if max_samples is not None:
+        data = data.select(range(min(int(max_samples), len(data))))
+    tokenizer = AutoTokenizer.from_pretrained(spec["model_id"], revision=spec["revision"])
+    model = AutoModelForCausalLM.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True), device_map="auto")
+    lora = LoraConfig(r=16, lora_alpha=32, lora_dropout=0.05, target_modules="all-linear", task_type="CAUSAL_LM")
+    args = TrainingArguments(output_dir=str(output_dir), max_steps=max_steps, per_device_train_batch_size=1, gradient_accumulation_steps=8, logging_steps=1, save_strategy="steps", save_steps=max(1, max_steps // 2), seed=seed, report_to=[])
+    try:
+        trainer = SFTTrainer(model=model, tokenizer=tokenizer, train_dataset=data, peft_config=lora, args=args)
+    except TypeError:
+        trainer = SFTTrainer(model=model, processing_class=tokenizer, train_dataset=data, peft_config=lora, args=args)
+    result = trainer.train(); trainer.save_model(str(output_dir)); trainer.save_state(); tokenizer.save_pretrained(str(output_dir))
+    (output_dir / "loss_history.json").write_text(json.dumps(trainer.state.log_history, default=str, indent=2))
+    (output_dir / "training_run.json").write_text(json.dumps({"model": spec, "dataset": str(dataset), "dataset_rows": len(data), "seed": seed, "max_steps": max_steps, "wall_clock_seconds": time.time() - started, "train_metrics": result.metrics, "output_dir": str(output_dir)}, default=str, indent=2))
+    return result.metrics
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser(); p.add_argument("--model", required=True, choices=["gemma", "granite", "ministral", "qwen"]); p.add_argument("--dataset", type=Path, required=True); p.add_argument("--output-dir", type=Path, required=True); p.add_argument("--max-steps", type=int, default=100); a = p.parse_args(); print(train(a.model, a.dataset, a.output_dir, max_steps=a.max_steps))

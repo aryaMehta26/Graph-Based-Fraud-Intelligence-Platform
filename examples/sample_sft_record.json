@@ -1,0 +1,17 @@
+{
+  "case_id": "synthetic_case_001",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AML investigator. Return the required structured JSON."
+    },
+    {
+      "role": "user",
+      "content": "{\"subgraph_id\": \"synthetic_subgraph_001\", \"accounts\": [{\"account_id\": \"ACCOUNT_A\", \"out_degree\": 2, \"in_degree\": 1}], \"transactions\": [{\"txn_id\": \"TX_SYNTH_001\", \"src_acct\": \"ACCOUNT_A\", \"dst_acct\": \"ACCOUNT_B\", \"amount\": 125.5, \"payment_format\": \"ACH\"}]}"
+    },
+    {
+      "role": "assistant",
+      "content": "{\"decision\": \"LEGITIMATE\", \"pattern\": \"NONE\", \"risk_level\": \"LOW\", \"confidence\": 0.9, \"evidence\": [\"TX_SYNTH_001 is the only observed transaction\"], \"recommended_actions\": [], \"summary\": \"Synthetic example only.\"}"
+    }
+  ]
+}

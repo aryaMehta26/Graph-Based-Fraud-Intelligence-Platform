@@ -1,0 +1,34 @@
+# DATA 298B controlled model registry.
+# Checkpoint IDs intentionally live here and nowhere else in source code.
+gemma:
+  family: gemma4
+  parameters_b: 31
+  model_id: google/gemma-4-31B
+  revision: main
+  architecture: dense
+  access: gated_or_license_acceptance_may_be_required
+  instruction_tuned: false
+granite:
+  family: granite4.2
+  parameters_b: 30
+  model_id: ibm-granite/granite-4.2-30b
+  revision: main
+  architecture: dense
+  access: verify_checkpoint_access_before_training
+  instruction_tuned: true
+ministral:
+  family: ministral3
+  parameters_b: 14
+  model_id: mistralai/Ministral-3-14B-Instruct-2512
+  revision: main
+  architecture: dense
+  access: open_weights
+  instruction_tuned: true
+qwen:
+  family: qwen3.5
+  parameters_b: 27
+  model_id: Qwen/Qwen3.5-27B
+  revision: main
+  architecture: dense
+  access: verify_checkpoint_access_before_training
+  instruction_tuned: false

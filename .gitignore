@@ -18,6 +18,36 @@ airflow/logs/
 
 # Environment
 .env
+
+# Raw IBM AML source files and local pattern extracts
+data/raw/
+raw/
+HI-*.txt
+HI-*.csv
+*Patterns.txt
+
+# Generated investigation/SFT data (may contain account IDs, transaction IDs,
+# amounts, labels, or fraud-pattern instances)
+artifacts/evaluation_dry_run/
+artifacts/**/sft*.jsonl
+artifacts/**/cases*.jsonl
+artifacts/**/traces/
+artifacts/llm_outputs/
+artifacts/metrics/
+
+# Model outputs and checkpoints
+artifacts/adapters/
+artifacts/checkpoints/
+adapters/
+checkpoints/
+**/checkpoint-*/
+*.safetensors
+adapter_model.bin
+
+# Hugging Face caches and local model downloads
+.cache/huggingface/
+.huggingface/
+huggingface_cache/
 .venv
 venv/
 *.egg-info/

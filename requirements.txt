@@ -25,3 +25,11 @@ anthropic>=0.101.0
 
 # Experiment tracking (planned)
 mlflow>=2.10.0
+
+# 298B backend (optional for GPU training/local inference; evaluation runs on core deps)
+pyyaml>=6.0
+transformers>=4.45.0
+datasets>=2.20.0
+peft>=0.12.0
+trl>=0.10.0
+bitsandbytes>=0.43.0
