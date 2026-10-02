@@ -8,6 +8,23 @@ def _format_messages(example):
     messages = example.get("messages", [])
     return "\n".join(f"[{message.get('role', 'user').upper()}]\n{message.get('content', '')}" for message in messages)
 
+
+def _render_mistral_training_text(example, tokenizer):
+    """Render a completed conversation as ordinary training text.
+
+    MistralCommonBackend rejects a completed assistant message when TRL sees
+    the raw ``messages`` column as a serving conversation.  Continuing the
+    final assistant message is the training form; storing the rendered result
+    under ``text`` prevents TRL from re-applying the serving formatter.
+    """
+    return {
+        "text": tokenizer.apply_chat_template(
+            example["messages"],
+            tokenize=False,
+            continue_final_message=True,
+        )
+    }
+
 def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, seed=42, max_samples=None, **kwargs):
     try:
         from datasets import load_dataset
@@ -29,7 +46,14 @@ def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, se
         except (TypeError, ValueError):
             tokenizer = MistralCommonBackend.from_pretrained(spec["model_id"], revision=spec["revision"])
         model = Mistral3ForConditionalGeneration.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
-        formatting_func = _format_messages
+        # Pre-render completed conversations as text. Otherwise TRL treats the
+        # final assistant answer as a serving prompt and MistralCommonBackend
+        # raises InvalidMessageStructureException during tokenization.
+        data = data.map(
+            lambda example: _render_mistral_training_text(example, tokenizer),
+            remove_columns=data.column_names,
+        )
+        formatting_func = None
     else:
         tokenizer = AutoTokenizer.from_pretrained(spec["model_id"], revision=spec["revision"])
         model = AutoModelForCausalLM.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
