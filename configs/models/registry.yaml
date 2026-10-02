@@ -19,7 +19,9 @@ granite:
 ministral:
   family: ministral3
   parameters_b: 14
-  model_id: mistralai/Ministral-3-14B-Instruct-2512
+  # BF16 variant is selected for QLoRA; the default Instruct checkpoint is FP8
+  # and cannot be combined with the BitsAndBytesConfig used by the trainer.
+  model_id: mistralai/Ministral-3-14B-Instruct-2512-BF16
   revision: main
   architecture: dense
   access: open_weights
