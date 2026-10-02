@@ -25,7 +25,7 @@ class TransformersBackend(ModelBackend):
             from transformers import Mistral3ForConditionalGeneration, MistralCommonBackend
             try:
                 self.tokenizer = MistralCommonBackend.from_pretrained(model_id, revision=revision, fix_mistral_regex=True, **tokenizer_kwargs)
-            except TypeError:
+            except (TypeError, ValueError):
                 self.tokenizer = MistralCommonBackend.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
             self.model = Mistral3ForConditionalGeneration.from_pretrained(model_id, revision=revision, **model_kwargs)
         else:

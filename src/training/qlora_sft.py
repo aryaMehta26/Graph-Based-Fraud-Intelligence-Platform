@@ -26,7 +26,7 @@ def train(model_name: str, dataset: Path, output_dir: Path, *, max_steps=100, se
         from transformers import Mistral3ForConditionalGeneration, MistralCommonBackend
         try:
             tokenizer = MistralCommonBackend.from_pretrained(spec["model_id"], revision=spec["revision"], fix_mistral_regex=True)
-        except TypeError:
+        except (TypeError, ValueError):
             tokenizer = MistralCommonBackend.from_pretrained(spec["model_id"], revision=spec["revision"])
         model = Mistral3ForConditionalGeneration.from_pretrained(spec["model_id"], revision=spec["revision"], quantization_config=quantization, device_map="auto")
         formatting_func = _format_messages
