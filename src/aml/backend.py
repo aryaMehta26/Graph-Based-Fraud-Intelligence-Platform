@@ -56,7 +56,12 @@ class TransformersBackend(ModelBackend):
         except AttributeError:
             encoded_text = self.tokenizer(text=text, add_special_tokens=False)
             output_ids = encoded_text["input_ids"]
-            output_tokens = len(output_ids[0] if output_ids and isinstance(output_ids[0], list) else output_ids)
+            if hasattr(output_ids, "ndim"):
+                output_tokens = int(output_ids.shape[-1]) if output_ids.ndim > 1 else int(output_ids.shape[0])
+            elif isinstance(output_ids, list):
+                output_tokens = len(output_ids[0]) if output_ids and isinstance(output_ids[0], list) else len(output_ids)
+            else:
+                output_tokens = 0
         return {"text": text, "prompt_tokens": int(inputs.input_ids.shape[-1]), "output_tokens": output_tokens}
 
 class OpenAICompatibleBackend(ModelBackend):
