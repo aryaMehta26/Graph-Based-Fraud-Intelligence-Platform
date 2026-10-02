@@ -39,12 +39,14 @@ class TransformersBackend(ModelBackend):
 
     def generate(self, messages, *, max_tokens=512, temperature=0.0):
         if self.is_mistral3:
-            prompt = "\n".join(f"[{message.get('role', 'user').upper()}]\n{message.get('content', '')}" for message in messages)
+            prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = self.tokenizer(text=prompt, return_tensors="pt").to(self.model.device)
         else:
             prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
-        generation_kwargs = {"max_new_tokens": max_tokens, "do_sample": temperature > 0}
+        if getattr(self.model, "generation_config", None) is not None:
+            self.model.generation_config.max_length = None
+        generation_kwargs = {"max_new_tokens": max_tokens, "min_new_tokens": 1, "do_sample": temperature > 0}
         if temperature > 0:
             generation_kwargs["temperature"] = temperature
         output = self.model.generate(**inputs, **generation_kwargs)
