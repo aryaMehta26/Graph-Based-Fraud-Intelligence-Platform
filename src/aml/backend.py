@@ -20,12 +20,13 @@ class TransformersBackend(ModelBackend):
             import torch
             from transformers import BitsAndBytesConfig
             model_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4", bnb_4bit_use_double_quant=True)
-        if "Ministral-3" in model_id:
-            from transformers import AutoProcessor, Mistral3ForConditionalGeneration
+        self.is_mistral3 = "Ministral-3" in model_id
+        if self.is_mistral3:
+            from transformers import Mistral3ForConditionalGeneration, MistralCommonBackend
             try:
-                self.tokenizer = AutoProcessor.from_pretrained(model_id, revision=revision, fix_mistral_regex=True, **tokenizer_kwargs)
+                self.tokenizer = MistralCommonBackend.from_pretrained(model_id, revision=revision, fix_mistral_regex=True, **tokenizer_kwargs)
             except TypeError:
-                self.tokenizer = AutoProcessor.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
+                self.tokenizer = MistralCommonBackend.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
             self.model = Mistral3ForConditionalGeneration.from_pretrained(model_id, revision=revision, **model_kwargs)
         else:
             self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision, **tokenizer_kwargs)
@@ -37,8 +38,12 @@ class TransformersBackend(ModelBackend):
             except ImportError as exc: raise RuntimeError("Install peft to load an AML adapter") from exc
 
     def generate(self, messages, *, max_tokens=512, temperature=0.0):
-        prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
+        if self.is_mistral3:
+            prompt = "\n".join(f"[{message.get('role', 'user').upper()}]\n{message.get('content', '')}" for message in messages)
+            inputs = self.tokenizer(text=prompt, return_tensors="pt").to(self.model.device)
+        else:
+            prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
         output = self.model.generate(**inputs, max_new_tokens=max_tokens, do_sample=temperature > 0, temperature=max(temperature, 1e-5))
         text = self.tokenizer.decode(output[0][inputs.input_ids.shape[-1]:], skip_special_tokens=True)
         return {"text": text, "prompt_tokens": int(inputs.input_ids.shape[-1]), "output_tokens": len(self.tokenizer.encode(text))}
