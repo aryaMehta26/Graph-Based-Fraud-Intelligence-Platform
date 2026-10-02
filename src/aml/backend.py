@@ -49,7 +49,13 @@ class TransformersBackend(ModelBackend):
             generation_kwargs["temperature"] = temperature
         output = self.model.generate(**inputs, **generation_kwargs)
         text = self.tokenizer.decode(output[0][inputs.input_ids.shape[-1]:], skip_special_tokens=True)
-        return {"text": text, "prompt_tokens": int(inputs.input_ids.shape[-1]), "output_tokens": len(self.tokenizer.encode(text))}
+        try:
+            output_tokens = len(self.tokenizer.encode(text))
+        except AttributeError:
+            encoded_text = self.tokenizer(text=text, add_special_tokens=False)
+            output_ids = encoded_text["input_ids"]
+            output_tokens = len(output_ids[0] if output_ids and isinstance(output_ids[0], list) else output_ids)
+        return {"text": text, "prompt_tokens": int(inputs.input_ids.shape[-1]), "output_tokens": output_tokens}
 
 class OpenAICompatibleBackend(ModelBackend):
     def __init__(self, base_url: str, model: str, api_key: str = "local", timeout: int = 180):
