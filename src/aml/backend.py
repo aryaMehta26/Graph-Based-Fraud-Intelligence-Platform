@@ -43,7 +43,15 @@ class TransformersBackend(ModelBackend):
             inputs = self.tokenizer(text=prompt, return_tensors="pt").to(self.model.device)
         else:
             if getattr(self.tokenizer, "chat_template", None):
-                prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                try:
+                    prompt = self.tokenizer.apply_chat_template(
+                        messages,
+                        tokenize=False,
+                        add_generation_prompt=True,
+                        enable_thinking=False,
+                    )
+                except TypeError:
+                    prompt = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             else:
                 prompt = "\n".join(
                     f"[{message.get('role', 'user').upper()}]\n{message.get('content', '')}"
