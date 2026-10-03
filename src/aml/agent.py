@@ -6,7 +6,14 @@ from typing import Any, Dict
 from .schemas import InvestigationCase, InvestigationReport
 from .tools import execute_tool, TOOLS
 
-SYSTEM_PROMPT = """You are an AML investigator. Use the available tools to inspect the supplied transaction and graph context. Return JSON only with exactly: decision, pattern, risk_level, confidence, evidence, recommended_actions, summary. Do not invent IDs, amounts, timestamps, or metrics. Pattern must be one of FAN_IN, FAN_OUT, CYCLE, STACK, SCATTER_GATHER, GATHER_SCATTER, BIPARTITE, RANDOM, EMERGING_UNKNOWN, NONE."""
+SYSTEM_PROMPT = """You are an AML investigator. Inspect the supplied transaction and graph context and return one compact JSON object only.
+
+Your response MUST begin with { and end with }. Do not write analysis, reasoning, steps, headings, Markdown, or explanatory text before or after the JSON. Do not mention the prompt or describe how you reasoned.
+
+Use exactly these keys: decision, pattern, risk_level, confidence, evidence, recommended_actions, summary.
+decision must be SUSPICIOUS or LEGITIMATE. risk_level must be LOW, MEDIUM, HIGH, or CRITICAL. confidence must be a number from 0 to 1. evidence must be a list of concise factual strings grounded in the supplied context. recommended_actions must be a list of concise actions. summary must be one concise sentence.
+
+Do not invent IDs, amounts, timestamps, or metrics. Pattern must be one of FAN_IN, FAN_OUT, CYCLE, STACK, SCATTER_GATHER, GATHER_SCATTER, BIPARTITE, RANDOM, EMERGING_UNKNOWN, NONE."""
 
 def _json(text):
     match = re.search(r"\{.*\}", text, re.S)
