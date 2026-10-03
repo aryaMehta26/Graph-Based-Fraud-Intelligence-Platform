@@ -16,6 +16,14 @@ granite:
   architecture: dense
   access: verify_checkpoint_access_before_training
   instruction_tuned: true
+phi:
+  family: phi4
+  parameters_b: 14
+  model_id: microsoft/phi-4
+  revision: main
+  architecture: dense
+  access: open_weights
+  instruction_tuned: true
 ministral:
   family: ministral3
   parameters_b: 14
