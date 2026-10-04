@@ -29,7 +29,7 @@ export default function LLMPage() {
       }
     >
       <Panel title="Case header">
-        <div className="grid grid-cols-[2fr_1.2fr_1.3fr_1.1fr_0.7fr] gap-3">
+        <div className="grid grid-cols-5 gap-3" style={{ gridTemplateColumns: '2fr 1.2fr 1.3fr 1.1fr 0.7fr' }}>
           <Stat className={centered} label="Case ID" value={report.case} detail="Validated artifact" tone="blue" />
           <Stat className={centered} label="Account" value={report.account || '—'} detail="Selected context" tone="purple" />
           <Stat className={centered} label="Selected LLM" value="Gemma 4 31B" detail="AML fine-tuned model" tone="green" />
