@@ -10,5 +10,5 @@ export function Panel({ title, children, className = '' }: { title?: string; chi
 
 export function Stat({ label, value, detail, tone = 'blue' }: { label: string; value: string; detail?: string; tone?: 'blue' | 'red' | 'green' | 'purple' | 'orange' }) {
   const styles = { blue: 'bg-[#eaf3ff] text-[#0877ff]', red: 'bg-[#fff0f2] text-[#f0445e]', green: 'bg-[#e9fbf4] text-[#10b981]', purple: 'bg-[#f2eafe] text-[#7c3aed]', orange: 'bg-[#fff7e3] text-[#ff8a34]' };
-  return <div className="rounded-2xl border border-[#dce7f2] bg-white p-4 shadow-sm"><div className={`mb-3 inline-flex rounded-xl px-3 py-2 text-xs font-bold ${styles[tone]}`}>{label}</div><div className="text-2xl font-extrabold text-[#10233d]">{value}</div>{detail && <div className="mt-1 text-xs text-[#607590]">{detail}</div>}</div>;
+  return <div className="min-w-0 rounded-2xl border border-[#dce7f2] bg-white p-4 shadow-sm"><div className={`mb-3 inline-flex max-w-full rounded-xl px-3 py-2 text-xs font-bold ${styles[tone]}`}>{label}</div><div className="min-w-0 break-all text-2xl font-extrabold leading-tight text-[#10233d]" title={value}>{value}</div>{detail && <div className="mt-1 text-xs text-[#607590]">{detail}</div>}</div>;
 }
