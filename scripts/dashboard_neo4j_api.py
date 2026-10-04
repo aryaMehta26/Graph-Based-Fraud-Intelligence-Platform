@@ -38,6 +38,7 @@ NEO4J_USER = os.getenv("NEO4J_USER", ENV.get("NEO4J_USER", "neo4j"))
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", ENV.get("NEO4J_PASSWORD", ""))
 NEO4J_DATABASE = os.getenv("NEO4J_DB", ENV.get("NEO4J_DB", "neo4j"))
 PORT = int(os.getenv("DASHBOARD_API_PORT", "8765"))
+ACCOUNT_NODE_COUNT = int(os.getenv("NEO4J_ACCOUNT_COUNT", "1758573"))
 
 
 def jsonable(value):
@@ -89,17 +90,39 @@ class Handler(BaseHTTPRequestHandler):
                     if account is None:
                         self.send_json({"error": "account_not_found", "account_id": account_id}, 404)
                         return
-                    rows = session.run(
-                        "MATCH (a:Account {account_id: $account_id})-[:SENT]->(t:Transaction)-[:RECEIVED_BY]->(b:Account) "
-                        "RETURN b.account_id AS dst_acct, t AS transaction LIMIT $limit",
+                    stats = session.run(
+                        "MATCH (a:Account {account_id: $account_id}) "
+                        "CALL (a) { MATCH (a)-[:SENT]->(out_tx:Transaction)-[:RECEIVED_BY]->(:Account) "
+                        "RETURN count(DISTINCT out_tx) AS out_degree } "
+                        "CALL (a) { MATCH (a)<-[:RECEIVED_BY]-(in_tx:Transaction)<-[:SENT]-(:Account) "
+                        "RETURN count(DISTINCT in_tx) AS in_degree } "
+                        "RETURN a, out_degree, in_degree",
                         account_id=account_id,
-                        limit=limit,
-                    )
+                    ).single()
+                    account_payload = dict(stats["a"])
+                    out_degree = int(stats["out_degree"])
+                    in_degree = int(stats["in_degree"])
+                    account_payload.update({
+                        "out_degree": out_degree,
+                        "in_degree": in_degree,
+                        "total_degree": out_degree + in_degree,
+                        "degree_centrality": (out_degree + in_degree) / max(ACCOUNT_NODE_COUNT - 1, 1),
+                    })
                     edges = []
-                    for row in rows:
+                    outgoing = session.run(
+                        "MATCH (src:Account {account_id: $account_id})-[:SENT]->(t:Transaction)-[:RECEIVED_BY]->(dst:Account) "
+                        "RETURN src.account_id AS src_acct, dst.account_id AS dst_acct, t AS transaction LIMIT $limit",
+                        account_id=account_id, limit=limit,
+                    )
+                    incoming = session.run(
+                        "MATCH (src:Account)-[:SENT]->(t:Transaction)-[:RECEIVED_BY]->(dst:Account {account_id: $account_id}) "
+                        "RETURN src.account_id AS src_acct, dst.account_id AS dst_acct, t AS transaction LIMIT $limit",
+                        account_id=account_id, limit=limit,
+                    )
+                    for row in list(outgoing) + list(incoming):
                         transaction = dict(row["transaction"])
-                        edges.append({"src_acct": account_id, "dst_acct": row["dst_acct"], **transaction})
-                    self.send_json({"account": dict(account["a"]), "edges": edges})
+                        edges.append({"src_acct": row["src_acct"], "dst_acct": row["dst_acct"], **transaction})
+                    self.send_json({"account": account_payload, "edges": edges})
                     return
             self.send_json({"error": "not_found"}, 404)
         except Exception as exc:  # Keep the demo API from exposing credentials.
