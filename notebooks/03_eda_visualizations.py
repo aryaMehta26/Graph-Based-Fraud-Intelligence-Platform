@@ -21,9 +21,21 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import kagglehub
+from dotenv import load_dotenv
 
 DIVIDER = "=" * 60
-BASE     = kagglehub.dataset_download("ealtman2019/ibm-transactions-for-anti-money-laundering-aml")
+load_dotenv()
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_BASE = os.getenv("AML_DATASET_DIR", PROJECT_ROOT)
+if not all(os.path.exists(os.path.join(LOCAL_BASE, name)) for name in (
+    "HI-Medium_Trans.csv",
+    "HI-Medium_accounts.csv",
+    "HI-Medium_Patterns.txt",
+)):
+    LOCAL_BASE = kagglehub.dataset_download(
+        "ealtman2019/ibm-transactions-for-anti-money-laundering-aml"
+    )
+BASE     = LOCAL_BASE
 TX_FILE  = os.path.join(BASE, "HI-Medium_Trans.csv")
 ACC_FILE = os.path.join(BASE, "HI-Medium_accounts.csv")
 PAT_FILE = f"{BASE}/HI-Medium_Patterns.txt"

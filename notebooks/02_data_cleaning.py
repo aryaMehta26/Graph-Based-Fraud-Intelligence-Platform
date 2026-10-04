@@ -13,9 +13,20 @@ import os
 import numpy as np
 import pandas as pd
 import kagglehub
+from dotenv import load_dotenv
 
 DIVIDER = "=" * 60
-BASE     = kagglehub.dataset_download("ealtman2019/ibm-transactions-for-anti-money-laundering-aml")
+load_dotenv()
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_BASE = os.getenv("AML_DATASET_DIR", PROJECT_ROOT)
+if not all(os.path.exists(os.path.join(LOCAL_BASE, name)) for name in (
+    "HI-Medium_Trans.csv",
+    "HI-Medium_accounts.csv",
+)):
+    LOCAL_BASE = kagglehub.dataset_download(
+        "ealtman2019/ibm-transactions-for-anti-money-laundering-aml"
+    )
+BASE     = LOCAL_BASE
 TX_FILE  = os.path.join(BASE, "HI-Medium_Trans.csv")
 ACC_FILE = os.path.join(BASE, "HI-Medium_accounts.csv")
 
