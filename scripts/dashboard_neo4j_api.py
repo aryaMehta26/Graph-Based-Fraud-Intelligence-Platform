@@ -14,12 +14,25 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from dotenv import dotenv_values
 from neo4j import GraphDatabase
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ENV = dotenv_values(ROOT / ".env")
+def read_env_file(path: Path) -> dict[str, str]:
+    """Read the small local .env file without requiring python-dotenv."""
+    values: dict[str, str] = {}
+    if not path.exists():
+        return values
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        values[key.strip()] = value.strip().strip('"').strip("'")
+    return values
+
+
+ENV = read_env_file(ROOT / ".env")
 NEO4J_URI = os.getenv("NEO4J_URI", ENV.get("NEO4J_URI", "bolt://127.0.0.1:7687"))
 NEO4J_USER = os.getenv("NEO4J_USER", ENV.get("NEO4J_USER", "neo4j"))
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", ENV.get("NEO4J_PASSWORD", ""))
