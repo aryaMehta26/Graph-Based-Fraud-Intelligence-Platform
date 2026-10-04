@@ -32,10 +32,11 @@ class InvestigationCase:
     ground_truth: Dict[str, Any] = field(default_factory=dict)
     split: str = "benchmark"
     reference_report: Optional[Dict[str, Any]] = None
+    provenance: Dict[str, Any] = field(default_factory=dict)
 
     def agent_context(self) -> Dict[str, Any]:
         """Return context with labels removed; labels stay evaluator-only."""
-        blocked = {"is_laundering", "fraud_label", "pattern", "pattern_type", "ground_truth", "label"}
+        blocked = {"is_laundering", "fraud_label", "pattern", "pattern_type", "ground_truth", "label", "provenance"}
         def clean(value):
             if isinstance(value, dict): return {k: clean(v) for k, v in value.items() if str(k).strip().lower().replace(" ", "_") not in blocked}
             if isinstance(value, list): return [clean(v) for v in value]
