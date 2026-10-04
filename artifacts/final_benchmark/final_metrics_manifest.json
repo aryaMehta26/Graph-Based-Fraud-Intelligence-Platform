@@ -1,0 +1,41 @@
+{
+  "dataset": {
+    "transactions": 31898238,
+    "accounts": 1758573,
+    "leiden_communities": 66227,
+    "fraud_transactions": 35230
+  },
+  "detection": {
+    "baseline_xgboost": {
+      "pr_auc": 0.304311,
+      "roc_auc": 0.944734,
+      "precision": 0.017456,
+      "recall": 0.914213,
+      "f1": 0.034259
+    },
+    "graph_enhanced_xgboost": {
+      "pr_auc": 0.461665,
+      "roc_auc": 0.984645,
+      "precision": 0.011098,
+      "recall": 0.991802,
+      "f1": 0.02195
+    }
+  },
+  "llm_integrated_benchmark": {
+    "cases": 50,
+    "models": {
+      "Ministral": {"binary_f1": 0.898876, "specificity": 0.1, "pattern_macro_f1": 0.20631, "evidence_supported_rate": 0.504673, "unsupported_claim_rate": 0.373832, "latency_seconds": 83.27048, "tokens_per_second": 6.6338},
+      "Phi-4": {"binary_f1": 0.941176, "specificity": 0.5, "pattern_macro_f1": 0.127969, "evidence_supported_rate": 0.409314, "unsupported_claim_rate": 0.492647, "latency_seconds": 35.01395, "tokens_per_second": 9.55105},
+      "Qwen": {"binary_f1": 0.898876, "specificity": 0.1, "pattern_macro_f1": 0.191046, "evidence_supported_rate": 0.637874, "unsupported_claim_rate": 0.126246, "latency_seconds": 172.59264, "tokens_per_second": 3.23189},
+      "Gemma": {"binary_f1": 0.963855, "specificity": 0.7, "pattern_macro_f1": 0.22521, "evidence_supported_rate": 0.541833, "unsupported_claim_rate": 0.354582, "latency_seconds": 97.49147, "tokens_per_second": 3.47353}
+    }
+  },
+  "selected_model": "Gemma 4 31B AML fine-tuned model",
+  "final_validation": {"cases": 10, "suspicious_cases": 5, "legitimate_cases": 5, "guarded_recall": 1.0, "guarded_specificity": 0.6, "guarded_false_positives": 2},
+  "source_of_truth": {
+    "selection": "artifacts/final_benchmark/selected_model.json",
+    "dashboard_llm": "frontend/src/data/data298b.json",
+    "dashboard_snapshot": "frontend/src/data/dashboard.json",
+    "validation_metrics": "artifacts/final_benchmark/posthoc_audit/metrics_guarded.json"
+  }
+}

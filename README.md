@@ -82,21 +82,21 @@ The platform implements four detection layers in sequence. Each layer feeds sign
 │           │                                                           │
 │           ▼                                                           │
 │  ┌──────────────────┐                                                 │
-│  │   LAYER 2        │  Neo4j GDS: Degree Centrality                  │
+│  │   LAYER 2        │  Neo4j: Graph Intelligence                    │
 │  │   Graph          │  in_degree, out_degree, degree_centrality       │
 │  │   Features       │  per account → joined to transaction splits    │
 │  └────────┬─────────┘                                                 │
 │           │                                                           │
 │           ▼                                                           │
 │  ┌──────────────────┐                                                 │
-│  │   LAYER 3        │  Neo4j GDS: Louvain Community Detection        │
+│  │   LAYER 3        │  Leiden Community / Trend Intelligence          │
 │  │   Community      │  community_id, community_size,                 │
-│  │   Detection      │  community_fraud_rate → PR-AUC: 0.5599 (+84%) │
+│  │   Detection      │  community context joined into the test store   │
 │  └────────┬─────────┘                                                 │
 │           │                                                           │
 │           ▼                                                           │
 │  ┌──────────────────┐                                                 │
-│  │   LAYER 4        │  Claude LLM Investigator                       │
+│  │   LAYER 4        │  Gemma 4 31B AML fine-tuned investigator        │
 │  │   LLM            │  Subgraph JSON → structured report             │
 │  │   Investigator   │  pattern + evidence + risk + actions           │
 │  └──────────────────┘                                                 │
@@ -109,19 +109,21 @@ Trains on 11 tabular features extracted during data cleaning. Handles 904:1 clas
 
 **Key features by SHAP importance:** `is_ACH` > `log_amount` > `is_Wire` > `hour` > `is_cross_currency`
 
-### Layer 2 — Graph Features (Non-Trainable)
+### Layer 2 — Graph Intelligence — Neo4j (Non-Trainable)
 
 Runs Neo4j GDS degree centrality on the full Account graph. Extracts `in_degree`, `out_degree`, `total_degree`, and `degree_centrality` per account, then joins them onto every transaction row. A hub account with 500 outgoing transactions looks completely different from a normal account with 3.
 
-### Layer 3 — Louvain Community Detection (Non-Trainable)
+### Layer 3 — Community / Trend Intelligence — Leiden (Non-Trainable)
 
 Runs Louvain community detection on the Account graph. Assigns every account a `community_id` and computes `community_fraud_rate` — what fraction of that community's transactions are fraudulent. An account in a community with 42% fraud rate is not the same as one in a community with 0.1% fraud rate.
 
-### Layer 4 — LLM Investigator (Trainable via Prompt)
+### Layer 4 — AML Investigation — Selected LLM
 
-Takes a pre-computed subgraph JSON (flagged by Layers 1–3) and produces a structured investigation report. Four Claude model variants compared for consistency, faithfulness, and schema compliance.
+The selected Gemma 4 31B AML fine-tuned model takes the investigation case produced by Layers 1–3 and produces a structured report. The frozen DATA 298B comparison evaluated Ministral, Phi-4, Qwen, and Gemma on the same integrated cases. Historical Claude outputs remain a 298A baseline only.
 
-**LLM Evaluation Results:**
+**Selected LLM:** Gemma 4 31B AML fine-tuned model. Integrated benchmark binary F1: **0.963855**; specificity: **0.70**; pattern Macro-F1: **0.225210**. Guarded unseen validation recall: **1.00**; specificity: **0.60** on 10 cases.
+
+**Historical 298A baseline (not the selected 298B model):**
 
 | Variant | Model | Schema | Faithfulness | Consistency | Meets Target |
 |---|---|---|---|---|---|
@@ -208,7 +210,7 @@ Each account exists exactly once. Loading a flat CSV directly creates duplicate 
 │   │   └── tune_threshold.py              # PR curve threshold optimisation
 │   │
 │   └── llm/
-│       ├── investigator.py         # Layer 4: 4-variant Claude LLM investigator
+│       ├── investigator.py         # Layer 4: AML investigation interface
 │       └── evaluate.py             # Consistency + faithfulness + schema evaluation
 │
 ├── artifacts/
@@ -320,7 +322,7 @@ before loading a sample; use a dedicated QA database via `NEO4J_DATABASE`.
 | Graph Database | Neo4j 5.x | Knowledge graph |
 | Graph ML | Neo4j GDS 2.27.0 | Louvain + Degree Centrality |
 | ML Layer | XGBoost 2.0 + SHAP | Fraud classification |
-| LLM Layer | Anthropic Claude (claude-sonnet-4-6) | Structured investigation reports |
+| LLM Layer | Gemma 4 31B AML fine-tuned model | Structured investigation reports |
 | Visualization | Matplotlib, PyVis | EDA + graph explorer |
 | Dashboard | Streamlit 1.30 | Intelligence interface |
 | Container | Docker + Compose | Reproducible Neo4j environment |
@@ -349,14 +351,15 @@ before loading a sample; use a dedicated QA database via `NEO4J_DATABASE`.
 ### Phase 3 — Model Development ✅
 
 - [x] XGBoost baseline — PR-AUC 0.3043 on tabular features
-- [x] Graph-enhanced XGBoost — PR-AUC 0.4590 with degree features (+51%)
-- [x] Community-enhanced XGBoost — PR-AUC 0.5599 with Louvain features (+84%)
+- [x] Graph-enhanced XGBoost — PR-AUC 0.461665 on the test split
+- [x] Leiden/community features joined into the graph-enriched test store
 - [x] SHAP feature importance analysis
 - [x] Threshold tuning via PR curve
 
 ### Phase 4 — LLM Investigator ✅
 
-- [x] 4-variant Claude investigator (Haiku, Sonnet, Sonnet+prompt, Sonnet+CoT)
+- [x] Four-model DATA 298B comparison: Ministral, Phi-4, Qwen, and Gemma
+- [x] Selected LLM locked: Gemma 4 31B AML fine-tuned model
 - [x] Structured output schema: pattern, evidence, risk_level, actions
 - [x] Evaluation framework: consistency (Jaccard), faithfulness, schema compliance
 - [x] Tested on 3 subgraph types: Smurfing, Layering Ring, Fan-Out

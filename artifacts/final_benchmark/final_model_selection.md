@@ -2,7 +2,7 @@
 
 ## Decision
 
-Gemma is selected as the provisional final model for the backend demonstration.
+Gemma 4 31B AML fine-tuned model is the selected final LLM for the backend demonstration.
 This selection is based on the integrated four-model benchmark, where Gemma had
 the strongest binary F1, specificity, and pattern Macro-F1 among the candidates.
 
@@ -15,8 +15,9 @@ test transactions -> XGBoost score -> graph features -> Leiden/community
 -> investigation case -> deterministic retrieval -> LLM report
 ```
 
-Gemma led the aggregate comparison with binary F1 0.9639, specificity 0.70,
-and pattern Macro-F1 0.2252. Phi-4 was fastest, while Qwen produced stronger
+Gemma led the aggregate comparison with binary F1 0.963855, specificity 0.70,
+and pattern Macro-F1 0.225210. Its automated evidence-supported rate was
+0.541833 and unsupported-claim rate was 0.354582. Phi-4 was fastest, while Qwen produced stronger
 post-hoc evidence support but weaker binary decision performance.
 
 ## Final unseen validation
@@ -53,5 +54,8 @@ and downgrade suspicious decisions with neither structural nor XGBoost support.
 - `gemma_validation_traces_guarded_v2.jsonl`
 - `audit_summary.json`
 - `case_audit.csv`
+- `selected_model.json`
 
-The dashboard is intentionally out of scope for this freeze.
+The dashboard reads the frozen DATA 298B comparison, selected-model record, and
+guarded validation artifacts. Legacy Claude/298A outputs remain historical
+artifacts and are excluded from the current analyst-facing report path.

@@ -1,0 +1,26 @@
+{
+  "selected_model": "Gemma 4 31B AML fine-tuned model",
+  "model_family": "gemma",
+  "status": "final",
+  "selection_basis": "Integrated four-model benchmark followed by 10-case unseen validation with deterministic report guardrails.",
+  "integrated_benchmark": {
+    "cases": 50,
+    "binary_f1": 0.963855,
+    "specificity": 0.7,
+    "pattern_macro_f1": 0.22521,
+    "evidence_supported_rate": 0.541833,
+    "unsupported_claim_rate": 0.354582,
+    "average_latency_seconds": 97.49147,
+    "source": "frontend/src/data/data298b.json"
+  },
+  "unseen_validation": {
+    "cases": 10,
+    "suspicious_cases": 5,
+    "legitimate_cases": 5,
+    "guarded_recall": 1.0,
+    "guarded_specificity": 0.6,
+    "guarded_false_positives": 2,
+    "source": "artifacts/final_benchmark/posthoc_audit/metrics_guarded.json"
+  },
+  "rationale": "Gemma had the strongest integrated binary F1, specificity, and fraud-pattern Macro-F1 among the four candidates. The unseen validation retained complete suspicious-case recall and improved specificity after deterministic report guardrails. The result remains a research prototype and requires analyst review for borderline cases."
+}

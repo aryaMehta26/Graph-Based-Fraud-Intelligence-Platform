@@ -53,6 +53,8 @@ def main() -> None:
 
     accounts = pd.read_csv(accounts_path) if accounts_path.exists() else pd.DataFrame()
     communities = pd.read_csv(communities_path, usecols=["community_id"]) if communities_path.exists() else pd.DataFrame()
+    if communities.empty and "community_id" in accounts.columns:
+        communities = accounts[["community_id"]]
     top_accounts = accounts.sort_values("total_degree", ascending=False).head(12).fillna(0).to_dict("records") if not accounts.empty else []
 
     transaction_columns = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment Format", "Is Laundering"]

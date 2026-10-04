@@ -1,6 +1,17 @@
 # DATA 298B backend
 
-The 298B implementation extends the existing 298A files and leaves the Claude investigator/evaluator intact as a baseline.
+The 298B implementation extends the existing 298A files. The final selected LLM is the Gemma 4 31B AML fine-tuned model. Claude artifacts remain historical 298A baseline material and are excluded from the current dashboard report path.
+
+## Final architecture
+
+```text
+Layer 1: Transaction Detection — XGBoost
+Layer 2: Graph Intelligence — Neo4j
+Layer 3: Community / Trend Intelligence — Leiden
+Layer 4: AML Investigation — Gemma 4 31B AML fine-tuned model
+```
+
+The authoritative selection record is [`artifacts/final_benchmark/selected_model.json`](../artifacts/final_benchmark/selected_model.json). It preserves the exact integrated benchmark metrics and guarded unseen-validation metrics used for the final selection.
 
 ## Controlled experiment
 

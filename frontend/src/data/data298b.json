@@ -1,5 +1,22 @@
 {
   "benchmarkCases": 50,
+  "detection": {
+    "baseline": {
+      "pr_auc": 0.304311,
+      "roc_auc": 0.944734,
+      "precision": 0.017456,
+      "recall": 0.914213,
+      "f1": 0.034259
+    },
+    "graphEnhanced": {
+      "pr_auc": 0.461665,
+      "roc_auc": 0.984645,
+      "precision": 0.011098,
+      "recall": 0.991802,
+      "f1": 0.02195
+    },
+    "source": "data/models/xgboost_baseline_metrics.json and data/models/xgboost_graph_enhanced_metrics.json"
+  },
   "models": [
     {
       "model": "Ministral",
@@ -52,8 +69,9 @@
   ],
   "selection": {
     "model": "Gemma",
-    "status": "provisional_final",
-    "reason": "Best integrated binary F1, specificity, and pattern Macro-F1; retains high recall with guardrail-based review flags."
+    "status": "final",
+    "displayName": "Gemma 4 31B AML fine-tuned model",
+    "reason": "Best integrated binary F1, specificity, and pattern Macro-F1; retains complete suspicious-case recall with guardrail-based review flags."
   },
   "finalValidation": {
     "cases": 10,
