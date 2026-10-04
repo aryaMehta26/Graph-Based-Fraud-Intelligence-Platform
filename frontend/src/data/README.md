@@ -24,5 +24,9 @@ Planned API mappings:
 | Model comparison | `GET /api/models/comparison` | model metric JSON |
 | Reports | `GET /api/reports` | `artifacts/llm_outputs/*.json` |
 
-The current snapshot explicitly marks live transaction search, live graph
-queries, and live LLM runs as unavailable until those endpoints exist.
+The current dashboard intentionally uses frozen artifacts for the transaction,
+model-comparison, investigator, and report surfaces. The Network Analysis page
+uses the read-only local Neo4j bridge (`scripts/dashboard_neo4j_api.py`) for
+live account neighborhoods and falls back to the snapshot when Neo4j is not
+available. The LLM Investigator displays saved Gemma validation reports; it
+does not run new inference from the browser.
