@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "existing pipeline artifacts",
-    "generatedAt": "2026-10-04T18:05:40.801976+00:00",
+    "generatedAt": "2026-10-04T19:20:52.841278+00:00",
     "mockFields": [
       "liveTransactionSearch",
       "liveGraphQuery",
@@ -365,6 +365,166 @@
       "Amount Paid": 3765.34,
       "Payment Format": "Cheque",
       "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "100428A08",
+      "dst_acct": "84BF01C70",
+      "Amount Paid": 236.04,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "100428660",
+      "dst_acct": "821304BB0",
+      "Amount Paid": 3180313.04,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "1004286A8",
+      "dst_acct": "8126568A0",
+      "Amount Paid": 459.18,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "84DA1F581",
+      "dst_acct": "84DA1F581",
+      "Amount Paid": 0.343225,
+      "Payment Format": "Bitcoin",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "1004288A0",
+      "dst_acct": "831453770",
+      "Amount Paid": 15.45,
+      "Payment Format": "Credit Card",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "83A86A020",
+      "dst_acct": "83AC526B0",
+      "Amount Paid": 1547.38,
+      "Payment Format": "Wire",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "839B83270",
+      "dst_acct": "83AFC7DE0",
+      "Amount Paid": 2367.35,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "80E8246A0",
+      "dst_acct": "81C97BF30",
+      "Amount Paid": 266513.95,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "83D38D510",
+      "dst_acct": "83D97B3C0",
+      "Amount Paid": 443.89,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "823644FF0",
+      "dst_acct": "827303C10",
+      "Amount Paid": 82.39,
+      "Payment Format": "Cash",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "8116C4ED0",
+      "dst_acct": "811E34BF0",
+      "Amount Paid": 2390.04,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "83645D420",
+      "dst_acct": "8374E8D60",
+      "Amount Paid": 3231.65,
+      "Payment Format": "ACH",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "813326480",
+      "dst_acct": "81CAD0AA0",
+      "Amount Paid": 1352.11,
+      "Payment Format": "Credit Card",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "81D48EC40",
+      "dst_acct": "82E304500",
+      "Amount Paid": 1588.84,
+      "Payment Format": "ACH",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "8310F8C00",
+      "dst_acct": "831360050",
+      "Amount Paid": 1228.43,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "8168C7310",
+      "dst_acct": "81CAFA9E0",
+      "Amount Paid": 1638.7,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "81DB0FC00",
+      "dst_acct": "8255888C0",
+      "Amount Paid": 245.63,
+      "Payment Format": "Cash",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "807F978B0",
+      "dst_acct": "81FB3C670",
+      "Amount Paid": 2.9,
+      "Payment Format": "Cash",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "8000E7650",
+      "dst_acct": "83FFC30F0",
+      "Amount Paid": 410.69,
+      "Payment Format": "Cheque",
+      "Is Laundering": 0
+    },
+    {
+      "Timestamp": "2022-09-15 01:29:00",
+      "src_acct": "80301B9D0",
+      "dst_acct": "82746F290",
+      "Amount Paid": 282.47,
+      "Payment Format": "Credit Card",
+      "Is Laundering": 0
     }
   ],
   "accounts": [
@@ -671,6 +831,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84BF01C70",
+      "Amount Paid": 236.04,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "821304BB0",
       "Amount Paid": 3180313.04,
@@ -683,15 +849,105 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "84DA1F581",
+      "dst_acct": "84DA1F581",
+      "Amount Paid": 0.343225,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004288A0",
       "dst_acct": "831453770",
       "Amount Paid": 15.45,
       "Is Laundering": 0
     },
     {
+      "src_acct": "83A86A020",
+      "dst_acct": "83AC526B0",
+      "Amount Paid": 1547.38,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "839B83270",
+      "dst_acct": "83AFC7DE0",
+      "Amount Paid": 2367.35,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "80E8246A0",
+      "dst_acct": "81C97BF30",
+      "Amount Paid": 266513.95,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "83D38D510",
+      "dst_acct": "83D97B3C0",
+      "Amount Paid": 443.89,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "823644FF0",
       "dst_acct": "827303C10",
       "Amount Paid": 82.39,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "8116C4ED0",
+      "dst_acct": "811E34BF0",
+      "Amount Paid": 2390.04,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "83645D420",
+      "dst_acct": "8374E8D60",
+      "Amount Paid": 3231.65,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "813326480",
+      "dst_acct": "81CAD0AA0",
+      "Amount Paid": 1352.11,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "81D48EC40",
+      "dst_acct": "82E304500",
+      "Amount Paid": 1588.84,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "8310F8C00",
+      "dst_acct": "831360050",
+      "Amount Paid": 1228.43,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "8168C7310",
+      "dst_acct": "81CAFA9E0",
+      "Amount Paid": 1638.7,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "81DB0FC00",
+      "dst_acct": "8255888C0",
+      "Amount Paid": 245.63,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "807F978B0",
+      "dst_acct": "81FB3C670",
+      "Amount Paid": 2.9,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "8000E7650",
+      "dst_acct": "83FFC30F0",
+      "Amount Paid": 410.69,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "80301B9D0",
+      "dst_acct": "82746F290",
+      "Amount Paid": 282.47,
       "Is Laundering": 0
     },
     {
@@ -1109,6 +1365,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "849DC4F40",
+      "Amount Paid": 1275.34,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004289C0",
       "dst_acct": "845B9AE00",
       "Amount Paid": 3344.17,
@@ -1505,6 +1767,18 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84C347070",
+      "Amount Paid": 1384.38,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A4436E0",
+      "Amount Paid": 2168.97,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "827E60510",
       "Amount Paid": 90.48,
@@ -1547,6 +1821,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84C846E90",
+      "Amount Paid": 19295.05,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428978",
       "dst_acct": "841F7D940",
       "Amount Paid": 2843.89,
@@ -1568,6 +1848,12 @@
       "src_acct": "100428810",
       "dst_acct": "827B86DC0",
       "Amount Paid": 770.68,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "849E16450",
+      "Amount Paid": 1357.63,
       "Is Laundering": 0
     },
     {
@@ -1622,6 +1908,12 @@
       "src_acct": "100428810",
       "dst_acct": "83752CD60",
       "Amount Paid": 154.33,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A044B90",
+      "Amount Paid": 3838.45,
       "Is Laundering": 0
     },
     {
@@ -2375,6 +2667,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84A538960",
+      "Amount Paid": 107.61,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004287C8",
       "dst_acct": "81F99C040",
       "Amount Paid": 3535.56,
@@ -3011,6 +3309,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84A1820E0",
+      "Amount Paid": 69009.15,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "8031AFB90",
       "Amount Paid": 1636.56,
@@ -3224,6 +3528,12 @@
       "src_acct": "100428660",
       "dst_acct": "827E60510",
       "Amount Paid": 718.62,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A044B90",
+      "Amount Paid": 5130.04,
       "Is Laundering": 0
     },
     {
@@ -3689,6 +3999,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84A1820E0",
+      "Amount Paid": 13157.54,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428858",
       "dst_acct": "82AB5D740",
       "Amount Paid": 612.31,
@@ -3758,6 +4074,12 @@
       "src_acct": "1004286A8",
       "dst_acct": "8154E1C60",
       "Amount Paid": 292.31,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "849F4B9F0",
+      "Amount Paid": 15983.95,
       "Is Laundering": 0
     },
     {
@@ -4895,6 +5217,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84C449E10",
+      "Amount Paid": 22772.47,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004286A8",
       "dst_acct": "80A9B1D40",
       "Amount Paid": 211.89,
@@ -4910,6 +5238,12 @@
       "src_acct": "1004288E8",
       "dst_acct": "837CCE270",
       "Amount Paid": 24545.32,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84C7981C0",
+      "Amount Paid": 13004.78,
       "Is Laundering": 0
     },
     {
@@ -5102,6 +5436,12 @@
       "src_acct": "100428660",
       "dst_acct": "81F595DC0",
       "Amount Paid": 1376.64,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "849E53AA0",
+      "Amount Paid": 5932.14,
       "Is Laundering": 0
     },
     {
@@ -5357,6 +5697,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84AA07180",
+      "Amount Paid": 867.02,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "82CFEF5E0",
       "Amount Paid": 108.59,
@@ -5396,6 +5742,12 @@
       "src_acct": "100428858",
       "dst_acct": "82C537B30",
       "Amount Paid": 236.32,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "849E3A1D0",
+      "Amount Paid": 11262.18,
       "Is Laundering": 0
     },
     {
@@ -5981,6 +6333,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84BDDB670",
+      "Amount Paid": 1042.03,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004286F0",
       "dst_acct": "810D3A6B0",
       "Amount Paid": 1781.78,
@@ -6539,6 +6897,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84A1820E0",
+      "Amount Paid": 196181.55,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004287C8",
       "dst_acct": "84B2751E0",
       "Amount Paid": 635927.35,
@@ -6719,6 +7083,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84BF06DD0",
+      "Amount Paid": 20053.15,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "8056CC820",
       "Amount Paid": 1209.4,
@@ -6776,6 +7146,12 @@
       "src_acct": "100428660",
       "dst_acct": "848889280",
       "Amount Paid": 90.36,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84AA17EF0",
+      "Amount Paid": 20276.78,
       "Is Laundering": 0
     },
     {
@@ -7193,6 +7569,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84C7981C0",
+      "Amount Paid": 5333.49,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004287C8",
       "dst_acct": "81B6C9FF0",
       "Amount Paid": 11816.28,
@@ -7463,6 +7845,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84AA17EF0",
+      "Amount Paid": 14539.27,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004287C8",
       "dst_acct": "81F474400",
       "Amount Paid": 33761.25,
@@ -7508,6 +7896,12 @@
       "src_acct": "100428858",
       "dst_acct": "82A0B9EB0",
       "Amount Paid": 3.02,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "849B9A300",
+      "Amount Paid": 930.73,
       "Is Laundering": 0
     },
     {
@@ -7811,6 +8205,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "849B4F1E0",
+      "Amount Paid": 30583.8,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428858",
       "dst_acct": "82D008470",
       "Amount Paid": 69.82,
@@ -7856,6 +8256,12 @@
       "src_acct": "100428660",
       "dst_acct": "842CE9B90",
       "Amount Paid": 10489.47,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A4436E0",
+      "Amount Paid": 1400.06,
       "Is Laundering": 0
     },
     {
@@ -8186,6 +8592,18 @@
       "src_acct": "100428810",
       "dst_acct": "826331490",
       "Amount Paid": 48382.03,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84B1590B0",
+      "Amount Paid": 516.25,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84B1590B0",
+      "Amount Paid": 948.19,
       "Is Laundering": 0
     },
     {
@@ -8963,6 +9381,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84B044820",
+      "Amount Paid": 42.64,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004289C0",
       "dst_acct": "8475D86B0",
       "Amount Paid": 42.58,
@@ -9044,6 +9468,12 @@
       "src_acct": "1004289C0",
       "dst_acct": "8466BF2C0",
       "Amount Paid": 305.78,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84BA4BCE0",
+      "Amount Paid": 411.65,
       "Is Laundering": 0
     },
     {
@@ -10433,6 +10863,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84ADE3130",
+      "Amount Paid": 677.6,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004286A8",
       "dst_acct": "80B39D1E0",
       "Amount Paid": 278.49,
@@ -10451,9 +10887,27 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84B044820",
+      "Amount Paid": 180.54,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428810",
       "dst_acct": "845A477E0",
       "Amount Paid": 4790.98,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84C7981C0",
+      "Amount Paid": 18450.85,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84C6A0880",
+      "Amount Paid": 55384.82,
       "Is Laundering": 0
     },
     {
@@ -10538,6 +10992,12 @@
       "src_acct": "100428660",
       "dst_acct": "82B672EB0",
       "Amount Paid": 1335.99,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A811580",
+      "Amount Paid": 964.16,
       "Is Laundering": 0
     },
     {
@@ -10655,6 +11115,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84AA053E0",
+      "Amount Paid": 10008.13,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "809547A50",
       "Amount Paid": 10418.14,
@@ -10697,6 +11163,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "849B4F1E0",
+      "Amount Paid": 100181.78,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "1004286A8",
       "dst_acct": "84379A1E0",
       "Amount Paid": 2491.63,
@@ -10721,6 +11193,18 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84A23C0A0",
+      "Amount Paid": 8971.04,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A23C0A0",
+      "Amount Paid": 16448.24,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "81AF846C0",
       "Amount Paid": 1138.4,
@@ -10742,6 +11226,12 @@
       "src_acct": "100428660",
       "dst_acct": "839DFAFE0",
       "Amount Paid": 20605.66,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84C6A0880",
+      "Amount Paid": 40934.53,
       "Is Laundering": 0
     },
     {
@@ -11303,6 +11793,12 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "806E22ED0",
+      "dst_acct": "811E34BF0",
+      "Amount Paid": 8.8,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "84CC239D0",
       "Amount Paid": 653.79,
@@ -11831,9 +12327,21 @@
       "Is Laundering": 0
     },
     {
+      "src_acct": "100428A08",
+      "dst_acct": "84BB332A0",
+      "Amount Paid": 960.42,
+      "Is Laundering": 0
+    },
+    {
       "src_acct": "100428660",
       "dst_acct": "81ACFDFA0",
       "Amount Paid": 4106.1,
+      "Is Laundering": 0
+    },
+    {
+      "src_acct": "100428A08",
+      "dst_acct": "84A538960",
+      "Amount Paid": 1197.25,
       "Is Laundering": 0
     },
     {
@@ -12140,354 +12648,6 @@
       "src_acct": "100428660",
       "dst_acct": "846EA5480",
       "Amount Paid": 36.39,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "827B69850",
-      "Amount Paid": 2384.56,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428858",
-      "dst_acct": "82BF02190",
-      "Amount Paid": 288.0,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "833B1E460",
-      "Amount Paid": 34.68,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286F0",
-      "dst_acct": "80DF5FF60",
-      "Amount Paid": 282.75,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "828BBAF50",
-      "Amount Paid": 13920.23,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "806670010",
-      "Amount Paid": 18049.15,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "833359FC0",
-      "Amount Paid": 1030.59,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "80A2E1C30",
-      "Amount Paid": 115.12,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428858",
-      "dst_acct": "82ABB7DE0",
-      "Amount Paid": 4513.25,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "82600FA80",
-      "Amount Paid": 775.97,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004288A0",
-      "dst_acct": "83195B9B0",
-      "Amount Paid": 96390.23,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004288A0",
-      "dst_acct": "830D64530",
-      "Amount Paid": 180529.49,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "805CA3BA0",
-      "Amount Paid": 814.22,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8369F3220",
-      "Amount Paid": 727.0,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8075BFE90",
-      "Amount Paid": 254.96,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "847C670B0",
-      "Amount Paid": 13624.0,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286F0",
-      "dst_acct": "80D249500",
-      "Amount Paid": 876.79,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83D8CD8D0",
-      "Amount Paid": 1349171.5,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004288A0",
-      "dst_acct": "82DDFFF00",
-      "Amount Paid": 204.25,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "84827CD50",
-      "Amount Paid": 319.87,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "8251E0ED0",
-      "Amount Paid": 1967.85,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004288A0",
-      "dst_acct": "8314A21F0",
-      "Amount Paid": 118.86,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "81B332930",
-      "Amount Paid": 0.03,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "80010AEE0",
-      "Amount Paid": 18.59,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "84D826600",
-      "Amount Paid": 9716.24,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "804ACD640",
-      "Amount Paid": 3426.63,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83A8EDAC0",
-      "Amount Paid": 26.71,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "80376F700",
-      "Amount Paid": 2264.59,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "819BCB4A0",
-      "Amount Paid": 135.35,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "84EDCCC00",
-      "Amount Paid": 3077.7,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "842BD30A0",
-      "Amount Paid": 90.89,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "819C2C710",
-      "Amount Paid": 1300.31,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8251A7740",
-      "Amount Paid": 10518.18,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8444900B0",
-      "Amount Paid": 3098.74,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83BB53830",
-      "Amount Paid": 2261.54,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "803FCAFC0",
-      "Amount Paid": 1601297.34,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "819E48130",
-      "Amount Paid": 301972.63,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "818498FE0",
-      "Amount Paid": 1126.53,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83C06F2C0",
-      "Amount Paid": 48.17,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "81FC1B660",
-      "Amount Paid": 548.97,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428978",
-      "dst_acct": "83E10F7F0",
-      "Amount Paid": 38777.82,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8032C1860",
-      "Amount Paid": 6418.94,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "84C79F650",
-      "Amount Paid": 392.32,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "820D40750",
-      "Amount Paid": 25386.6,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "820D524F0",
-      "Amount Paid": 92.02,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83938F660",
-      "Amount Paid": 15313.23,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "8031E38F0",
-      "Amount Paid": 58900.65,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "80127D550",
-      "Amount Paid": 19.27,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "839DFAFE0",
-      "Amount Paid": 15342.4,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004289C0",
-      "dst_acct": "8447A82E0",
-      "Amount Paid": 227.53,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004289C0",
-      "dst_acct": "842DF7BC0",
-      "Amount Paid": 457.76,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "802D01340",
-      "Amount Paid": 403.41,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "83C527990",
-      "Amount Paid": 9.54,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "839BC9D10",
-      "Amount Paid": 20540.93,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428660",
-      "dst_acct": "802AD2400",
-      "Amount Paid": 157.39,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "100428978",
-      "dst_acct": "83FFDE670",
-      "Amount Paid": 868.86,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004289C0",
-      "dst_acct": "842B93710",
-      "Amount Paid": 32551.63,
-      "Is Laundering": 0
-    },
-    {
-      "src_acct": "1004286A8",
-      "dst_acct": "8024405F0",
-      "Amount Paid": 147.5,
       "Is Laundering": 0
     }
   ],

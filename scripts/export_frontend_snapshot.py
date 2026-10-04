@@ -20,6 +20,7 @@ PROCESSED = ROOT / "data" / "processed"
 MODELS = ROOT / "data" / "models"
 ARTIFACTS = ROOT / "artifacts"
 OUTPUT = ROOT / "frontend" / "src" / "data" / "dashboard.json"
+TRANSACTION_PREVIEW_ROWS = 50
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -60,7 +61,7 @@ def main() -> None:
     transaction_columns = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment Format", "Is Laundering"]
     transactions = pd.DataFrame()
     if split_test.exists():
-        transactions = next(pq.ParquetFile(split_test).iter_batches(batch_size=30, columns=transaction_columns)).to_pandas()
+        transactions = next(pq.ParquetFile(split_test).iter_batches(batch_size=TRANSACTION_PREVIEW_ROWS, columns=transaction_columns)).to_pandas()
     transaction_rows = transactions.fillna("").to_dict("records") if not transactions.empty else []
 
     # Keep a small, real edge sample for the interactive network view. The full
