@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "existing pipeline artifacts",
-    "generatedAt": "2026-10-03T21:04:31.830788+00:00",
+    "generatedAt": "2026-10-04T09:29:05.974192+00:00",
     "mockFields": [
       "liveTransactionSearch",
       "liveGraphQuery",
@@ -12,7 +12,7 @@
     "totalTransactions": 31898238,
     "totalAccounts": 1758573,
     "fraudTransactions": 35230,
-    "communities": 164067
+    "communities": 0
   },
   "models": {
     "baseline": {
@@ -58,33 +58,33 @@
       "train": {
         "split": "train",
         "threshold": 0.3,
-        "pr_auc": 0.326555,
-        "roc_auc": 0.990524,
-        "f1_fraud": 0.015115,
-        "precision": 0.007615,
-        "recall": 0.999431,
+        "pr_auc": 0.218514,
+        "roc_auc": 0.982903,
+        "f1_fraud": 0.012519,
+        "precision": 0.006299,
+        "recall": 0.996348,
         "support_fraud": 21082,
         "support_total": 22328766
       },
       "val": {
         "split": "val",
         "threshold": 0.3,
-        "pr_auc": 0.335617,
-        "roc_auc": 0.983437,
-        "f1_fraud": 0.016783,
-        "precision": 0.008464,
-        "recall": 0.981957,
+        "pr_auc": 0.254095,
+        "roc_auc": 0.980814,
+        "f1_fraud": 0.014191,
+        "precision": 0.007147,
+        "recall": 0.992346,
         "support_fraud": 5487,
         "support_total": 4784736
       },
       "test": {
         "split": "test",
         "threshold": 0.3,
-        "pr_auc": 0.529198,
-        "roc_auc": 0.987037,
-        "f1_fraud": 0.026182,
-        "precision": 0.013267,
-        "recall": 0.983489,
+        "pr_auc": 0.461665,
+        "roc_auc": 0.984645,
+        "f1_fraud": 0.02195,
+        "precision": 0.011098,
+        "recall": 0.991802,
         "support_fraud": 8661,
         "support_total": 4784736
       }
@@ -92,36 +92,36 @@
     "comparison": {
       "train": {
         "baseline_pr_auc": 0.037543,
-        "graph_pr_auc": 0.326555,
-        "pr_auc_delta": 0.289012,
+        "graph_pr_auc": 0.218514,
+        "pr_auc_delta": 0.180971,
         "baseline_f1": 0.017936,
-        "graph_f1": 0.015115,
-        "f1_delta": -0.002821,
+        "graph_f1": 0.012519,
+        "f1_delta": -0.005417,
         "baseline_recall": 0.86007,
-        "graph_recall": 0.999431,
-        "recall_delta": 0.139361
+        "graph_recall": 0.996348,
+        "recall_delta": 0.136278
       },
       "val": {
         "baseline_pr_auc": 0.037927,
-        "graph_pr_auc": 0.335617,
-        "pr_auc_delta": 0.29769,
+        "graph_pr_auc": 0.254095,
+        "pr_auc_delta": 0.216168,
         "baseline_f1": 0.021612,
-        "graph_f1": 0.016783,
-        "f1_delta": -0.004829,
+        "graph_f1": 0.014191,
+        "f1_delta": -0.007421,
         "baseline_recall": 0.869328,
-        "graph_recall": 0.981957,
-        "recall_delta": 0.112629
+        "graph_recall": 0.992346,
+        "recall_delta": 0.123018
       },
       "test": {
         "baseline_pr_auc": 0.304311,
-        "graph_pr_auc": 0.529198,
-        "pr_auc_delta": 0.224887,
+        "graph_pr_auc": 0.461665,
+        "pr_auc_delta": 0.157354,
         "baseline_f1": 0.034259,
-        "graph_f1": 0.026182,
-        "f1_delta": -0.008077,
+        "graph_f1": 0.02195,
+        "f1_delta": -0.012309,
         "baseline_recall": 0.914213,
-        "graph_recall": 0.983489,
-        "recall_delta": 0.069276
+        "graph_recall": 0.991802,
+        "recall_delta": 0.077589
       }
     }
   },
@@ -12492,326 +12492,264 @@
     }
   ],
   "llmModelCounts": {
-    "Gemma": 0,
+    "Gemma": 10,
     "Qwen": 0,
-    "Mistral": 0,
-    "Granite": 0,
-    "Claude": 11
+    "Ministral": 0,
+    "Phi-4": 0
   },
   "reports": [
     {
-      "reportId": "RPT-0001",
-      "case": "layering_ring_subgraph_v1",
-      "pattern": "Layering Ring",
-      "riskLevel": "CRITICAL",
-      "model": "claude-haiku-4-5-20251001",
+      "reportId": "GEMMA-001",
+      "case": "validation_attempt_2249",
+      "account": "82B75BF30",
+      "pattern": "RANDOM",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.8718186616897583,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Account 900A1B2 sent $45,000.00 to account 900B3C4 at 2022-09-10T02:15:00",
-        "Account 900B3C4 sent $44,200.00 to account 900C5D6 at 2022-09-10T02:48:00",
-        "Account 900C5D6 sent $43,500.00 back to account 900A1B2 at 2022-09-10T03:22:00",
-        "Cyclic transfer pattern: 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2",
-        "All 3 transactions marked as laundering (is_laundering=1)",
-        "All transactions executed via Wire format within 67-minute window",
-        "All 3 transactions are cross-bank transfers (bank_id: 10, 20, 30)",
-        "Community fraud rate is 0.671 (67.1%)",
-        "Account 900A1B2 has degree centrality of 0.743",
-        "Account 900B3C4 has degree centrality of 0.698",
-        "Account 900C5D6 has degree centrality of 0.712"
+        "The case contains 1 observed transaction(s) involving 2 account(s).",
+        "Observed transaction amounts range from 25496.68 to 25496.68, with a total of 25496.68.",
+        "Payment formats observed: ACH.",
+        "Observed activity spans 2022-09-16T12:38:00 through 2022-09-16T12:38:00.",
+        "Account 82AD58260 has total degree 66 (17 outgoing and 49 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 4."
       ],
       "actions": [
-        "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending investigation",
-        "File Suspicious Activity Report (SAR) for all three accounts citing layering ring pattern",
-        "Initiate enhanced due diligence on beneficial owners of accounts 900A1B2, 900B3C4, and 900C5D6",
-        "Coordinate with banks 10, 20, and 30 for account holder verification and transaction source documentation",
-        "Trace origin of initial $45,000.00 deposit into account 900A1B2",
-        "Analyze historical transaction patterns for all three accounts prior to 2022-09-10",
-        "Review all other accounts in community 112 for related suspicious activity",
-        "Escalate to Financial Crimes Enforcement Network (FinCEN) given cross-bank nature and high fraud rate"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a RANDOM pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0002",
-      "case": "layering_ring_subgraph_v2",
-      "pattern": "Layering Ring",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-002",
+      "case": "validation_attempt_2286",
+      "account": "830314840",
+      "pattern": "RANDOM",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.85,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Account 900A1B2 sent $45000.0 to account 900B3C4 via transaction T_101 at 02:15",
-        "Account 900B3C4 sent $44200.0 to account 900C5D6 via transaction T_102 at 02:48",
-        "Account 900C5D6 sent $43500.0 back to account 900A1B2 via transaction T_103 at 03:22, completing the cycle",
-        "All 3 transactions occurred within a 67-minute window between 02:15 and 03:22",
-        "All 3 transactions are flagged is_laundering=1",
-        "Total amount cycled through the ring is $132700.0 across 3 cross-bank wire transfers",
-        "Each transfer shows a slight reduction in amount ($45000.0 \u2192 $44200.0 \u2192 $43500.0), consistent with layering fees or skimming",
-        "All 3 accounts span different banks (bank_id 10, 20, and 30), indicating deliberate cross-institution obfuscation",
-        "Community 112 has a fraud rate of 0.671, and all 3 accounts carry the role 'layering_node'",
-        "All transactions occurred in the early morning hours (hour 2 and hour 3), a common off-hours evasion tactic",
-        "Account 900A1B2 has degree_centrality of 0.743, account 900C5D6 has 0.712, and account 900B3C4 has 0.698, all highly central within the community"
+        "The case contains 1 observed transaction(s) involving 2 account(s).",
+        "Observed transaction amounts range from 14976.07 to 14976.07, with a total of 14976.07.",
+        "Payment formats observed: ACH.",
+        "Observed activity spans 2022-09-15T13:10:00 through 2022-09-15T13:10:00.",
+        "The maximum observed transaction risk score is 0.9622299075126648 (observed in transaction(s): txn_1).",
+        "Account 830314890 has total degree 64 (18 outgoing and 46 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 186."
       ],
       "actions": [
-        "Freeze accounts 900A1B2, 900B3C4, and 900C5D6 immediately pending full investigation",
-        "File Suspicious Activity Reports (SARs) for accounts 900A1B2, 900B3C4, and 900C5D6 referencing transactions T_101, T_102, and T_103",
-        "Notify compliance teams at bank_id 10, bank_id 20, and bank_id 30 of the cross-institution layering ring",
-        "Trace the origin of the $45000.0 entering account 900A1B2 prior to transaction T_101 to identify the placement stage",
-        "Investigate the $1500.0 net reduction across the cycle ($45000.0 to $43500.0) to determine if funds were siphoned to additional undiscovered accounts",
-        "Expand graph analysis to identify any additional accounts connected to 900A1B2, 900B3C4, or 900C5D6 outside community_id 112",
-        "Escalate to law enforcement given 100% fraud transaction rate (3 of 3 transactions flagged) and CRITICAL community fraud rate of 0.671"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a RANDOM pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0003",
-      "case": "layering_ring_subgraph_v3",
-      "pattern": "Layering Ring",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-003",
+      "case": "validation_attempt_2288",
+      "account": "81BBEA160",
+      "pattern": "RANDOM",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.85,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Account 900A1B2 sends $45000.0 to 900B3C4 via Wire at 2022-09-10T02:15:00 (T_101)",
-        "Account 900B3C4 sends $44200.0 to 900C5D6 via Wire at 2022-09-10T02:48:00 (T_102)",
-        "Account 900C5D6 sends $43500.0 back to 900A1B2 via Wire at 2022-09-10T03:22:00 (T_103), completing the cycle 900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2",
-        "All 3 transactions flagged is_laundering: 1",
-        "Full cycle completed within 67 minutes across 3 cross-bank transfers",
-        "Transactions executed between 02:15 and 03:22 (off-hours, hour: 2 and hour: 3)",
-        "Total amount in subgraph: $132700.0 with a sequential bleed-down: $45000.0 \u2192 $44200.0 \u2192 $43500.0, suggesting fee skimming or deliberate obfuscation of round amounts",
-        "Account 900A1B2 holds degree_centrality: 0.743 and role: layering_node at bank_id: 10",
-        "Account 900B3C4 holds degree_centrality: 0.698 and role: layering_node at bank_id: 20",
-        "Account 900C5D6 holds degree_centrality: 0.712 and role: layering_node at bank_id: 30",
-        "Community fraud rate for community_id 112 is 0.671 (67.1%)",
-        "Subgraph flagged by xgboost_layer1 + louvain_layer2"
+        "The case contains 1 observed transaction(s) involving 2 account(s).",
+        "Observed transaction amounts range from 9905.46 to 9905.46, with a total of 9905.46.",
+        "Payment formats observed: ACH.",
+        "Observed activity spans 2022-09-15T05:34:00 through 2022-09-15T05:34:00.",
+        "Account 81BBEA160 has total degree 225 (125 outgoing and 100 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 6."
       ],
       "actions": [
-        "Immediately freeze outbound wire capabilities on accounts 900A1B2, 900B3C4, and 900C5D6 pending full investigation to prevent further cycle iterations or fund extraction",
-        "File Suspicious Activity Reports (SARs) for accounts 900A1B2 (bank_id: 10), 900B3C4 (bank_id: 20), and 900C5D6 (bank_id: 30) referencing transactions T_101, T_102, and T_103",
-        "Issue formal information-sharing requests (e.g., FinCEN 314(b) in the US or equivalent) to bank_id 20 and bank_id 30 to obtain KYC records, beneficial ownership data, and full transaction histories for 900B3C4 and 900C5D6",
-        "Conduct retroactive transaction lookback (minimum 12 months) on 900A1B2, 900B3C4, and 900C5D6 to identify prior cycle iterations, additional layering nodes, or upstream placement accounts not captured in community_112",
-        "Expand graph traversal beyond community_112 to enumerate all accounts connected to 900A1B2, 900B3C4, and 900C5D6 with out_degree or in_degree > 0, checking for fan-out distribution legs that may represent the placement or integration stages",
-        "Investigate the $1,500 bleed-down across T_101 ($45000.0), T_102 ($44200.0), and T_103 ($43500.0) \u2014 identify whether the $800 and $700 decrements correspond to fee payments to external accounts, which may reveal additional co-conspirator accounts",
-        "Flag all three accounts for enhanced due diligence (EDD) review including re-verification of identity documents, source of funds declarations, and business purpose statements",
-        "Escalate to law enforcement (e.g., FinCEN, FBI Financial Crimes, or jurisdictional equivalent) given the 67.1% community fraud rate and confirmed is_laundering labels on all three transactions",
-        "Place a 10-day hold on any pending or queued transactions originating from or destined to 900A1B2, 900B3C4, and 900C5D6 while investigation is active"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a RANDOM pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0004",
-      "case": "layering_ring_subgraph_v4",
-      "pattern": "Layering Ring",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-004",
+      "case": "validation_attempt_2289",
+      "account": "824C0E180",
+      "pattern": "NONE",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.85,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "900A1B2 \u2192 900B3C4 \u2192 900C5D6 \u2192 900A1B2 forms a closed cycle across 3 banks",
-        "T_101: $45000.0 from 900A1B2 to 900B3C4 at 02:15",
-        "T_102: $44200.0 from 900B3C4 to 900C5D6 at 02:48",
-        "T_103: $43500.0 from 900C5D6 to 900A1B2 at 03:22",
-        "All 3 accounts carry role 'layering_node'",
-        "community_fraud_rate: 0.671",
-        "All 3 transactions flagged is_laundering: 1",
-        "3 cross_bank_transfers completed within 67 minutes",
-        "Total subgraph amount: $132700.0",
-        "Degree centrality scores: 900A1B2=0.743, 900C5D6=0.712, 900B3C4=0.698"
+        "The case contains 1 observed transaction(s) involving 2 account(s).",
+        "Observed transaction amounts range from 3490.04 to 3490.04, with a total of 3490.04.",
+        "Payment formats observed: ACH.",
+        "Observed activity spans 2022-09-16T11:42:00 through 2022-09-16T11:42:00.",
+        "Account 824C0E130 has total degree 92 (18 outgoing and 74 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 5."
       ],
       "actions": [
-        "Immediately freeze accounts 900A1B2, 900B3C4, and 900C5D6 pending full investigation",
-        "File Suspicious Activity Reports (SARs) for all three accounts: 900A1B2 (bank 10), 900B3C4 (bank 20), 900C5D6 (bank 30)",
-        "Notify all three correspondent banks (bank_id 10, 20, 30) of the coordinated ring activity",
-        "Trace the origin of the $45000.0 entering 900A1B2 prior to T_101 and the ultimate destination of $43500.0 exiting 900A1B2 after T_103",
-        "Investigate the $1500.0 net reduction across the ring cycle (45000\u219244200\u219243500) for fee-skimming or layering costs",
-        "Conduct KYC/CDD review and beneficial ownership analysis on 900A1B2, 900B3C4, and 900C5D6",
-        "Flag all early-morning (02:00\u201303:22) wire activity in community_id 112 for retroactive review",
-        "Escalate to law enforcement given 67.1% community fraud rate and 100% laundering flag rate across all transactions"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a FAN_IN pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0005",
-      "case": "real_fan_in_subgraph_v2",
-      "pattern": "Fan-In",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-005",
+      "case": "validation_attempt_2292",
+      "account": "800367040",
+      "pattern": "RANDOM",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.75,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Focal account 824BF8940 has an in_degree of 64, receiving funds from at least 19 distinct source accounts across 20 flagged transactions within 77.8 hours",
-        "Account 8225DB4C0 sent a single anomalous transfer of $4,267,906.65 to 824BF8940 (T_012), representing the dominant share of total fraud amount $4,397,156.39",
-        "All 20 laundering transactions use ACH payment format exclusively, funneling into bank 99677 where 824BF8940 is held",
-        "Account 822F7EDA0 (layering_node role) has total_degree of 214 with out_degree 130, and both receives from and sends to 824BF8940 (T_013 inbound $1,306.38; T_018 outbound $13,479.11), indicating downstream layering",
-        "Multiple distributor accounts (8230E3350, 8230E32B0, 8230E3120, 8227615D0, 822266F70, 8000DE230, 8225DAE10, 822577140) spanning at least 7 different banks all converge on 824BF8940",
-        "Account 8000DE230 belongs to community 13 (fraud_rate 0.000517) while most other accounts are in community 5 (fraud_rate 0.001786), indicating cross-community coordination feeding 824BF8940"
+        "The case contains 2 observed transaction(s) involving 4 account(s).",
+        "Observed transaction amounts range from 10975.78 to 1037077.46, with a total of 1048053.24.",
+        "Payment formats observed: ACH.",
+        "Observed activity spans 2022-09-15T14:05:00 through 2022-09-15T15:15:00.",
+        "Account 800367040 has total degree 245 (211 outgoing and 34 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 78, 8."
       ],
       "actions": [
-        "Freeze account 824BF8940 immediately and file a Suspicious Activity Report (SAR) citing $4,397,156.39 in confirmed laundering transactions",
-        "Freeze and investigate account 8225DB4C0 as the source of the $4,267,906.65 single-transaction anomaly (T_012) and trace its upstream funding",
-        "Freeze account 822F7EDA0 (layering_node, total_degree 214) and map all 130 outbound transactions to identify downstream beneficiaries receiving layered funds",
-        "Subpoena ACH transaction records from banks 293268, 192419, 195134, 213, and 25268 for all distributor accounts feeding 824BF8940 to identify the full network of feeder accounts"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a RANDOM pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0006",
-      "case": "real_fan_out_subgraph_v2",
-      "pattern": "Fan-Out",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
-      "evidence": [
-        "Focal account 80E777630 has an out_degree of 16 and in_degree of only 2, indicating it is primarily a source of outbound transfers",
-        "Account 80E777630 sent 16 confirmed laundering transactions (is_laundering=1) out of 20 total outbound transactions",
-        "Total fraud amount attributed to this subgraph is $2,278,704.66 across 16 fraudulent transactions",
-        "Account 80E777630 dispersed funds to at least 12 distinct destination accounts including 80DAB8C70, 81B4C67A0, 8155772D0, 804D720B0, 80CADB870, 80F21A650, 80C19E030, 8155A3150, 801E94250, 805A2F3C0, 80DA69040, 816A55540, 8112BCD60, 811F55770, 80BEF4620, and 8160C4BC0",
-        "Transfers span 13 different destination banks including bank IDs 29723, 172103, 20874, 21617, 25, 38319, 225016, 51213, 14027, 14997, 116674, 13843, 242551, 237303, 16630, and 28219, indicating deliberate cross-bank dispersal",
-        "Transaction T_002 sent $1,090,233.15 to account 81B4C67A0 at bank 172103, the single largest outbound laundering transfer",
-        "Transaction T_014 sent $852,835.33 to account 805A2F3C0 at bank 14997, the second largest outbound laundering transfer",
-        "All transactions use ACH payment format, consistent with automated or scripted disbursement",
-        "Transfers occurred over a compressed time span of 63.3 hours between 2022-09-16 22:00:00 and 2022-09-19 13:16:00",
-        "Four self-referential transactions (T_003, T_005, T_007, T_010) from 80E777630 to itself totaling $339,643.74 are flagged as non-laundering, suggesting possible balance manipulation or obfuscation",
-        "Feeder account 801E94250 has an unusually high total_degree of 176 (out_degree 115, in_degree 61), suggesting it is itself a high-activity node potentially involved in upstream layering",
-        "Account 80E777630 belongs to community 224 with a community_fraud_rate of 0.001664, and multiple feeder accounts (816A55540, 805A2F3C0, 8155A3150) share the same community 224",
-        "Several outbound transfers occur during off-hours: T_001 at hour 22, T_010 at hour 23, T_012 at hour 1, T_017 at hour 0, consistent with attempts to avoid detection"
-      ],
-      "actions": [
-        "Freeze account 80E777630 immediately pending full AML investigation",
-        "File a Suspicious Activity Report (SAR) for account 80E777630 citing $2,278,704.66 in confirmed laundering transactions",
-        "Freeze or place a hold on destination accounts 81B4C67A0 and 805A2F3C0, which received $1,090,233.15 and $852,835.33 respectively",
-        "Investigate feeder account 801E94250 (total_degree 176) for upstream layering activity and trace its inbound funding sources",
-        "Subpoena or request records from destination banks 172103, 14997, 29723, and 25 for accounts 81B4C67A0, 805A2F3C0, 80DAB8C70, and 80CADB870",
-        "Investigate the four self-to-self transactions (T_003, T_005, T_007, T_010) on account 80E777630 totaling $339,643.74 to determine if they represent balance inflation or internal layering",
-        "Conduct enhanced due diligence on all 16 destination accounts receiving laundering-flagged transfers from 80E777630",
-        "Escalate to law enforcement given the transaction volume exceeding $2.27M in fraud and the cross-bank dispersal pattern across 13+ institutions",
-        "Review all ACH batch submissions originating from bank 235909 during the period 2022-09-16 to 2022-09-19 for related suspicious activity",
-        "Assess community 224 accounts (816A55540, 805A2F3C0, 8155A3150) for coordinated activity with 80E777630"
-      ]
+      "reportId": "GEMMA-006",
+      "case": "validation_legitimate_001",
+      "account": "833C8C7A0",
+      "pattern": "EMERGING_UNKNOWN",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "MEDIUM",
+      "confidence": 0.0,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
+      "evidence": [],
+      "actions": [],
+      "summary": "Invalid model output"
     },
     {
-      "reportId": "RPT-0007",
-      "case": "real_layering_subgraph_v2",
-      "pattern": "Layering Ring",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-007",
+      "case": "validation_legitimate_002",
+      "account": "8137193A0",
+      "pattern": "NONE",
+      "decision": "LEGITIMATE",
+      "riskLevel": "LOW",
+      "confidence": 0.5,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Focal account 803C25F20 has both high out_degree (106) and in_degree (55), acting as a central hub receiving and re-sending funds across multiple layering nodes",
-        "Transaction T_020 is a self-loop: account 803C25F20 sent $15282.31 to itself (from bank 28219 to bank 28219), a classic layering obfuscation technique",
-        "Bidirectional cycle between 803C25F20 and 801F15560: T_001 sends $7906.03 from 801F15560 to 803C25F20, then T_005 sends $19206.44 from 803C25F20 back to 801F15560",
-        "Bidirectional cycle between 803C25F20 and 804B45920: T_006 sends $2000.47 from 803C25F20 to 804B45920, T_012 sends $12089.51 from 804B45920 back to 803C25F20, and T_019 sends $1983.31 from 804B45920 to 803C25F20 again",
-        "Bidirectional cycle between 803C25F20 and 8003E6690: T_013 sends $13199.55 from 8003E6690 to 803C25F20, then T_017 sends $19097.59 from 803C25F20 back to 8003E6690",
-        "Bidirectional cycle between 803C25F20 and 805754540: T_002 sends $8766.33 from 803C25F20 to 805754540, T_004 sends $18926.80 from 805754540 back to 803C25F20, and T_009 sends $4684.38 from 803C25F20 to 805754540 again",
-        "All 20 transactions in the subgraph are flagged is_laundering=1, with total fraud amount of $321936.90 across 28 fraud transactions out of 45 total",
-        "Transactions span 236.6 hours with activity at off-hours including 01:08 (T_004), 02:54 (T_008), 04:56 (T_003), and 01:38 (T_009), consistent with automated layering",
-        "Layering nodes span 7 different banks (bank IDs 11796, 29630, 25828, 15327, 20, 11798, 7818), indicating cross-institution layering to obscure the money trail",
-        "Account 100428660 at bank 70 has anomalously high degree_centrality of 0.6163074 and out_degree of 1076979, suggesting it may be a payment processor or aggregator node connected to this ring",
-        "Account 80006FD60 (bank 11) has out_degree of 312 and sent $18626.09 to 803C25F20 in T_007, consistent with a high-volume feeder node in the layering structure",
-        "Community 51 (containing 803C25F20) has a fraud_rate of 0.003207, the highest among all communities represented in this subgraph"
+        "The case contains 6 observed transaction(s) involving 11 account(s).",
+        "Observed transaction amounts range from 89.75 to 75986.11, with a total of 78853.64.",
+        "Payment formats observed: Credit Card, ACH, Cheque, Cash.",
+        "Observed activity spans 1 observed hour(s): 1.",
+        "Observed activity spans 1 observed day(s): 2022-09-15.",
+        "Account 8137193A0 has total degree 88 (87 outgoing and 1 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 1, 236, 10, 253, 257."
       ],
       "actions": [
-        "Freeze account 803C25F20 immediately pending full AML investigation due to confirmed self-loop transaction T_020 and central role in multiple bidirectional cycles",
-        "Freeze layering node accounts 804B45920, 801F15560, 8003E6690, and 805754540 pending investigation due to confirmed bidirectional fund cycling with 803C25F20",
-        "Freeze layering node accounts 80321FBF0, 80006FD60, 805754590, 805753DD0, and 805754540 pending investigation as confirmed feeder nodes to 803C25F20",
-        "File Suspicious Activity Reports (SARs) for all transactions T_001 through T_020 totaling $321936.90 in confirmed laundering activity",
-        "Notify bank 28219 (host of focal account 803C25F20) and banks 11796, 29630, 25828, 15327, 20, 11798, 7818, and 11 of the cross-institution layering ring",
-        "Investigate account 100428660 at bank 70 for its role as a potential aggregator given its extreme degree_centrality of 0.6163074 and out_degree of 1076979",
-        "Subpoena transaction records for all accounts in community 51 (size 3418, fraud_rate 0.003207) to identify additional ring participants beyond the 20 unique accounts in this subgraph",
-        "Trace destination accounts 80139DE20 (bank 952, T_011, $1404.66), 80139E060 (bank 11796, T_014, $2289.92), 805754320 (bank 212353, T_015, $7202.69), 805753EC0 (bank 25644, T_016, $19800.35), and 8057540B0 (bank 5965, T_018, $19746.70) as potential exit points for laundered funds",
-        "Escalate to law enforcement given the confirmed ground_truth_is_laundering=1 flag, multi-bank cross-institution structure, and total fraud amount of $321936.90"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a FAN_IN pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0008",
-      "case": "sample_subgraph_v1",
-      "pattern": "Fan-In",
-      "riskLevel": "CRITICAL",
-      "model": "claude-haiku-4-5-20251001",
+      "reportId": "GEMMA-008",
+      "case": "validation_legitimate_003",
+      "account": "82E0AB490",
+      "pattern": "NONE",
+      "decision": "LEGITIMATE",
+      "riskLevel": "LOW",
+      "confidence": 0.5,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Account 800B1C9 sent 2 transactions totaling $19,700 to account 800A3F2",
-        "Account 800C4D1 sent 2 transactions totaling $19,350 to account 800A3F2",
-        "Account 800A3F2 has out_degree of 47 and in_degree of 3, indicating funnel role",
-        "Account 800A3F2 has degree_centrality of 0.891, highest in the subgraph",
-        "Account 800A3F2 received $39,050 from feeder accounts 800B1C9 and 800C4D1 within 93 minutes",
-        "Account 800A3F2 sent $48,200 wire transfer to account 800D7E8 within 1.5 hours of receiving funds",
-        "All 5 transactions in subgraph marked as is_laundering: 1",
-        "Community fraud_rate is 0.423 with community_size of 12",
-        "Cross-bank transfers: 2 (account 800C4D1 from bank 3196, account 800D7E8 from bank 1208)"
+        "The case contains 6 observed transaction(s) involving 12 account(s).",
+        "Observed transaction amounts range from 31.36 to 955619.90, with a total of 997431.73.",
+        "Payment formats observed: Credit Card, Cheque, Cash, ACH.",
+        "Observed activity spans 1 observed hour(s): 1.",
+        "Observed activity spans 1 observed day(s): 2022-09-15.",
+        "The observed accounts belong to 7 observed community group(s): 7, 92, 15, 299, 107, 56.",
+        "Account 80749E5B0 has total degree 85 (84 outgoing and 1 incoming connection(s)).",
+        "The observed transaction(s) has a maximum, observed, transaction-level, observed and predicted,  XGBoost risk score of 0.07192350178956985."
       ],
       "actions": [
-        "Immediately freeze account 800A3F2 pending investigation",
-        "Freeze accounts 800B1C9 and 800C4D1 as feeder accounts",
-        "Freeze account 800D7E8 as ultimate beneficiary",
-        "File Suspicious Activity Report (SAR) for all four accounts",
-        "Conduct enhanced due diligence on beneficial owners of accounts 800A3F2, 800B1C9, and 800C4D1",
-        "Coordinate with banks 20, 3196, and 1208 for account holder verification",
-        "Trace source of funds in feeder accounts 800B1C9 and 800C4D1",
-        "Investigate destination and use of $48,200 wire transfer to account 800D7E8",
-        "Review all historical transactions for these four accounts for additional suspicious patterns"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a FAN_IN pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0009",
-      "case": "sample_subgraph_v2",
-      "pattern": "Smurfing",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-009",
+      "case": "validation_legitimate_004",
+      "account": "1004288E8",
+      "pattern": "NONE",
+      "decision": "SUSPICIOUS",
+      "riskLevel": "HIGH",
+      "confidence": 0.85,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Accounts 800B1C9 and 800C4D1 act as feeders, sending multiple ACH transactions to hub account 800A3F2 with amounts $9800.0, $9750.0, $9900.0, and $9600.0 \u2014 all just below the $10,000 CTR reporting threshold",
-        "Account 800A3F2 has degree_centrality of 0.891 and out_degree of 47, confirming its role as a high-volume suspected funnel hub",
-        "All 4 inbound feeder transactions occurred within a 40-minute window between 03:12 and 03:52 on 2022-09-14, indicating coordinated structuring",
-        "Account 800A3F2 consolidated incoming funds and issued a single outbound Wire transfer of $48200.0 to account 800D7E8 at 04:45 on 2022-09-14",
-        "All 5 transactions in the subgraph are flagged is_laundering=1, with a community fraud rate of 0.423 across 12 accounts in community 447",
-        "Cross-bank transfers involve accounts at bank_id 3196 (800C4D1) and bank_id 1208 (800D7E8), suggesting deliberate use of multiple institutions to obscure the trail"
+        "The case contains 6 observed transaction(s) involving 12 account(s).",
+        "Observed transaction amounts range from 15.18 to 25566707.65, with a total of 25619525.16.",
+        "Payment formats observed: Cheque, Cash, Credit Card, ACH.",
+        "The observed activity spans 1 observed hour(s): 1.",
+        "Observed account 1004288E8 has total degree 77097 (76693 outgoing and 404 incoming connection(s)).",
+        "The observed accounts belong to community group(s): 10, 9, 13, 17, 1, 226."
       ],
       "actions": [
-        "Freeze accounts 800A3F2, 800B1C9, and 800C4D1 immediately pending full AML investigation, given coordinated structuring activity below the $10,000 threshold",
-        "File a Suspicious Activity Report (SAR) covering all 5 transactions (T_001 through T_005) totaling $97250.0 and flag the structuring pattern to FinCEN",
-        "Trace and place a hold on the $48200.0 Wire transfer (T_003) received by account 800D7E8 at bank_id 1208, and notify that institution's compliance team",
-        "Expand investigation to the remaining 8 undetailed accounts in community 447 to identify additional feeder or layering accounts connected to hub 800A3F2"
-      ]
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
+      ],
+      "summary": "The observed transaction and graph context is consistent with a FAN_IN pattern; retain the case for analyst review and corroborate the linked activity."
     },
     {
-      "reportId": "RPT-0010",
-      "case": "sample_subgraph_v3",
-      "pattern": "Smurfing",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
+      "reportId": "GEMMA-010",
+      "case": "validation_legitimate_005",
+      "account": "804F20880",
+      "pattern": "NONE",
+      "decision": "LEGITIMATE",
+      "riskLevel": "LOW",
+      "confidence": 0.5,
+      "model": "Gemma",
+      "date": "final_unseen_validation",
+      "status": "Validated artifact",
       "evidence": [
-        "Account 800A3F2 carries role 'suspected_funnel' with out_degree 47 and degree_centrality 0.891, consistent with a central aggregation node",
-        "Account 800B1C9 carries role 'feeder' with in_degree 18, sending $9,800.00 (T_001) and $9,900.00 (T_004) to 800A3F2",
-        "Account 800C4D1 carries role 'feeder' with in_degree 14, sending $9,750.00 (T_002) and $9,600.00 (T_005) to 800A3F2",
-        "All four inbound ACH transactions to 800A3F2 are individually below $10,000.00, a classic structuring threshold-avoidance pattern",
-        "All five transactions carry is_laundering flag = 1",
-        "Inbound ACH transfers to 800A3F2 occur within a compressed window: T_001 at 03:12, T_002 at 03:18, T_004 at 03:44, T_005 at 03:52 \u2014 all between 03:00\u201304:00 on 2022-09-14",
-        "Aggregated funds are consolidated and fanned out via a single Wire transfer of $48,200.00 (T_003) from 800A3F2 to receiver 800D7E8 at 04:45 on 2022-09-14",
-        "Account 800D7E8 carries role 'receiver' with out_degree 0 and in_degree 8, indicating a terminal collection point with no onward ACH activity visible in subgraph",
-        "Cross-bank transfers count = 2, with 800C4D1 domiciled at bank_id 3196 and 800D7E8 domiciled at bank_id 1208, introducing jurisdictional layering",
-        "community_fraud_rate for community_id 447 is 0.423, and fraud_transaction_count equals total transaction_count of 5",
-        "Total amount in subgraph is $97,250.00 across a time_window_minutes of 93"
+        "The case contains 6 observed transaction(s) involving 12 account(s).",
+        "Observed transaction amounts range from 103.32 to 27399.82, with a total of 43435.75.",
+        "Payment formats observed: Cheque, Credit Card, ACH, Cash.",
+        "The observed activity spans 1 observed hour(s): 1.",
+        "Observed activity is concentrated on 1 observed day(s): 2022-09-15.",
+        "Account 83A90C2F0 has total degree 38 (2 outgoing and 36 incoming connection(s)).",
+        "The observed accounts belong to 4 community group(s): 144, 9, 33, 13."
       ],
       "actions": [
-        "File a Suspicious Activity Report (SAR) immediately covering accounts 800A3F2, 800B1C9, 800C4D1, and 800D7E8, referencing transactions T_001 through T_005 and the aggregate flow of $97,250.00",
-        "Place a real-time transaction hold on account 800A3F2 (bank_id 20) pending full KYC/CDD review; its out_degree of 47 suggests additional undisclosed outbound flows beyond this subgraph",
-        "Freeze or restrict outbound activity on account 800D7E8 (bank_id 1208) immediately, as it is a terminal receiver with out_degree 0 and may be the ultimate beneficiary of laundered funds",
-        "Subpoena or formally request full transaction history for feeder accounts 800B1C9 and 800C4D1 for the 90-day lookback period to identify the upstream source of structured deposits",
-        "Issue a cross-bank information request to bank_id 3196 (holder of 800C4D1) and bank_id 1208 (holder of 800D7E8) under applicable inter-bank AML cooperation agreements",
-        "Conduct a structuring analysis on all historical transactions from 800B1C9 and 800C4D1 to confirm whether sub-$10,000.00 ACH transfers are a recurring pattern across multiple dates",
-        "Escalate Wire transfer T_003 ($48,200.00 from 800A3F2 to 800D7E8) to the wire operations team for recall or reversal if funds have not yet settled at bank_id 1208",
-        "Expand graph traversal on 800A3F2's remaining out_degree 47 edges to identify additional destination accounts not captured in community_447 and assess whether a broader smurfing network exists",
-        "Flag all five transactions (T_001\u2013T_005) in the core banking system with SAR reference codes and suppress from standard automated release queues",
-        "Notify the BSA/AML Compliance Officer and Legal counsel given the CRITICAL risk level and multi-bank, cross-institution nature of the scheme"
-      ]
-    },
-    {
-      "reportId": "RPT-0011",
-      "case": "sample_subgraph_v4",
-      "pattern": "Smurfing",
-      "riskLevel": "CRITICAL",
-      "model": "claude-sonnet-4-6",
-      "evidence": [
-        "Account 800B1C9 sent $9800.0 (T_001) and $9900.0 (T_004) to 800A3F2 \u2014 both just below the $10,000 CTR reporting threshold",
-        "Account 800C4D1 sent $9750.0 (T_002) and $9600.0 (T_005) to 800A3F2 \u2014 both just below the $10,000 CTR reporting threshold",
-        "All four feeder transactions occurred within a 40-minute window (03:12\u201303:52) on 2022-09-14, consistent with coordinated structuring",
-        "Account 800A3F2 (degree_centrality: 0.891, role: suspected_funnel) consolidated inflows and issued a single outbound Wire transfer of $48200.0 to 800D7E8 (T_003)",
-        "Transactions T_001 through T_005 all carry is_laundering: 1",
-        "community_fraud_rate of 0.423 (42.3%) for community_id 447 indicates a high-risk cluster",
-        "All feeder transactions executed at hour: 3 (3 AM), a low-oversight period",
-        "Total subgraph amount of $97250.0 aggregated across 5 transactions in only 93 minutes"
+        "Escalate the case for enhanced due diligence.",
+        "Review the linked accounts and transaction provenance.",
+        "Document the observed pattern and supporting transaction evidence before disposition."
       ],
-      "actions": [
-        "File a Suspicious Activity Report (SAR) immediately for accounts 800A3F2, 800B1C9, and 800C4D1 citing structured transactions below the $10,000 CTR threshold",
-        "Freeze outbound wire capabilities on account 800A3F2 (bank_id: 20) pending full investigation, given its role as suspected_funnel with degree_centrality 0.891",
-        "Notify bank_id 1208 (host of account 800D7E8) of the inbound $48200.0 wire (T_003) and request a hold pending AML review",
-        "Subpoena full transaction history for 800B1C9 and 800C4D1 to identify the broader network of structuring sources (in_degree 18 and 14 respectively suggest many upstream feeders)",
-        "Escalate to FinCEN given cross-bank transfers (bank_id 20, 3196, 1208) and coordinated early-morning activity pattern",
-        "Expand graph analysis to all accounts connected to 800B1C9 (in_degree: 18) and 800C4D1 (in_degree: 14) to uncover the full smurfing network within community_id 447"
-      ]
+      "summary": "The observed transaction and graph context is consistent with a FAN_IN pattern; retain the case for analyst review and corroborate the linked activity."
     }
   ]
 }

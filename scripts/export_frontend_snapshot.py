@@ -76,28 +76,39 @@ def main() -> None:
             if len(edge_rows) >= 2_000:
                 break
 
+    # Prefer current DATA 298B Gemma validation traces. The older llm_outputs
+    # directory contains historical/demo artifacts and must not be presented as
+    # the current investigator report set.
     reports: list[dict[str, Any]] = []
-    for path in sorted((ARTIFACTS / "llm_outputs").glob("*.json")):
-        report = first_successful_report(path)
-        if not report:
-            continue
-        meta = report.get("_meta", {}) if isinstance(report.get("_meta"), dict) else {}
-        reports.append(
-            {
-                "reportId": f"RPT-{len(reports) + 1:04d}",
-                "case": path.stem,
-                "pattern": report.get("pattern", "Unknown"),
-                "riskLevel": str(report.get("risk_level", "UNKNOWN")).upper(),
-                "model": meta.get("model", "Saved artifact"),
-                "evidence": report.get("evidence", []),
-                "actions": report.get("actions", []),
-            }
-        )
+    current_traces = ARTIFACTS / "final_benchmark" / "posthoc_audit" / "gemma_validation_traces_guarded_v2.jsonl"
+    if current_traces.exists():
+        for line in current_traces.read_text().splitlines():
+            trace = json.loads(line)
+            report = trace.get("report", {})
+            context = trace.get("context", {})
+            accounts_in_case = context.get("accounts", []) if isinstance(context, dict) else []
+            reports.append(
+                {
+                    "reportId": f"GEMMA-{len(reports) + 1:03d}",
+                    "case": trace.get("case_id", "unknown"),
+                    "account": accounts_in_case[0].get("account_id", "") if accounts_in_case else "",
+                    "pattern": report.get("pattern", "UNKNOWN"),
+                    "decision": report.get("decision", "UNKNOWN"),
+                    "riskLevel": str(report.get("risk_level", "UNKNOWN")).upper(),
+                    "confidence": report.get("confidence", 0),
+                    "model": "Gemma",
+                    "date": trace.get("variant", "final unseen validation"),
+                    "status": "Validated artifact",
+                    "evidence": report.get("evidence", []),
+                    "actions": report.get("recommended_actions", []),
+                    "summary": report.get("summary", ""),
+                }
+            )
 
-    llm_model_counts: dict[str, int] = {"Gemma": 0, "Qwen": 0, "Mistral": 0, "Granite": 0, "Claude": 0}
+    llm_model_counts: dict[str, int] = {"Gemma": 0, "Qwen": 0, "Ministral": 0, "Phi-4": 0}
     for report in reports:
         model_name = str(report.get("model", "")).lower()
-        key = "Claude" if "claude" in model_name else next((name for name in ("Gemma", "Qwen", "Mistral", "Granite") if name.lower() in model_name), None)
+        key = next((name for name in ("Gemma", "Qwen", "Ministral", "Phi-4") if name.lower() in model_name), None)
         if key:
             llm_model_counts[key] += 1
 
