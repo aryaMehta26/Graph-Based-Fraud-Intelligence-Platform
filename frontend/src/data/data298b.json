@@ -1,0 +1,73 @@
+{
+  "benchmarkCases": 50,
+  "models": [
+    {
+      "model": "Ministral",
+      "binaryF1": 0.898876,
+      "specificity": 0.1,
+      "patternMacroF1": 0.20631,
+      "schemaCompliance": 1.0,
+      "evidenceSupportedRate": 0.504673,
+      "unsupportedClaimRate": 0.373832,
+      "latencySeconds": 83.27048,
+      "tokensPerSecond": 6.6338,
+      "toolSuccessRate": 1.0
+    },
+    {
+      "model": "Phi-4",
+      "binaryF1": 0.941176,
+      "specificity": 0.5,
+      "patternMacroF1": 0.127969,
+      "schemaCompliance": 1.0,
+      "evidenceSupportedRate": 0.409314,
+      "unsupportedClaimRate": 0.492647,
+      "latencySeconds": 35.01395,
+      "tokensPerSecond": 9.55105,
+      "toolSuccessRate": 1.0
+    },
+    {
+      "model": "Qwen",
+      "binaryF1": 0.898876,
+      "specificity": 0.1,
+      "patternMacroF1": 0.191046,
+      "schemaCompliance": 1.0,
+      "evidenceSupportedRate": 0.637874,
+      "unsupportedClaimRate": 0.126246,
+      "latencySeconds": 172.59264,
+      "tokensPerSecond": 3.23189,
+      "toolSuccessRate": 1.0
+    },
+    {
+      "model": "Gemma",
+      "binaryF1": 0.963855,
+      "specificity": 0.7,
+      "patternMacroF1": 0.22521,
+      "schemaCompliance": 1.0,
+      "evidenceSupportedRate": 0.541833,
+      "unsupportedClaimRate": 0.354582,
+      "latencySeconds": 97.49147,
+      "tokensPerSecond": 3.47353,
+      "toolSuccessRate": 1.0
+    }
+  ],
+  "selection": {
+    "model": "Gemma",
+    "status": "provisional_final",
+    "reason": "Best integrated binary F1, specificity, and pattern Macro-F1; retains high recall with guardrail-based review flags."
+  },
+  "finalValidation": {
+    "cases": 10,
+    "suspiciousCases": 5,
+    "legitimateCases": 5,
+    "raw": {
+      "recall": 1.0,
+      "specificity": 0.0,
+      "falsePositives": 5
+    },
+    "guarded": {
+      "recall": 1.0,
+      "specificity": 0.6,
+      "falsePositives": 2
+    }
+  }
+}
