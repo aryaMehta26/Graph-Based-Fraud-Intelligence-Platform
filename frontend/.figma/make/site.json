@@ -1,0 +1,10 @@
+{
+  "description": "Access comprehensive fraud intelligence insights through an interactive dashboard, enabling users to analyze transactions, generate reports, and compare models efficiently.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
