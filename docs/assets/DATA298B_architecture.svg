@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2550" viewBox="0 0 1600 2550" role="img" aria-labelledby="title desc">
+  <title id="title">DATA 298B Graph-Based Fraud Intelligence Architecture</title>
+  <desc id="desc">Top-to-bottom architecture from IBM AML transactions through XGBoost, Neo4j graph intelligence, Leiden community intelligence, investigation case construction, deterministic retrieval, Gemma AML investigation, and dashboard outputs.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7fbff"/>
+      <stop offset="1" stop-color="#eef5fc"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0877ff"/>
+      <stop offset="1" stop-color="#0756c7"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#5521b5"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#087f5b"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9b45"/>
+      <stop offset="1" stop-color="#d96b16"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#12385c" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#5f7895"/>
+    </marker>
+    <style>
+      .font { font-family: Inter, Arial, sans-serif; fill: #10233d; }
+      .title { font-size: 48px; font-weight: 800; letter-spacing: -1px; }
+      .subtitle { font-size: 23px; fill: #607590; }
+      .stage { font-size: 17px; font-weight: 800; letter-spacing: 2px; }
+      .box-title { font-size: 30px; font-weight: 800; }
+      .box-body { font-size: 21px; fill: #48658a; }
+      .metric { font-size: 20px; font-weight: 700; fill: #ffffff; }
+      .small { font-size: 18px; fill: #607590; }
+      .white { fill: #ffffff; }
+      .line { stroke: #5f7895; stroke-width: 5; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke: #7f96ad; stroke-width: 3; stroke-dasharray: 12 10; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="2100" fill="url(#bg)"/>
+  <rect x="56" y="48" width="1488" height="2440" rx="34" fill="none" stroke="#d8e6f3" stroke-width="3"/>
+
+  <text x="800" y="125" text-anchor="middle" class="font title">DATA 298B Fraud Intelligence Architecture</text>
+  <text x="800" y="169" text-anchor="middle" class="font subtitle">From 31.9M transactions to a grounded AML investigation report</text>
+
+  <!-- Input -->
+  <text x="800" y="235" text-anchor="middle" class="font stage" fill="#0877ff">INPUT DATA</text>
+  <g filter="url(#shadow)">
+    <rect x="210" y="265" width="1180" height="180" rx="28" fill="#ffffff" stroke="#bcd8f5" stroke-width="3"/>
+  </g>
+  <circle cx="320" cy="355" r="54" fill="url(#blue)"/>
+  <text x="320" y="347" text-anchor="middle" class="font white" font-size="25" font-weight="800">IBM</text>
+  <text x="320" y="378" text-anchor="middle" class="font white" font-size="20" font-weight="700">AML</text>
+  <text x="415" y="328" class="font box-title">HI-Medium transaction data</text>
+  <text x="415" y="367" class="font box-body">Timestamp · sender · receiver · amount · payment format · currency</text>
+  <text x="415" y="404" class="font small">31,898,238 transactions · 1,758,573 accounts · extreme class imbalance</text>
+
+  <path d="M800 445 L800 505" class="line"/>
+
+  <!-- Layer 1 -->
+  <text x="800" y="550" text-anchor="middle" class="font stage" fill="#0877ff">LAYER 1 · TRANSACTION DETECTION</text>
+  <g filter="url(#shadow)">
+    <rect x="150" y="580" width="1300" height="220" rx="28" fill="url(#blue)"/>
+  </g>
+  <circle cx="285" cy="690" r="58" fill="#ffffff" fill-opacity="0.18"/>
+  <text x="285" y="682" text-anchor="middle" class="font white" font-size="25" font-weight="800">XGB</text>
+  <text x="285" y="716" text-anchor="middle" class="font white" font-size="17" font-weight="700">MODEL</text>
+  <text x="410" y="650" class="font white box-title">XGBoost scoring</text>
+  <text x="410" y="689" class="font white box-body">Baseline tabular model and graph-enhanced model</text>
+  <text x="410" y="728" class="font white box-body">Outputs suspicious score, risk signal, and SHAP-ready features</text>
+  <rect x="1060" y="635" width="300" height="104" rx="18" fill="#ffffff" fill-opacity="0.16"/>
+  <text x="1210" y="674" text-anchor="middle" class="font metric">Graph PR-AUC</text>
+  <text x="1210" y="716" text-anchor="middle" class="font white" font-size="34" font-weight="800">0.4617</text>
+
+  <path d="M800 800 L800 860" class="line"/>
+
+  <!-- Layer 2 -->
+  <text x="800" y="905" text-anchor="middle" class="font stage" fill="#7c3aed">LAYER 2 · GRAPH INTELLIGENCE</text>
+  <g filter="url(#shadow)">
+    <rect x="150" y="935" width="1300" height="235" rx="28" fill="url(#purple)"/>
+  </g>
+  <circle cx="285" cy="1052" r="58" fill="#ffffff" fill-opacity="0.18"/>
+  <circle cx="264" cy="1032" r="11" fill="#ffffff"/><circle cx="314" cy="1032" r="11" fill="#ffffff"/><circle cx="285" cy="1080" r="11" fill="#ffffff"/>
+  <path d="M273 1039 L306 1039 M272 1041 L282 1071 M307 1041 L290 1071" stroke="#ffffff" stroke-width="6"/>
+  <text x="410" y="1005" class="font white box-title">Neo4j account graph</text>
+  <text x="410" y="1044" class="font white box-body">Accounts, transactions, SENT and RECEIVED_BY relationships</text>
+  <text x="410" y="1083" class="font white box-body">Incoming degree · outgoing degree · total degree · centrality</text>
+  <text x="410" y="1122" class="font white box-body">Live read-only neighborhood queries power the dashboard network view</text>
+
+  <path d="M800 1170 L800 1230" class="line"/>
+
+  <!-- Layer 3 -->
+  <text x="800" y="1275" text-anchor="middle" class="font stage" fill="#10a879">LAYER 3 · COMMUNITY / TREND INTELLIGENCE</text>
+  <g filter="url(#shadow)">
+    <rect x="150" y="1305" width="1300" height="220" rx="28" fill="url(#green)"/>
+  </g>
+  <circle cx="285" cy="1415" r="58" fill="#ffffff" fill-opacity="0.18"/>
+  <circle cx="255" cy="1390" r="15" fill="#ffffff"/><circle cx="315" cy="1390" r="15" fill="#ffffff"/><circle cx="285" cy="1445" r="15" fill="#ffffff"/>
+  <path d="M269 1397 L301 1397 M263 1403 L279 1434 M307 1403 L291 1434" stroke="#ffffff" stroke-width="6"/>
+  <text x="410" y="1370" class="font white box-title">Leiden community enrichment</text>
+  <text x="410" y="1409" class="font white box-body">Community ID · community size · community fraud rate</text>
+  <text x="410" y="1448" class="font white box-body">Adds network-level context to every investigation case</text>
+  <text x="410" y="1487" class="font white box-body">66,227 communities in the final processed graph artifact</text>
+
+  <path d="M800 1525 L800 1585" class="line"/>
+
+  <!-- Case construction and retrieval -->
+  <text x="800" y="1630" text-anchor="middle" class="font stage" fill="#d96b16">EVIDENCE ASSEMBLY</text>
+  <g filter="url(#shadow)">
+    <rect x="150" y="1660" width="1300" height="220" rx="28" fill="url(#orange)"/>
+  </g>
+  <text x="410" y="1725" class="font white box-title">Investigation-case construction</text>
+  <text x="410" y="1764" class="font white box-body">Held-out transaction + XGBoost + graph + Leiden context</text>
+  <text x="410" y="1803" class="font white box-body">Source transaction IDs and provenance preserved for evaluation</text>
+  <rect x="1030" y="1705" width="330" height="92" rx="18" fill="#ffffff" fill-opacity="0.18"/>
+  <text x="1195" y="1741" text-anchor="middle" class="font metric">Deterministic retrieval</text>
+  <text x="1195" y="1775" text-anchor="middle" class="font white" font-size="19" font-weight="700">transactions · graph · community</text>
+
+  <path d="M800 1880 L800 1940" class="line"/>
+
+  <!-- Layer 4 -->
+  <text x="800" y="1985" text-anchor="middle" class="font stage" fill="#5521b5">LAYER 4 · AML INVESTIGATION</text>
+  <g filter="url(#shadow)">
+    <rect x="150" y="2015" width="1300" height="280" rx="28" fill="#10233d"/>
+  </g>
+  <text x="410" y="2080" class="font white box-title">Gemma 4 31B AML fine-tuned investigator</text>
+  <text x="410" y="2119" class="font white box-body">Receives the same grounded evidence package for each case</text>
+  <text x="410" y="2158" class="font white box-body">Returns structured decision, pattern, risk, evidence, and actions</text>
+  <rect x="410" y="2190" width="920" height="64" rx="16" fill="#ffffff" fill-opacity="0.12"/>
+  <text x="870" y="2231" text-anchor="middle" class="font metric">50-case comparison → 10-case unseen validation → frozen analyst reports</text>
+
+  <!-- Output callout -->
+  <rect x="150" y="2340" width="1300" height="130" rx="26" fill="#ffffff" stroke="#bcd8f5" stroke-width="3"/>
+  <text x="800" y="2387" text-anchor="middle" class="font box-title">Analyst-facing outputs</text>
+  <text x="800" y="2428" text-anchor="middle" class="font box-body">React dashboard · Model comparison · Network analysis · Validated investigation reports</text>
+</svg>
