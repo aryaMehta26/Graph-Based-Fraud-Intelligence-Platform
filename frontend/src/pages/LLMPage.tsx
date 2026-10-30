@@ -2,6 +2,7 @@ import { useState } from 'react';
 import dashboardData from '../data/dashboard.json';
 import PageShell, { Panel, Stat } from '../components/PageShell';
 import { go, loadCaseId, loadTransaction } from '../state';
+import { runLiveInvestigation } from '../data/live';
 
 export default function LLMPage() {
   const context = loadTransaction();
@@ -11,10 +12,32 @@ export default function LLMPage() {
     return index >= 0 ? index : 0;
   });
   const report = dashboardData.reports[selected] ?? dashboardData.reports[0];
+  const [liveReport, setLiveReport] = useState<Record<string, unknown> | null>(null);
+  const [liveError, setLiveError] = useState('');
+  const [running, setRunning] = useState(false);
 
   if (!report) {
     return <PageShell title="LLM Investigator" subtitle="No current DATA 298B investigation artifacts are available." />;
   }
+
+  const investigateLive = async () => {
+    setRunning(true);
+    setLiveError('');
+    try {
+      const contextPayload = {
+        accounts: report.account ? [{ account_id: report.account }] : [],
+        transactions: context ? [context] : [],
+        graph_stats: { source: 'React selected case', pattern_hint: report.pattern },
+        retrieved_evidence: report.evidence,
+      };
+      const result = await runLiveInvestigation({ case_id: String(report.case), context: contextPayload });
+      setLiveReport(result.report);
+    } catch (error) {
+      setLiveError(error instanceof Error ? error.message : 'Live Gemma request failed');
+    } finally {
+      setRunning(false);
+    }
+  };
 
   const centered = 'text-center [&>div:first-child]:mx-auto';
 
@@ -54,7 +77,7 @@ export default function LLMPage() {
         </Panel>
       </div>
 
-      <Panel title="Recommended analyst actions" className="mt-4">
+      <Panel title="Live Gemma investigation" className="mt-4"><div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-[#48658a]">Send this selected case context to the Gemma adapter running in Colab.</p><button onClick={() => void investigateLive()} disabled={running} className="rounded-xl bg-[#0877ff] px-4 py-2 text-sm font-bold text-white disabled:opacity-50">{running ? 'Running Gemma…' : 'Run live Gemma report'}</button></div>{liveError && <p className="mt-3 text-sm text-[#b45309]">{liveError}</p>}{liveReport && <div className="mt-4 rounded-xl border border-[#dce7f2] bg-[#f8fbff] p-4"><div className="grid gap-3 sm:grid-cols-3"><Stat label="Decision" value={String(liveReport.decision ?? '—')} detail="live model output" /><Stat label="Pattern" value={String(liveReport.pattern ?? '—')} detail="live model output" tone="purple" /><Stat label="Risk" value={String(liveReport.risk_level ?? '—')} detail="live model output" tone="orange" /></div><p className="mt-4 text-sm text-[#48658a]">{String(liveReport.summary ?? '')}</p><div className="mt-3"><strong className="text-sm">Evidence</strong><ul className="mt-2 list-disc pl-5 text-sm text-[#48658a]">{(Array.isArray(liveReport.evidence) ? liveReport.evidence : []).map((item, index) => <li key={`${String(item)}-${index}`}>{String(item)}</li>)}</ul></div></div>}</Panel><Panel title="Recommended analyst actions" className="mt-4">
         <div className="grid gap-3 md:grid-cols-3">
           {report.actions.map((item, index) => <div key={`${item}-${index}`} className="rounded-xl border border-[#dce7f2] p-4 text-sm text-[#48658a]"><span className="font-bold text-[#10b981]">{index + 1}. </span>{item}</div>)}
         </div>
