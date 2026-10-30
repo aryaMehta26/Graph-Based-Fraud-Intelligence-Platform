@@ -291,11 +291,28 @@ def _run_gemma(payload: dict) -> dict:
         "a small replay window is not, by itself, proof of coordinated fraud."
     )
     report["rationale"] = rationale
+    out_degree = int(graph.get("out_degree", 0) or 0)
+    in_degree = int(graph.get("in_degree", 0) or 0)
+    if out_degree >= 3 and out_degree > in_degree:
+        structural_reason = (
+            f"The selected account has {out_degree} outgoing versus {in_degree} incoming connections, "
+            "so funds are moving outward to multiple counterparties; this supports a fan-out hypothesis."
+        )
+    elif in_degree >= 3 and in_degree > out_degree:
+        structural_reason = (
+            f"The selected account has {in_degree} incoming versus {out_degree} outgoing connections, "
+            "so funds are concentrating into one account; this supports a fan-in hypothesis."
+        )
+    else:
+        structural_reason = (
+            f"The selected account has {out_degree} outgoing and {in_degree} incoming connections; "
+            "the available topology is not sufficient to confirm a specific network pattern."
+        )
     report["rationale_points"] = [
-        f"XGBoost escalated the alert with a fraud score of {score:.3f} against the 0.300 review threshold.",
-        f"Gemma classified the grounded case as {pattern} with {risk} risk.",
-        f"The case window contains {len(transactions)} transaction(s) across {len(accounts)} account(s).",
-        "The pattern is an investigation hypothesis and must be corroborated in the network view.",
+        f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
+        structural_reason,
+        f"Gemma classified the grounded case as {pattern} with {risk} risk using {len(transactions)} transaction(s) across {len(accounts)} account(s).",
+        "This is an investigation hypothesis, not proof of fraud; corroborate it in the network view and transaction history.",
     ]
     return {
         "report": report,
