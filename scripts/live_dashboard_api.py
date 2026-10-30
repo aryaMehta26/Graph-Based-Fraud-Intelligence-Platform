@@ -184,7 +184,9 @@ def _build_live_case_context(context: dict) -> dict:
         if row_src not in account_ids and row_dst not in account_ids:
             continue
         candidates.append({key: row.get(key) for key in DISPLAY_COLUMNS})
-    candidates = candidates[-24:]
+    # Keep the prompt close to the trained case format while still giving Gemma
+    # historical context beyond the selected alert.
+    candidates = candidates[-7:]
     selected_key = tuple(selected.get(key) for key in DISPLAY_COLUMNS)
     case_transactions = [selected]
     for row in candidates:
@@ -274,8 +276,8 @@ def _run_gemma(payload: dict) -> dict:
         investigate_kwargs["prefetch_tools"] = True
     trace = agent.investigate(case, **investigate_kwargs)
     report = _recover_report_from_raw_response(trace)
-    score = float(context.get("xgboost_score", context.get("fraud_probability", 0)) or 0)
     graph = context.get("graph_stats") if isinstance(context.get("graph_stats"), dict) else {}
+    score = float(context.get("xgboost_score", context.get("fraud_probability", graph.get("xgboost_score", 0))) or 0)
     transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
     accounts = context.get("accounts") if isinstance(context.get("accounts"), list) else []
     pattern = str(report.get("pattern") or "EMERGING_UNKNOWN")

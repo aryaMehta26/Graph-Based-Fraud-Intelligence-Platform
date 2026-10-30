@@ -53,7 +53,7 @@ export default function LLMPage() {
     finally { setRunning(false); }
   };
 
-  const current = liveReport ? { ...shown, decision: liveReport.decision, pattern: liveReport.pattern, riskLevel: liveReport.risk_level, confidence: liveReport.confidence, summary: liveReport.summary, rationale: liveReport.rationale, evidence: Array.isArray(liveReport.evidence) ? liveReport.evidence : shown.evidence, actions: Array.isArray(liveReport.recommended_actions) ? liveReport.recommended_actions : shown.actions } : shown;
+  const current = liveReport ? { ...shown, decision: liveReport.decision, pattern: liveReport.pattern, riskLevel: liveReport.risk_level, confidence: liveReport.confidence, summary: liveReport.summary || shown.summary, rationale: liveReport.rationale, evidence: Array.isArray(liveReport.evidence) && liveReport.evidence.length ? liveReport.evidence : shown.evidence, actions: Array.isArray(liveReport.recommended_actions) && liveReport.recommended_actions.length ? liveReport.recommended_actions : shown.actions } : shown;
   const centered = 'text-center [&>div:first-child]:mx-auto';
 
   return <PageShell title="LLM Investigator" subtitle={liveMode ? 'Investigate the selected suspicious transaction with a fresh Gemma report.' : 'Saved benchmark cases are available for evaluation only.'} action={!liveMode ? <select value={selected} onChange={(e) => setSelected(Number(e.target.value))} className="h-10 rounded-xl border border-[#c9d9ea] bg-white px-3 text-sm"><option disabled>Saved benchmark cases</option>{dashboardData.reports.map((item, index) => <option key={item.reportId} value={index}>{item.reportId} · {item.case}</option>)}</select> : <span className="rounded-xl bg-[#eaf3ff] px-3 py-2 text-sm font-bold text-[#0877ff]">Live case selected</span>}>
