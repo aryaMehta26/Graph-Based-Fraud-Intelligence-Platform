@@ -291,6 +291,12 @@ def _run_gemma(payload: dict) -> dict:
         "a small replay window is not, by itself, proof of coordinated fraud."
     )
     report["rationale"] = rationale
+    report["rationale_points"] = [
+        f"XGBoost escalated the alert with a fraud score of {score:.3f} against the 0.300 review threshold.",
+        f"Gemma classified the grounded case as {pattern} with {risk} risk.",
+        f"The case window contains {len(transactions)} transaction(s) across {len(accounts)} account(s).",
+        "The pattern is an investigation hypothesis and must be corroborated in the network view.",
+    ]
     return {
         "report": report,
         "latency_seconds": trace.get("latency_seconds", 0),
