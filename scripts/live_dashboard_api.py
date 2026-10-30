@@ -185,12 +185,13 @@ def _run_gemma(payload: dict) -> dict:
     context = payload.get("context") if isinstance(payload.get("context"), dict) else payload
     case = InvestigationCase(case_id=case_id, context=context, ground_truth={}, split="live")
     trace_dir = Path(os.getenv("DATA298B_GEMMA_TRACE_DIR", str(ROOT / "artifacts/live_gemma_traces")))
-    trace = AMLAgent(backend, max_tool_calls=1, artifact_dir=str(trace_dir)).investigate(
+    trace = AMLAgent(backend, max_tool_calls=3, artifact_dir=str(trace_dir)).investigate(
         case,
         model_family="gemma",
         variant="finetuned_live",
         seed=42,
         inference_config={"max_tokens": 700, "temperature": 0.0},
+        prefetch_tools=True,
     )
     return {"report": trace.get("report", {}), "latency_seconds": trace.get("latency_seconds", 0), "case_id": case_id}
 
