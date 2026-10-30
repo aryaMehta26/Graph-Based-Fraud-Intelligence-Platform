@@ -29,6 +29,10 @@ export function getLivePredictions(limit = 8) {
   return request<{ items: LivePrediction[] }>(`/api/live/predictions?limit=${limit}`);
 }
 
+export function getLiveGraph(accountId: string) {
+  return request<{ account: Record<string, unknown>; edges: Record<string, unknown>[]; source: string }>(`/api/graph/${encodeURIComponent(accountId)}?limit=100`);
+}
+
 export function runLiveInvestigation(payload: { case_id: string; context: Record<string, unknown> }) {
   return request<{ report: Record<string, unknown>; latency_seconds: number; case_id: string }>('/api/live/investigate', {
     method: 'POST',

@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dashboardData from '../data/dashboard.json';
 import PageShell, { Panel, Stat } from '../components/PageShell';
 import { go, loadCaseId, loadTransaction } from '../state';
-import { runLiveInvestigation } from '../data/live';
+import { getLiveGraph, runLiveInvestigation } from '../data/live';
 
 export default function LLMPage() {
   const context = loadTransaction();
@@ -13,6 +13,18 @@ export default function LLMPage() {
   const [liveReport, setLiveReport] = useState<Record<string, unknown> | null>(null);
   const [liveError, setLiveError] = useState('');
   const [running, setRunning] = useState(false);
+  const [graphDetails, setGraphDetails] = useState<Record<string, unknown> | null>(null);
+
+  useEffect(() => {
+    if (!liveMode || !context?.src_acct) return;
+    getLiveGraph(String(context.src_acct)).then((result) => setGraphDetails(result.account)).catch(() => setGraphDetails(null));
+  }, [context?.src_acct, liveMode]);
+
+  const liveEvidence = context ? [
+    `XGBoost fraud probability: ${Number(context.xgboost_score ?? 0).toFixed(3)}`,
+    `Transaction: ${String(context.src_acct)} → ${String(context.dst_acct)}; amount ${String(context['Amount Paid'])}; format ${String(context['Payment Format'])}.`,
+    graphDetails ? `Graph context: ${graphDetails.total_degree ?? 0} total degree (${graphDetails.out_degree ?? 0} outgoing, ${graphDetails.in_degree ?? 0} incoming); centrality ${Number(graphDetails.degree_centrality ?? 0).toFixed(5)}.` : 'Graph context is loading from the live network endpoint.',
+  ] : [];
 
   const shown = useMemo(() => {
     if (!liveMode || !context) return report;
@@ -21,9 +33,9 @@ export default function LLMPage() {
       case: String(context.case_id ?? 'live-case'), account: String(context.src_acct ?? '—'),
       decision: score >= 0.3 ? 'SUSPICIOUS' : 'LEGITIMATE', pattern: 'PENDING INVESTIGATION',
       riskLevel: score >= 0.7 ? 'HIGH' : score >= 0.3 ? 'MEDIUM' : 'LOW', confidence: score,
-      summary: 'This live transaction was escalated from the XGBoost risk score. Run Gemma to generate the case report.', evidence: [`XGBoost fraud probability: ${score.toFixed(3)}`], actions: ['Run the live Gemma investigation'],
+      summary: 'This live transaction was escalated from the XGBoost risk score. Run Gemma to generate the case report.', evidence: liveEvidence, actions: ['Run the live Gemma investigation'],
     };
-  }, [context, liveMode, report]);
+  }, [context, graphDetails, liveMode, report]);
 
   if (!shown) return <PageShell title="LLM Investigator" subtitle="No investigation context is available." />;
 
@@ -45,7 +57,7 @@ export default function LLMPage() {
   const centered = 'text-center [&>div:first-child]:mx-auto';
 
   return <PageShell title="LLM Investigator" subtitle={liveMode ? 'Investigate the selected suspicious transaction with a fresh Gemma report.' : 'Saved benchmark cases are available for evaluation only.'} action={!liveMode ? <select value={selected} onChange={(e) => setSelected(Number(e.target.value))} className="h-10 rounded-xl border border-[#c9d9ea] bg-white px-3 text-sm"><option disabled>Saved benchmark cases</option>{dashboardData.reports.map((item, index) => <option key={item.reportId} value={index}>{item.reportId} · {item.case}</option>)}</select> : <span className="rounded-xl bg-[#eaf3ff] px-3 py-2 text-sm font-bold text-[#0877ff]">Live case selected</span>}>
-    <Panel title="Case header"><div className="grid grid-cols-5 gap-3" style={{ gridTemplateColumns: '2fr 1.2fr 1.3fr 1.1fr 0.7fr' }}><Stat className={centered} label="Case ID" value={String(current.case)} detail={liveMode ? 'Live transaction' : 'Validated artifact'} tone="blue" /><Stat className={centered} label="Account" value={String(current.account || '—')} detail="Selected context" tone="purple" /><Stat className={centered} label="Selected LLM" value="Gemma 4 31B" detail="AML fine-tuned model" tone="green" /><Stat className={centered} label="Decision" value={String(current.decision)} detail={liveReport ? 'Fresh model output' : liveMode ? 'XGBoost escalation' : 'Saved model output'} tone="red" /><Stat className={centered} label="Confidence" value={`${(Number(current.confidence || 0) * 100).toFixed(0)}%`} detail="Model output" tone="orange" /></div></Panel>
+    <Panel title="Case header"><div className="grid grid-cols-5 gap-3" style={{ gridTemplateColumns: '2fr 1.2fr 1.3fr 1.1fr 0.7fr' }}><Stat className={centered} label="Case ID" value={String(current.case)} detail={liveMode ? 'Live transaction' : 'Validated artifact'} tone="blue" /><Stat className={centered} label="Account" value={String(current.account || '—')} detail="Selected context" tone="purple" /><Stat className={centered} label="Selected LLM" value="Gemma 4 31B" detail="AML fine-tuned model" tone="green" /><Stat className={centered} label="Decision" value={String(current.decision)} detail={liveReport ? 'Fresh Gemma output' : liveMode ? 'XGBoost escalation' : 'Saved model output'} tone="red" /><Stat className={centered} label="Confidence" value={`${(Number(current.confidence || 0) * 100).toFixed(0)}%`} detail={liveReport ? 'Gemma confidence' : liveMode ? 'XGBoost score' : 'Model output'} tone="orange" /></div></Panel>
     <div className="mt-4 grid gap-4 xl:grid-cols-[1fr_1.35fr]"><Panel title="Why this case was escalated"><div className="rounded-xl bg-[#fff7e3] p-4 text-lg font-bold text-[#b45309]">{String(current.riskLevel)} · {String(current.pattern)}</div><p className="mt-4 text-sm leading-6 text-[#48658a]">{String(current.summary)}</p><div className="mt-5 flex flex-wrap gap-2"><button onClick={() => go('transactions', context, String(current.account), String(current.case))} className="rounded-xl border border-[#c9d9ea] px-4 py-2 text-sm font-bold text-[#0877ff]">Open transaction evidence</button><button onClick={() => go('graph', context, String(current.account), String(current.case))} className="rounded-xl bg-[#0877ff] px-4 py-2 text-sm font-bold text-white">Open network</button></div></Panel><Panel title="Evidence sources"><ol className="space-y-3">{(current.evidence as unknown[]).map((item, index) => <li key={`${String(item)}-${index}`} className="rounded-xl border border-[#dce7f2] p-3 text-sm text-[#48658a]"><span className="mr-2 inline-grid size-6 place-items-center rounded-full bg-[#eaf3ff] text-xs font-bold text-[#0877ff]">{index + 1}</span>{String(item)}<span className="mt-2 block text-[11px] font-bold uppercase tracking-wide text-[#607590]">Retrieved evidence</span></li>)}</ol></Panel></div>
     <Panel title={liveMode ? 'Generate fresh Gemma report' : 'Re-run saved benchmark case'} className="mt-4"><div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-[#48658a]">{liveMode ? 'The selected suspicious transaction will be sent to the Gemma adapter running in Colab.' : 'This is a saved benchmark case. Use it for QA, not as a live prediction.'}</p><button onClick={() => void investigateLive()} disabled={running} className="rounded-xl bg-[#0877ff] px-4 py-2 text-sm font-bold text-white disabled:opacity-50">{running ? 'Running Gemma…' : liveMode ? 'Run fresh Gemma report' : 'Run benchmark case'}</button></div>{liveError && <p className="mt-3 text-sm text-[#b45309]">{liveError}</p>}</Panel>
     <Panel title="Recommended analyst actions" className="mt-4"><div className="grid gap-3 md:grid-cols-3">{(current.actions as unknown[]).map((item, index) => <div key={`${String(item)}-${index}`} className="rounded-xl border border-[#dce7f2] p-4 text-sm text-[#48658a]"><span className="font-bold text-[#10b981]">{index + 1}. </span>{String(item)}</div>)}</div><p className="mt-4 text-xs text-[#607590]">{liveReport ? 'Source: fresh live Gemma inference.' : liveMode ? 'Source: live XGBoost escalation; Gemma report not generated yet.' : 'Source: saved validated DATA 298B Gemma trace.'}</p></Panel>
