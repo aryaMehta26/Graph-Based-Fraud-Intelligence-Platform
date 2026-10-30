@@ -79,11 +79,13 @@ def _load_replay_rows(limit: int = 2000) -> None:
         probability = float(probabilities[index])
         payload = {key: _jsonable(row[key]) for key in DISPLAY_COLUMNS}
         payload.update({
+            "case_id": f"live-{index}-{str(row['Timestamp']).replace(':', '').replace(' ', 'T')}",
             "xgboost_score": probability,
             "fraud_probability": probability,
             "risk_level": "HIGH" if probability >= 0.7 else "MEDIUM" if probability >= 0.3 else "LOW",
             "prediction": "SUSPICIOUS" if probability >= 0.3 else "LEGITIMATE",
             "source": "replayed test transaction",
+            "investigatable": probability >= 0.3,
         })
         _rows.append(payload)
 

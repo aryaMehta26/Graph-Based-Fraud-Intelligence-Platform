@@ -1,4 +1,5 @@
 export type LivePrediction = {
+  case_id: string;
   Timestamp: string;
   src_acct: string;
   dst_acct: string;
@@ -9,6 +10,7 @@ export type LivePrediction = {
   risk_level: string;
   prediction: string;
   source: string;
+  investigatable?: boolean;
 };
 
 const api = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, '') || '';
