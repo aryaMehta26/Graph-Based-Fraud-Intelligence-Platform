@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dashboardData from '../data/dashboard.json';
 import PageShell, { Panel, Stat } from '../components/PageShell';
+import { getApi } from '../data/api';
 
 type Risk = 'high' | 'medium' | 'low';
 
@@ -8,10 +9,17 @@ export default function GraphPage() {
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(dashboardData.accounts[0]?.account_id ?? '');
   const [zoom, setZoom] = useState(1);
+  const [live, setLive] = useState<{ account: any; edges: any[]; source: string } | null>(null);
+  useEffect(() => {
+    if (!selectedId) return;
+    getApi<{ account: any; edges: any[]; source: string }>(`/api/graph/${encodeURIComponent(selectedId)}`)
+      .then(setLive)
+      .catch(() => setLive(null));
+  }, [selectedId]);
   const availableIds = useMemo(() => [...new Set([...dashboardData.accounts.map((account) => account.account_id), ...dashboardData.graphEdges.flatMap((edge) => [String(edge.src_acct), String(edge.dst_acct)])])], []);
   const matches = useMemo(() => availableIds.filter((id) => id.toLowerCase().includes(query.toLowerCase())).slice(0, 20), [availableIds, query]);
-  const featureAccount = dashboardData.accounts.find((account) => account.account_id === selectedId);
-  const edges = dashboardData.graphEdges.filter((edge) => String(edge.src_acct) === selectedId || String(edge.dst_acct) === selectedId);
+  const featureAccount = live?.account ?? dashboardData.accounts.find((account) => account.account_id === selectedId);
+  const edges = live?.edges ?? dashboardData.graphEdges.filter((edge) => String(edge.src_acct) === selectedId || String(edge.dst_acct) === selectedId);
   const selected = featureAccount ?? { account_id: selectedId, total_degree: edges.length, degree_centrality: 0, out_degree: edges.filter((edge) => String(edge.src_acct) === selectedId).length, in_degree: edges.filter((edge) => String(edge.dst_acct) === selectedId).length, community_id: 'N/A', community_size: 0, community_fraud_rate: 0 };
   const nodes = useMemo(() => { const byId = new Map<string, { id: string; fraud: boolean; count: number }>(); edges.forEach((edge) => { const id = String(edge.src_acct) === selectedId ? String(edge.dst_acct) : String(edge.src_acct); const prior = byId.get(id); byId.set(id, { id, fraud: Boolean(prior?.fraud || Number(edge['Is Laundering']) === 1), count: (prior?.count ?? 0) + 1 }); }); return [...byId.values()].sort((a, b) => Number(b.fraud) - Number(a.fraud) || b.count - a.count).slice(0, 48); }, [edges, selectedId]);
   const riskFor = (node: { fraud: boolean; count: number }): Risk => node.fraud ? 'high' : node.count > 3 ? 'medium' : 'low';

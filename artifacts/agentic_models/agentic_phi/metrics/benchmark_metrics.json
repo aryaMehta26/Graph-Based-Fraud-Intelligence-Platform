@@ -1,0 +1,267 @@
+{
+  "binary": {
+    "accuracy": 0.9,
+    "precision": 0.8888888888888888,
+    "recall": 1.0,
+    "f1": 0.9411764705882353,
+    "specificity": 0.5,
+    "false_positive_rate": 0.5,
+    "false_negative_rate": 0.0,
+    "confusion_matrix": {
+      "tn": 5,
+      "fp": 5,
+      "fn": 0,
+      "tp": 40
+    }
+  },
+  "pattern": {
+    "per_class": {
+      "BIPARTITE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      },
+      "CYCLE": {
+        "precision": 0.5,
+        "recall": 0.8,
+        "f1": 0.6153846153846154,
+        "support": 5
+      },
+      "EMERGING_UNKNOWN": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      },
+      "FAN_IN": {
+        "precision": 0.5,
+        "recall": 0.4,
+        "f1": 0.4444444444444445,
+        "support": 5
+      },
+      "FAN_OUT": {
+        "precision": 0.2222222222222222,
+        "recall": 0.8,
+        "f1": 0.3478260869565218,
+        "support": 5
+      },
+      "GATHER_SCATTER": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      },
+      "NONE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 10
+      },
+      "RANDOM": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      },
+      "SCATTER_GATHER": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      },
+      "SCTG": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      },
+      "STACK": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5
+      }
+    },
+    "macro_precision": 0.11111111111111112,
+    "macro_recall": 0.18181818181818182,
+    "macro_f1": 0.12796864970778013,
+    "weighted_f1": 0.14076551467855816,
+    "confusion_matrix": {
+      "BIPARTITE": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 2,
+        "FAN_IN": 0,
+        "FAN_OUT": 2,
+        "GATHER_SCATTER": 0,
+        "NONE": 1,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "CYCLE": {
+        "BIPARTITE": 0,
+        "CYCLE": 4,
+        "EMERGING_UNKNOWN": 1,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "EMERGING_UNKNOWN": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "FAN_IN": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 1,
+        "FAN_IN": 2,
+        "FAN_OUT": 2,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "FAN_OUT": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 1,
+        "FAN_IN": 0,
+        "FAN_OUT": 4,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "GATHER_SCATTER": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 2,
+        "FAN_OUT": 3,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "NONE": {
+        "BIPARTITE": 2,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 2,
+        "FAN_IN": 0,
+        "FAN_OUT": 2,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 3,
+        "SCTG": 1,
+        "STACK": 0
+      },
+      "RANDOM": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 2,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 3
+      },
+      "SCATTER_GATHER": {
+        "BIPARTITE": 0,
+        "CYCLE": 3,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 1,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 1
+      },
+      "SCTG": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      },
+      "STACK": {
+        "BIPARTITE": 0,
+        "CYCLE": 1,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 4,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "SCTG": 0,
+        "STACK": 0
+      }
+    }
+  },
+  "schema": {
+    "valid_json_rate": 1.0,
+    "schema_compliance_rate": 1.0,
+    "missing_required_field_rate": 0.0,
+    "invalid_enum_rate": 0.0
+  },
+  "faithfulness": {
+    "evidence_faithfulness_rate": 0.0,
+    "unsupported_evidence_rate": 1.0,
+    "hallucination_count": 408,
+    "evidence_items": 408
+  },
+  "agent": {
+    "tool_call_success_rate": 1.0,
+    "failed_tool_calls": 0,
+    "average_tool_calls_per_case": 3.0,
+    "repeated_identical_tool_calls": 0,
+    "average_unique_tools_used": 3.0,
+    "max_tool_budget_hit_rate": 0.0,
+    "investigations_completed_without_tool_errors": 1.0
+  },
+  "efficiency": {
+    "average_latency_seconds": 35.0139486146,
+    "average_tokens": 334.42,
+    "total_output_tokens": 16721,
+    "throughput_tokens_per_second": 9.551050744975239
+  },
+  "generation": {
+    "status": "no reference reports"
+  },
+  "cases": 50
+}

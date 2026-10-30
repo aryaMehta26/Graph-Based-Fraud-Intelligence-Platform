@@ -118,6 +118,7 @@ def main() -> None:
             "graphEnhanced": read_json(MODELS / "xgboost_graph_enhanced_metrics.json"),
             "comparison": read_json(MODELS / "model_comparison.json"),
         },
+        "llmComparison": json.loads((MODELS / "model_comparison_integrated.json").read_text()) if (MODELS / "model_comparison_integrated.json").exists() else [],
         "transactions": transaction_rows,
         "accounts": top_accounts,
         "graphEdges": edge_rows,

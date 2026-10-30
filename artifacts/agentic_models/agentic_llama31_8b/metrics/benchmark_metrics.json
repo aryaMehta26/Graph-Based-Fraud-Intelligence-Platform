@@ -1,0 +1,238 @@
+{
+  "binary": {
+    "accuracy": 0.9,
+    "precision": 0.8888888888888888,
+    "recall": 1.0,
+    "f1": 0.9411764705882353,
+    "specificity": 0.5,
+    "false_positive_rate": 0.5,
+    "false_negative_rate": 0.0,
+    "confusion_matrix": {
+      "tn": 5,
+      "fp": 5,
+      "fn": 0,
+      "tp": 40
+    }
+  },
+  "pattern": {
+    "per_class": {
+      "BIPARTITE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 19
+      },
+      "CYCLE": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "support": 1
+      },
+      "EMERGING_UNKNOWN": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "FAN_IN": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 0
+      },
+      "FAN_OUT": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2
+      },
+      "GATHER_SCATTER": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "NONE": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 10
+      },
+      "RANDOM": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "SCATTER_GATHER": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1
+      },
+      "STACK": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14
+      }
+    },
+    "macro_precision": 0.15,
+    "macro_recall": 0.15,
+    "macro_f1": 0.13333333333333333,
+    "weighted_f1": 0.14666666666666667,
+    "confusion_matrix": {
+      "BIPARTITE": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 19,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "CYCLE": {
+        "BIPARTITE": 0,
+        "CYCLE": 1,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "EMERGING_UNKNOWN": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 1,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "FAN_IN": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 0,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "FAN_OUT": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 2,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "GATHER_SCATTER": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 1,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "NONE": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 5,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 5,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "RANDOM": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 1,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "SCATTER_GATHER": {
+        "BIPARTITE": 0,
+        "CYCLE": 0,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 1,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      },
+      "STACK": {
+        "BIPARTITE": 0,
+        "CYCLE": 1,
+        "EMERGING_UNKNOWN": 0,
+        "FAN_IN": 13,
+        "FAN_OUT": 0,
+        "GATHER_SCATTER": 0,
+        "NONE": 0,
+        "RANDOM": 0,
+        "SCATTER_GATHER": 0,
+        "STACK": 0
+      }
+    }
+  },
+  "schema": {
+    "valid_json_rate": 1.0,
+    "schema_compliance_rate": 1.0,
+    "missing_required_field_rate": 0.0,
+    "invalid_enum_rate": 0.0
+  },
+  "faithfulness": {
+    "evidence_faithfulness_rate": 0.9807439824945295,
+    "unsupported_evidence_rate": 0.01925601750547046,
+    "hallucination_count": 132,
+    "evidence_items": 6855
+  },
+  "agent": {
+    "tool_call_success_rate": 1.0,
+    "failed_tool_calls": 0,
+    "average_tool_calls_per_case": 3.0,
+    "repeated_identical_tool_calls": 0,
+    "average_unique_tools_used": 3.0,
+    "max_tool_budget_hit_rate": 0.0,
+    "investigations_completed_without_tool_errors": 1.0
+  },
+  "efficiency": {
+    "average_latency_seconds": 14.129877423759984,
+    "average_tokens": 118.24,
+    "total_output_tokens": 5912,
+    "throughput_tokens_per_second": 8.36808391565906
+  },
+  "generation": {
+    "status": "no reference reports"
+  },
+  "cases": 50
+}
