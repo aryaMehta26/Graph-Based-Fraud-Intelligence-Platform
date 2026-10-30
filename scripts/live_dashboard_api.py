@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -21,6 +22,8 @@ import pyarrow.parquet as pq
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 DATA_PATH = Path(os.getenv("DATA298B_LIVE_DATA", str(ROOT / "data/processed/test_graph_enriched.parquet")))
 MODEL_PATH = Path(os.getenv("DATA298B_LIVE_MODEL", str(ROOT / "data/models/xgboost_graph_enhanced.json")))
 PORT = int(os.getenv("DATA298B_LIVE_API_PORT", "8765"))
