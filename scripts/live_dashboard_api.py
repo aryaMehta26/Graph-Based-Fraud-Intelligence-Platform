@@ -293,20 +293,30 @@ def _run_gemma(payload: dict) -> dict:
     report["rationale"] = rationale
     out_degree = int(graph.get("out_degree", 0) or 0)
     in_degree = int(graph.get("in_degree", 0) or 0)
-    if out_degree >= 3 and out_degree > in_degree:
+    if pattern == "FAN_OUT" and out_degree >= 3 and out_degree > in_degree:
         structural_reason = (
             f"The selected account has {out_degree} outgoing versus {in_degree} incoming connections, "
-            "so funds are moving outward to multiple counterparties; this supports a fan-out hypothesis."
+            "so funds are moving outward to multiple counterparties; this supports Gemma's FAN_OUT hypothesis."
         )
-    elif in_degree >= 3 and in_degree > out_degree:
+    elif pattern == "FAN_IN" and in_degree >= 3 and in_degree > out_degree:
         structural_reason = (
             f"The selected account has {in_degree} incoming versus {out_degree} outgoing connections, "
-            "so funds are concentrating into one account; this supports a fan-in hypothesis."
+            "so funds are concentrating into one account; this supports Gemma's FAN_IN hypothesis."
+        )
+    elif pattern == "FAN_OUT" and in_degree > out_degree:
+        structural_reason = (
+            f"The selected account has {in_degree} incoming versus {out_degree} outgoing connections, "
+            "which is more consistent with inbound concentration than FAN_OUT; the graph evidence does not support Gemma's FAN_OUT prediction."
+        )
+    elif pattern == "FAN_IN" and out_degree > in_degree:
+        structural_reason = (
+            f"The selected account has {out_degree} outgoing versus {in_degree} incoming connections, "
+            "which is more consistent with outward distribution than FAN_IN; the graph evidence does not support Gemma's FAN_IN prediction."
         )
     else:
         structural_reason = (
             f"The selected account has {out_degree} outgoing and {in_degree} incoming connections; "
-            "the available topology is not sufficient to confirm a specific network pattern."
+            f"the available topology is not sufficient to confirm Gemma's {pattern} prediction."
         )
     report["rationale_points"] = [
         f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
