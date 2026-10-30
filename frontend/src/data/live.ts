@@ -13,6 +13,37 @@ export type LivePrediction = {
   investigatable?: boolean;
 };
 
+export type LiveReportRow = {
+  reportId: string;
+  case: string;
+  account: string;
+  decision: string;
+  pattern: string;
+  riskLevel: string;
+  model: string;
+  status: string;
+  summary: string;
+  evidence: string[];
+  actions: string[];
+  confidence?: number;
+};
+
+const LIVE_REPORTS_KEY = 'data298b-live-reports';
+
+export function loadLiveReports(): LiveReportRow[] {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(LIVE_REPORTS_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveLiveReport(report: LiveReportRow) {
+  const existing = loadLiveReports().filter((item) => item.reportId !== report.reportId);
+  localStorage.setItem(LIVE_REPORTS_KEY, JSON.stringify([report, ...existing].slice(0, 25)));
+}
+
 const api = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, '') || '';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -34,7 +65,7 @@ export function getLiveGraph(accountId: string) {
 }
 
 export function runLiveInvestigation(payload: { case_id: string; context: Record<string, unknown> }) {
-  return request<{ report: Record<string, unknown>; latency_seconds: number; case_id: string }>('/api/live/investigate', {
+  return request<{ report: Record<string, unknown>; latency_seconds: number; case_id: string; report_source?: string }>('/api/live/investigate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

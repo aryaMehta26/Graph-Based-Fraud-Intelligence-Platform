@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import dashboardData from '../data/dashboard.json';
 import PageShell, { Panel, Stat } from '../components/PageShell';
 import { go, loadCaseId, loadTransaction } from '../state';
-import { getLiveGraph, runLiveInvestigation } from '../data/live';
+import { getLiveGraph, runLiveInvestigation, saveLiveReport } from '../data/live';
 
 export default function LLMPage() {
   const context = loadTransaction();
@@ -49,6 +49,22 @@ export default function LLMPage() {
       } : { accounts: report.account ? [{ account_id: report.account }] : [], transactions: context ? [context] : [], graph_stats: { source: 'Saved benchmark case', pattern_hint: report.pattern }, retrieved_evidence: report.evidence };
       const result = await runLiveInvestigation({ case_id: String(liveContext?.case_id ?? report.case), context: contextPayload });
       setLiveReport({ ...result.report, __report_source: result.report_source });
+      if (result.report_source === 'raw_model_json') {
+        saveLiveReport({
+          reportId: `LIVE-${result.case_id}`,
+          case: result.case_id,
+          account: String(liveContext?.src_acct ?? report.account ?? '—'),
+          decision: String(result.report.decision ?? '—'),
+          pattern: String(result.report.pattern ?? '—'),
+          riskLevel: String(result.report.risk_level ?? '—'),
+          model: 'Gemma 4 31B',
+          status: 'Live session report',
+          summary: String(result.report.summary ?? ''),
+          evidence: Array.isArray(result.report.evidence) ? result.report.evidence.map(String) : [],
+          actions: Array.isArray(result.report.recommended_actions) ? result.report.recommended_actions.map(String) : [],
+          confidence: Number(result.report.confidence ?? 0),
+        });
+      }
     } catch (error) { setLiveError(error instanceof Error ? error.message : 'Live Gemma request failed'); }
     finally { setRunning(false); }
   };
