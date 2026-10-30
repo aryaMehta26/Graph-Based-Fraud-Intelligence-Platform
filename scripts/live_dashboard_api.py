@@ -177,6 +177,7 @@ def _load_gemma_backend():
 
 
 def _run_gemma(payload: dict) -> dict:
+    import inspect
     from src.aml.agent import AMLAgent
     from src.aml.schemas import InvestigationCase
 
@@ -185,14 +186,18 @@ def _run_gemma(payload: dict) -> dict:
     context = payload.get("context") if isinstance(payload.get("context"), dict) else payload
     case = InvestigationCase(case_id=case_id, context=context, ground_truth={}, split="live")
     trace_dir = Path(os.getenv("DATA298B_GEMMA_TRACE_DIR", str(ROOT / "artifacts/live_gemma_traces")))
-    trace = AMLAgent(backend, max_tool_calls=3, artifact_dir=str(trace_dir)).investigate(
-        case,
-        model_family="gemma",
-        variant="finetuned_live",
-        seed=42,
-        inference_config={"max_tokens": 700, "temperature": 0.0},
-        prefetch_tools=True,
-    )
+    agent = AMLAgent(backend, max_tool_calls=3, artifact_dir=str(trace_dir))
+    investigate_kwargs = {
+        "model_family": "gemma",
+        "variant": "finetuned_live",
+        "seed": 42,
+        "inference_config": {"max_tokens": 700, "temperature": 0.0},
+    }
+    # The live branch must work with both the older checked-in agent and the
+    # newer agent that supports controlled evidence prefetching.
+    if "prefetch_tools" in inspect.signature(agent.investigate).parameters:
+        investigate_kwargs["prefetch_tools"] = True
+    trace = agent.investigate(case, **investigate_kwargs)
     return {"report": trace.get("report", {}), "latency_seconds": trace.get("latency_seconds", 0), "case_id": case_id}
 
 
