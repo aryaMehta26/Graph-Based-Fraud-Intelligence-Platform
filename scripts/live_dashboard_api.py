@@ -158,15 +158,13 @@ def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
     return payload
 
 
-def _run_gemma(payload: dict) -> dict:
+def _load_gemma_backend():
     global _gemma_backend
     if not LIVE_GEMMA:
         raise RuntimeError("Live Gemma is disabled. Set DATA298B_LIVE_GEMMA=1 before starting the API.")
     if not ADAPTER_DIR or not Path(ADAPTER_DIR).exists():
         raise RuntimeError(f"Gemma adapter path is unavailable: {ADAPTER_DIR or '<empty>'}")
-    from src.aml.agent import AMLAgent
     from src.aml.backend import TransformersBackend
-    from src.aml.schemas import InvestigationCase
 
     if _gemma_backend is None:
         _gemma_backend = TransformersBackend(
@@ -175,11 +173,19 @@ def _run_gemma(payload: dict) -> dict:
             load_in_4bit=True,
             device_map="auto",
         )
+    return _gemma_backend
+
+
+def _run_gemma(payload: dict) -> dict:
+    from src.aml.agent import AMLAgent
+    from src.aml.schemas import InvestigationCase
+
+    backend = _load_gemma_backend()
     case_id = str(payload.get("case_id") or f"live_case_{int(time.time())}")
     context = payload.get("context") if isinstance(payload.get("context"), dict) else payload
     case = InvestigationCase(case_id=case_id, context=context, ground_truth={}, split="live")
     trace_dir = Path(os.getenv("DATA298B_GEMMA_TRACE_DIR", str(ROOT / "artifacts/live_gemma_traces")))
-    trace = AMLAgent(_gemma_backend, max_tool_calls=1, artifact_dir=str(trace_dir)).investigate(
+    trace = AMLAgent(backend, max_tool_calls=1, artifact_dir=str(trace_dir)).investigate(
         case,
         model_family="gemma",
         variant="finetuned_live",
@@ -215,6 +221,13 @@ class Handler(BaseHTTPRequestHandler):
                 "gemma_enabled": LIVE_GEMMA,
                 "gemma_loaded": _gemma_backend is not None,
             })
+            return
+        if parsed.path == "/api/live/warmup":
+            try:
+                _load_gemma_backend()
+                self._send({"status": "ready", "gemma_loaded": True})
+            except Exception as exc:
+                self._send({"error": str(exc), "gemma_loaded": False}, 500)
             return
         if parsed.path == "/api/live/predictions":
             try:
