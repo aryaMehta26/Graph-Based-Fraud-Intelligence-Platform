@@ -159,6 +159,61 @@ def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
     return payload
 
 
+def _build_live_case_context(context: dict) -> dict:
+    """Turn one replay alert into a bounded, point-in-time investigation case."""
+    transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
+    if not transactions:
+        return context
+    selected = transactions[0]
+    account_ids = {
+        str(account.get("account_id"))
+        for account in (context.get("accounts") or [])
+        if isinstance(account, dict) and account.get("account_id") is not None
+    }
+    for key in ("src_acct", "dst_acct"):
+        if selected.get(key) is not None:
+            account_ids.add(str(selected[key]))
+    cutoff = pd.to_datetime(selected.get("Timestamp"), errors="coerce")
+    candidates = []
+    for row in _rows:
+        row_src = str(row.get("src_acct"))
+        row_dst = str(row.get("dst_acct"))
+        row_time = pd.to_datetime(row.get("Timestamp"), errors="coerce")
+        if pd.notna(cutoff) and pd.notna(row_time) and row_time > cutoff:
+            continue
+        if row_src not in account_ids and row_dst not in account_ids:
+            continue
+        candidates.append({key: row.get(key) for key in DISPLAY_COLUMNS})
+    candidates = candidates[-24:]
+    selected_key = tuple(selected.get(key) for key in DISPLAY_COLUMNS)
+    case_transactions = [selected]
+    for row in candidates:
+        row_key = tuple(row.get(key) for key in DISPLAY_COLUMNS)
+        if row_key != selected_key:
+            case_transactions.append(row)
+    case_transactions = case_transactions[:25]
+    case_accounts = set(account_ids)
+    for row in case_transactions:
+        case_accounts.update({str(row.get("src_acct")), str(row.get("dst_acct"))})
+    enriched = dict(context)
+    enriched["transactions"] = case_transactions
+    enriched["accounts"] = [{"account_id": account_id} for account_id in sorted(case_accounts)]
+    graph_stats = dict(context.get("graph_stats") or {})
+    graph_stats.update({
+        "case_window_transactions": len(case_transactions),
+        "case_window_accounts": len(case_accounts),
+        "case_window_cutoff": _jsonable(selected.get("Timestamp")),
+        "case_window_source": "prior replay transactions involving selected accounts",
+    })
+    enriched["graph_stats"] = graph_stats
+    evidence = list(enriched.get("retrieved_evidence") or [])
+    evidence.append(
+        f"Case window contains {len(case_transactions)} transaction(s) and {len(case_accounts)} account(s) at or before the selected alert timestamp."
+    )
+    enriched["retrieved_evidence"] = evidence
+    return enriched
+
+
 def _load_gemma_backend():
     global _gemma_backend
     if not LIVE_GEMMA:
@@ -202,6 +257,8 @@ def _run_gemma(payload: dict) -> dict:
     backend = _load_gemma_backend()
     case_id = str(payload.get("case_id") or f"live_case_{int(time.time())}")
     context = payload.get("context") if isinstance(payload.get("context"), dict) else payload
+    _load_replay_rows()
+    context = _build_live_case_context(context)
     case = InvestigationCase(case_id=case_id, context=context, ground_truth={}, split="live")
     trace_dir = Path(os.getenv("DATA298B_GEMMA_TRACE_DIR", str(ROOT / "artifacts/live_gemma_traces")))
     agent = AMLAgent(backend, max_tool_calls=3, artifact_dir=str(trace_dir))
