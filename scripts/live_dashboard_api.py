@@ -47,6 +47,7 @@ DISPLAY_COLUMNS = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment 
 _lock = threading.Lock()
 _cursor = 0
 _rows: list[dict] = []
+_graph_cache: dict[str, dict] = {}
 _model = None
 _gemma_backend = None
 
@@ -114,6 +115,49 @@ def _next_predictions(limit: int) -> list[dict]:
         return result
 
 
+def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
+    """Return a bounded read-only neighborhood from the replay Parquet.
+
+    This keeps the React Network page on the same live API port. It uses only
+    transaction rows from the configured replay source and never reads labels.
+    """
+    account_id = str(account_id)
+    if account_id in _graph_cache:
+        return _graph_cache[account_id]
+    if not DATA_PATH.exists():
+        raise FileNotFoundError(f"Replay source not found: {DATA_PATH}")
+    columns = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment Format"]
+    edges: list[dict] = []
+    parquet = pq.ParquetFile(DATA_PATH)
+    for batch in parquet.iter_batches(batch_size=20000, columns=columns):
+        frame = batch.to_pandas()
+        matched = frame[(frame["src_acct"].astype(str) == account_id) | (frame["dst_acct"].astype(str) == account_id)]
+        for _, row in matched.head(max(1, min(limit, 200))).iterrows():
+            edges.append({
+                "src_acct": str(row["src_acct"]),
+                "dst_acct": str(row["dst_acct"]),
+                "timestamp": _jsonable(row["Timestamp"]),
+                "amount": _jsonable(row["Amount Paid"]),
+                "payment_format": _jsonable(row["Payment Format"]),
+            })
+        if len(edges) >= limit:
+            break
+    out_degree = sum(edge["src_acct"] == account_id for edge in edges)
+    in_degree = sum(edge["dst_acct"] == account_id for edge in edges)
+    account = {
+        "account_id": account_id,
+        "out_degree": out_degree,
+        "in_degree": in_degree,
+        "total_degree": out_degree + in_degree,
+        "degree_centrality": (out_degree + in_degree) / max(1758573 - 1, 1),
+        "community_id": "Unavailable",
+        "community_size": 0,
+    }
+    payload = {"account": account, "edges": edges, "source": "live replay Parquet"}
+    _graph_cache[account_id] = payload
+    return payload
+
+
 def _run_gemma(payload: dict) -> dict:
     global _gemma_backend
     if not LIVE_GEMMA:
@@ -176,6 +220,14 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 limit = int(parse_qs(parsed.query).get("limit", ["8"])[0])
                 self._send({"items": _next_predictions(limit)})
+            except Exception as exc:
+                self._send({"error": str(exc)}, 500)
+            return
+        if parsed.path.startswith("/api/graph/"):
+            try:
+                account_id = parsed.path.rsplit("/", 1)[-1]
+                limit = int(parse_qs(parsed.query).get("limit", ["100"])[0])
+                self._send(_graph_neighborhood(account_id, limit))
             except Exception as exc:
                 self._send({"error": str(exc)}, 500)
             return
