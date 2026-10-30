@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -176,6 +177,23 @@ def _load_gemma_backend():
     return _gemma_backend
 
 
+def _recover_report_from_raw_response(trace: dict) -> dict:
+    """Recover valid JSON when an older AMLAgent parser returns defaults."""
+    report = trace.get("report") or {}
+    raw = str(trace.get("raw_response") or "")
+    if not raw:
+        return report
+    try:
+        match = re.search(r"\{.*\}", raw, re.S)
+        parsed = json.loads(match.group(0)) if match else None
+    except (TypeError, ValueError, json.JSONDecodeError):
+        parsed = None
+    required = {"decision", "pattern", "risk_level", "confidence", "evidence", "recommended_actions", "summary"}
+    if isinstance(parsed, dict) and required.issubset(parsed):
+        return parsed
+    return report
+
+
 def _run_gemma(payload: dict) -> dict:
     import inspect
     from src.aml.agent import AMLAgent
@@ -198,7 +216,13 @@ def _run_gemma(payload: dict) -> dict:
     if "prefetch_tools" in inspect.signature(agent.investigate).parameters:
         investigate_kwargs["prefetch_tools"] = True
     trace = agent.investigate(case, **investigate_kwargs)
-    return {"report": trace.get("report", {}), "latency_seconds": trace.get("latency_seconds", 0), "case_id": case_id}
+    report = _recover_report_from_raw_response(trace)
+    return {
+        "report": report,
+        "latency_seconds": trace.get("latency_seconds", 0),
+        "case_id": case_id,
+        "report_source": "raw_model_json" if report != trace.get("report", {}) else "agent_parser",
+    }
 
 
 class Handler(BaseHTTPRequestHandler):
