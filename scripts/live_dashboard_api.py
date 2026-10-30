@@ -217,6 +217,21 @@ def _run_gemma(payload: dict) -> dict:
         investigate_kwargs["prefetch_tools"] = True
     trace = agent.investigate(case, **investigate_kwargs)
     report = _recover_report_from_raw_response(trace)
+    score = float(context.get("xgboost_score", context.get("fraud_probability", 0)) or 0)
+    graph = context.get("graph_stats") if isinstance(context.get("graph_stats"), dict) else {}
+    transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
+    accounts = context.get("accounts") if isinstance(context.get("accounts"), list) else []
+    pattern = str(report.get("pattern") or "EMERGING_UNKNOWN")
+    risk = str(report.get("risk_level") or "MEDIUM")
+    rationale = (
+        f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
+        "above the live review threshold of 0.300. "
+        f"Gemma classified the grounded case as {pattern} with {risk} risk "
+        f"using {len(transactions)} observed transaction(s), {len(accounts)} account(s), and the retrieved graph context. "
+        "The pattern is an investigation hypothesis that should be corroborated in the linked network view; "
+        "a small replay window is not, by itself, proof of coordinated fraud."
+    )
+    report["rationale"] = rationale
     return {
         "report": report,
         "latency_seconds": trace.get("latency_seconds", 0),
