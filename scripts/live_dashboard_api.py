@@ -233,12 +233,12 @@ def _load_gemma_backend():
     return _gemma_backend
 
 
-def _recover_report_from_raw_response(trace: dict) -> dict:
+def _recover_report_from_raw_response(trace: dict) -> tuple[dict, bool]:
     """Recover valid JSON when an older AMLAgent parser returns defaults."""
     report = trace.get("report") or {}
     raw = str(trace.get("raw_response") or "")
     if not raw:
-        return report
+        return report, False
     try:
         # Decode the first complete JSON object. Some older model/parser
         # combinations append repeated or malformed text after the valid
@@ -249,8 +249,8 @@ def _recover_report_from_raw_response(trace: dict) -> dict:
         parsed = None
     required = {"decision", "pattern", "risk_level", "confidence", "evidence", "recommended_actions", "summary"}
     if isinstance(parsed, dict) and required.issubset(parsed):
-        return parsed
-    return report
+        return parsed, True
+    return report, False
 
 
 def _run_gemma(payload: dict) -> dict:
@@ -277,12 +277,12 @@ def _run_gemma(payload: dict) -> dict:
     if "prefetch_tools" in inspect.signature(agent.investigate).parameters:
         investigate_kwargs["prefetch_tools"] = True
     trace = agent.investigate(case, **investigate_kwargs)
-    report = _recover_report_from_raw_response(trace)
+    report, recovered_from_raw = _recover_report_from_raw_response(trace)
     graph = context.get("graph_stats") if isinstance(context.get("graph_stats"), dict) else {}
     score = float(context.get("xgboost_score", context.get("fraud_probability", graph.get("xgboost_score", 0))) or 0)
     transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
     accounts = context.get("accounts") if isinstance(context.get("accounts"), list) else []
-    report_source = "raw_model_json" if report != trace.get("report", {}) else "agent_parser"
+    report_source = "raw_model_json" if recovered_from_raw else "agent_parser"
     report_is_valid = report_source == "raw_model_json"
     pattern = str(report.get("pattern") or "EMERGING_UNKNOWN")
     risk = str(report.get("risk_level") or "MEDIUM")
