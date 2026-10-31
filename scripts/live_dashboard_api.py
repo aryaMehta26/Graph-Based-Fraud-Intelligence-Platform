@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 import threading
 import time
@@ -241,8 +240,11 @@ def _recover_report_from_raw_response(trace: dict) -> dict:
     if not raw:
         return report
     try:
-        match = re.search(r"\{.*\}", raw, re.S)
-        parsed = json.loads(match.group(0)) if match else None
+        # Decode the first complete JSON object. Some older model/parser
+        # combinations append repeated or malformed text after the valid
+        # object; a greedy `{.*}` regex incorrectly rejects that response.
+        start = raw.find("{")
+        parsed, _ = json.JSONDecoder().raw_decode(raw[start:]) if start >= 0 else (None, 0)
     except (TypeError, ValueError, json.JSONDecodeError):
         parsed = None
     required = {"decision", "pattern", "risk_level", "confidence", "evidence", "recommended_actions", "summary"}
