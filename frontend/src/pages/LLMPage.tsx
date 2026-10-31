@@ -83,7 +83,15 @@ export default function LLMPage() {
   // Only a report recovered from the model's raw JSON is a valid fresh Gemma
   // result. Older AMLAgent parser fallbacks contain placeholder fields and
   // must not be presented as a real pattern, confidence, or narrative.
-  const validLiveReport = liveReport?.__report_source === 'raw_model_json';
+  const validLiveReport = liveReport?.__report_source === 'raw_model_json' || Boolean(
+    liveReport &&
+    typeof liveReport.decision === 'string' &&
+    typeof liveReport.pattern === 'string' &&
+    typeof liveReport.risk_level === 'string' &&
+    Number(liveReport.confidence) > 0 &&
+    Array.isArray(liveReport.evidence) && liveReport.evidence.length > 0 &&
+    typeof liveReport.summary === 'string' && liveReport.summary.trim().length > 0,
+  );
   const invalidLiveReport = Boolean(liveReport) && !validLiveReport;
   const liveScore = Number(context?.xgboost_score ?? context?.fraud_probability ?? 0);
   const current = validLiveReport ? { ...shown, decision: liveReport.decision, pattern: liveReport.pattern, riskLevel: liveReport.risk_level, confidence: liveReport.confidence, summary: liveReport.summary || 'No narrative Gemma summary was returned; use the evidence and network context for analyst review.', rationale: liveReport.rationale, rationalePoints: Array.isArray(liveReport.rationale_points) ? liveReport.rationale_points : [], evidence: Array.isArray(liveReport.evidence) && liveReport.evidence.length ? liveReport.evidence : shown.evidence, actions: Array.isArray(liveReport.recommended_actions) && liveReport.recommended_actions.length ? liveReport.recommended_actions : shown.actions } : invalidLiveReport ? { ...shown, pattern: 'PENDING INVESTIGATION', summary: 'Gemma did not return a valid structured report for this request. Use the XGBoost score, transaction window, and network evidence for analyst review.', rationale: 'The XGBoost alert is available, but Gemma did not return a valid structured response. No Gemma pattern or confidence is being asserted.', rationalePoints: [`XGBoost escalated the alert with a fraud score of ${liveScore.toFixed(3)}, above the 0.300 review threshold.`, 'Review the selected transaction together with its surrounding case window and linked account topology.', 'Gemma did not return a valid structured report, so its pattern, confidence, and narrative are unavailable.', 'This alert is an investigation starting point, not proof of fraud; corroborate it before disposition.'], evidence: shown.evidence, actions: ['Review transaction evidence', 'Open the network view', 'Retry the Gemma report'] } : shown;
