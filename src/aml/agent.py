@@ -44,6 +44,11 @@ class AMLAgent:
     def investigate(self, case: InvestigationCase, *, model_family: str, variant: str = "base", seed: int = 42, inference_config: Dict[str, Any] = None, prefetch_tools: bool = False) -> Dict[str, Any]:
         started = time.perf_counter(); trace_id = uuid.uuid4().hex
         system_prompt = AGENTIC_SYSTEM_PROMPT if prefetch_tools else SYSTEM_PROMPT
+        if variant == "finetuned_live":
+            system_prompt += """
+
+For this live response, keep the JSON compact: include no more than 5 evidence items and 3 recommended actions. Do not repeat provenance text or any evidence phrase. The summary must be one short sentence. Return the JSON immediately.
+"""
         context = case.agent_context()
         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": json.dumps(context, default=str)}]
         trace = {"trace_id": trace_id, "case_id": case.case_id, "model_family": model_family, "variant": variant, "seed": seed, "tool_budget": self.max_tool_calls, "tool_calls": [], "timestamp": datetime.now(timezone.utc).isoformat(), "inference_config": inference_config or {}, "context": case.agent_context(), "ground_truth": case.ground_truth}
