@@ -280,16 +280,26 @@ def _run_gemma(payload: dict) -> dict:
     score = float(context.get("xgboost_score", context.get("fraud_probability", graph.get("xgboost_score", 0))) or 0)
     transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
     accounts = context.get("accounts") if isinstance(context.get("accounts"), list) else []
+    report_source = "raw_model_json" if report != trace.get("report", {}) else "agent_parser"
+    report_is_valid = report_source == "raw_model_json"
     pattern = str(report.get("pattern") or "EMERGING_UNKNOWN")
     risk = str(report.get("risk_level") or "MEDIUM")
-    rationale = (
-        f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
-        "above the live review threshold of 0.300. "
-        f"Gemma classified the grounded case as {pattern} with {risk} risk "
-        f"using {len(transactions)} observed transaction(s), {len(accounts)} account(s), and the retrieved graph context. "
-        "The pattern is an investigation hypothesis that should be corroborated in the linked network view; "
-        "a small replay window is not, by itself, proof of coordinated fraud."
-    )
+    if report_is_valid:
+        rationale = (
+            f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
+            "above the live review threshold of 0.300. "
+            f"Gemma classified the grounded case as {pattern} with {risk} risk "
+            f"using {len(transactions)} observed transaction(s), {len(accounts)} account(s), and the retrieved graph context. "
+            "The pattern is an investigation hypothesis that should be corroborated in the linked network view; "
+            "a small replay window is not, by itself, proof of coordinated fraud."
+        )
+    else:
+        rationale = (
+            f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
+            "above the live review threshold of 0.300. Gemma did not return a valid structured report "
+            "for this request, so no Gemma pattern, confidence, or narrative is being asserted. "
+            "Review the transaction window and network evidence before making a disposition."
+        )
     report["rationale"] = rationale
     out_degree = int(graph.get("out_degree", 0) or 0)
     in_degree = int(graph.get("in_degree", 0) or 0)
@@ -318,17 +328,25 @@ def _run_gemma(payload: dict) -> dict:
             f"The selected account has {out_degree} outgoing and {in_degree} incoming connections; "
             f"the available topology is not sufficient to confirm Gemma's {pattern} prediction."
         )
-    report["rationale_points"] = [
-        f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
-        structural_reason,
-        f"Gemma classified the grounded case as {pattern} with {risk} risk using {len(transactions)} transaction(s) across {len(accounts)} account(s).",
-        "This is an investigation hypothesis, not proof of fraud; corroborate it in the network view and transaction history.",
-    ]
+    if report_is_valid:
+        rationale_points = [
+            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
+            structural_reason,
+            f"Gemma classified the grounded case as {pattern} with {risk} risk using {len(transactions)} transaction(s) across {len(accounts)} account(s).",
+            "This is an investigation hypothesis, not proof of fraud; corroborate it in the network view and transaction history.",
+        ]
+    else:
+        rationale_points = [
+            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
+            structural_reason.replace(f"Gemma's {pattern} prediction", "a specific Gemma pattern prediction"),
+            f"The grounded live window contains {len(transactions)} transaction(s) across {len(accounts)} account(s); inspect the linked network and transaction history.",
+            "Gemma did not return a valid structured report for this request, so its pattern and confidence are unavailable.",
+        ]
     return {
         "report": report,
         "latency_seconds": trace.get("latency_seconds", 0),
         "case_id": case_id,
-        "report_source": "raw_model_json" if report != trace.get("report", {}) else "agent_parser",
+        "report_source": report_source,
     }
 
 
