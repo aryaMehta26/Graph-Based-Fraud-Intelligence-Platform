@@ -1,0 +1,143 @@
+{
+  "v2_leakfree": {
+    "f1_optimal_on_val": {
+      "alerts": 2859,
+      "txn_recall": 0.4851528384279476,
+      "attempt_recall": 0.8976215098241985,
+      "by_typology": {
+        "BIPARTITE": 0.8767123287671232,
+        "CYCLE": 0.8484848484848485,
+        "FAN-IN": 0.8548387096774194,
+        "FAN-OUT": 0.926605504587156,
+        "GATHER-SCATTER": 0.9096045197740112,
+        "RANDOM": 0.8703703703703703,
+        "SCATTER-GATHER": 0.9495798319327731,
+        "STACK": 0.936
+      }
+    },
+    "precision_20pct_on_val": {
+      "alerts": 24379,
+      "txn_recall": 0.6772925764192139,
+      "attempt_recall": 0.9968976215098242,
+      "by_typology": {
+        "BIPARTITE": 1.0,
+        "CYCLE": 1.0,
+        "FAN-IN": 0.9919354838709677,
+        "FAN-OUT": 0.9908256880733946,
+        "GATHER-SCATTER": 1.0,
+        "RANDOM": 1.0,
+        "SCATTER-GATHER": 0.9915966386554622,
+        "STACK": 1.0
+      }
+    },
+    "budget_1000_per_day_on_val": {
+      "alerts": 1946,
+      "txn_recall": 0.3930131004366812,
+      "attempt_recall": 0.7983453981385729,
+      "by_typology": {
+        "BIPARTITE": 0.684931506849315,
+        "CYCLE": 0.7121212121212122,
+        "FAN-IN": 0.782258064516129,
+        "FAN-OUT": 0.8256880733944955,
+        "GATHER-SCATTER": 0.8757062146892656,
+        "RANDOM": 0.7037037037037037,
+        "SCATTER-GATHER": 0.8739495798319328,
+        "STACK": 0.848
+      }
+    }
+  },
+  "v2_graph": {
+    "f1_optimal_on_val": {
+      "alerts": 2886,
+      "txn_recall": 0.52882096069869,
+      "attempt_recall": 0.9348500517063082,
+      "by_typology": {
+        "BIPARTITE": 0.9315068493150684,
+        "CYCLE": 0.8787878787878788,
+        "FAN-IN": 0.9032258064516129,
+        "FAN-OUT": 0.9541284403669725,
+        "GATHER-SCATTER": 0.9548022598870056,
+        "RANDOM": 0.9351851851851852,
+        "SCATTER-GATHER": 0.9663865546218487,
+        "STACK": 0.952
+      }
+    },
+    "precision_20pct_on_val": {
+      "alerts": 22441,
+      "txn_recall": 0.6825327510917031,
+      "attempt_recall": 0.9948293691830403,
+      "by_typology": {
+        "BIPARTITE": 0.9863013698630136,
+        "CYCLE": 0.9924242424242424,
+        "FAN-IN": 0.9919354838709677,
+        "FAN-OUT": 1.0,
+        "GATHER-SCATTER": 0.9943502824858758,
+        "RANDOM": 1.0,
+        "SCATTER-GATHER": 0.9915966386554622,
+        "STACK": 1.0
+      }
+    },
+    "budget_1000_per_day_on_val": {
+      "alerts": 1964,
+      "txn_recall": 0.40829694323144106,
+      "attempt_recall": 0.8252326783867632,
+      "by_typology": {
+        "BIPARTITE": 0.821917808219178,
+        "CYCLE": 0.7651515151515151,
+        "FAN-IN": 0.7661290322580645,
+        "FAN-OUT": 0.8623853211009175,
+        "GATHER-SCATTER": 0.8813559322033898,
+        "RANDOM": 0.7314814814814815,
+        "SCATTER-GATHER": 0.865546218487395,
+        "STACK": 0.88
+      }
+    }
+  },
+  "gnn": {
+    "f1_optimal_on_val": {
+      "alerts": 2100,
+      "txn_recall": 0.301528384279476,
+      "attempt_recall": 0.6494312306101344,
+      "by_typology": {
+        "BIPARTITE": 0.589041095890411,
+        "CYCLE": 0.5757575757575758,
+        "FAN-IN": 0.5645161290322581,
+        "FAN-OUT": 0.6513761467889908,
+        "GATHER-SCATTER": 0.6892655367231638,
+        "RANDOM": 0.6203703703703703,
+        "SCATTER-GATHER": 0.7647058823529411,
+        "STACK": 0.704
+      }
+    },
+    "precision_20pct_on_val": {
+      "alerts": 11207,
+      "txn_recall": 0.5185589519650655,
+      "attempt_recall": 0.8810754912099276,
+      "by_typology": {
+        "BIPARTITE": 0.8904109589041096,
+        "CYCLE": 0.8712121212121212,
+        "FAN-IN": 0.8225806451612904,
+        "FAN-OUT": 0.8623853211009175,
+        "GATHER-SCATTER": 0.9096045197740112,
+        "RANDOM": 0.8703703703703703,
+        "SCATTER-GATHER": 0.8991596638655462,
+        "STACK": 0.912
+      }
+    },
+    "budget_1000_per_day_on_val": {
+      "alerts": 1375,
+      "txn_recall": 0.2318777292576419,
+      "attempt_recall": 0.5284384694932782,
+      "by_typology": {
+        "BIPARTITE": 0.4657534246575342,
+        "CYCLE": 0.4393939393939394,
+        "FAN-IN": 0.4596774193548387,
+        "FAN-OUT": 0.5321100917431193,
+        "GATHER-SCATTER": 0.5649717514124294,
+        "RANDOM": 0.5185185185185185,
+        "SCATTER-GATHER": 0.7142857142857143,
+        "STACK": 0.504
+      }
+    }
+  }
+}

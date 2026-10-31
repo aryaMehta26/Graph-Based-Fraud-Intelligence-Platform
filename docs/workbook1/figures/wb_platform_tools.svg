@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="246pt" viewBox="0 0 470 246" role="img" aria-label="Platforms and tools: XGBoost, Leiden and Neo4j run on the local workstation; the four LLMs are fine-tuned and run on Google Colab GPUs with adapters and traces on Google Drive and base checkpoints from Hugging Face; all code is versioned on GitHub.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .gt { font-size: 8.5px; font-weight: bold; font-style: italic; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .grp { fill: none; stroke: #000; stroke-width: 0.6; stroke-dasharray: 3 2; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .bi { marker-start: url(#ah); }
+    .ln { fill: none; stroke: #000; stroke-width: 0.6; stroke-dasharray: 2 2; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="246" fill="#fff"/>
+
+  <!-- Source -->
+  <rect class="box" x="10" y="40" width="56" height="44"/>
+  <text class="t" x="38" y="54" text-anchor="middle">IBM AML</text>
+  <text class="s" x="38" y="65" text-anchor="middle">Kaggle</text>
+  <text class="s" x="38" y="75" text-anchor="middle">kagglehub API</text>
+  <line class="ar" x1="66" y1="58" x2="85" y2="58"/>
+
+  <!-- Local workstation -->
+  <rect class="grp" x="76" y="24" width="202" height="182" rx="3"/>
+  <text class="gt" x="177" y="18" text-anchor="middle">Local workstation (macOS, 24 GB RAM)</text>
+  <rect class="box" x="86" y="34" width="182" height="48"/>
+  <text class="t" x="177" y="48" text-anchor="middle">Python 3.11 environment</text>
+  <text class="s" x="177" y="59" text-anchor="middle">pandas, PyArrow: preprocessing</text>
+  <text class="s" x="177" y="68.5" text-anchor="middle">igraph, leidenalg: Leiden communities (M3)</text>
+  <text class="s" x="177" y="78" text-anchor="middle">XGBoost, SHAP: detection (M1, M4)</text>
+
+  <rect class="box" x="86" y="100" width="182" height="48"/>
+  <text class="t" x="177" y="114" text-anchor="middle">Docker Compose services</text>
+  <text class="s" x="177" y="125" text-anchor="middle">Neo4j 5.26 + GDS, APOC: graph, degree (M2)</text>
+  <text class="s" x="177" y="134.5" text-anchor="middle">Airflow 3.2: pipeline orchestration</text>
+  <text class="s" x="177" y="144" text-anchor="middle">QA Neo4j instance: demo graph</text>
+
+  <rect class="box" x="86" y="166" width="182" height="32"/>
+  <text class="t" x="177" y="180" text-anchor="middle">Analyst interfaces</text>
+  <text class="s" x="177" y="191" text-anchor="middle">React dashboard · Streamlit dashboard</text>
+
+  <line class="ar" x1="150" y1="82" x2="150" y2="99"/>
+  <text class="el" x="146" y="94" text-anchor="end">load graph</text>
+  <line class="ar" x1="205" y1="100" x2="205" y2="83"/>
+  <text class="el" x="209" y="94">degree features</text>
+  <line class="ar" x1="177" y1="148" x2="177" y2="165"/>
+  <text class="el" x="181" y="160">graph API</text>
+
+  <!-- Colab -->
+  <rect class="grp" x="288" y="24" width="88" height="182" rx="3"/>
+  <text class="gt" x="332" y="18" text-anchor="middle">Google Colab (GPU)</text>
+  <rect class="box shade" x="294" y="34" width="76" height="78"/>
+  <text class="t" x="332" y="48" text-anchor="middle">Fine-tuning</text>
+  <text class="s" x="332" y="59" text-anchor="middle">Transformers</text>
+  <text class="s" x="332" y="68.5" text-anchor="middle">PEFT, TRL</text>
+  <text class="s" x="332" y="78" text-anchor="middle">bitsandbytes</text>
+  <text class="s" x="332" y="87.5" text-anchor="middle">4-bit QLoRA</text>
+  <text class="s" x="332" y="97" text-anchor="middle">(M5 to M8)</text>
+
+  <rect class="box" x="294" y="128" width="76" height="48"/>
+  <text class="t" x="332" y="142" text-anchor="middle">Inference</text>
+  <text class="s" x="332" y="153" text-anchor="middle">40 GB GPU runtime</text>
+  <text class="s" x="332" y="162.5" text-anchor="middle">JSON reports,</text>
+  <text class="s" x="332" y="172" text-anchor="middle">traces</text>
+  <line class="ar" x1="332" y1="112" x2="332" y2="127"/>
+
+  <!-- Cloud services -->
+  <rect class="grp" x="386" y="24" width="78" height="182" rx="3"/>
+  <text class="gt" x="425" y="18" text-anchor="middle">Cloud services</text>
+  <rect class="box" x="392" y="34" width="66" height="78"/>
+  <text class="t" x="425" y="48" text-anchor="middle">Google Drive</text>
+  <text class="s" x="425" y="59" text-anchor="middle">SFT corpus</text>
+  <text class="s" x="425" y="68.5" text-anchor="middle">LoRA adapters</text>
+  <text class="s" x="425" y="78" text-anchor="middle">held-out cases</text>
+  <text class="s" x="425" y="87.5" text-anchor="middle">traces, metrics</text>
+
+  <rect class="box" x="392" y="128" width="66" height="48"/>
+  <text class="t" x="425" y="142" text-anchor="middle">Hugging Face</text>
+  <text class="s" x="425" y="153" text-anchor="middle">base model</text>
+  <text class="s" x="425" y="162.5" text-anchor="middle">checkpoints</text>
+
+  <line class="ar bi" x1="371" y1="66" x2="391" y2="66"/>
+  <path class="ar" d="M370 136 H381 V100 H391"/>
+  <line class="ar" x1="392" y1="156" x2="371" y2="156"/>
+  <path class="ar" d="M268 44 H282 V29 H425 V33"/>
+
+  <!-- GitHub -->
+  <rect class="box" x="8" y="216" width="456" height="26"/>
+  <text class="t" x="236" y="227" text-anchor="middle">GitHub repository</text>
+  <text class="s" x="236" y="237" text-anchor="middle">source code, Docker and Airflow configuration, notebooks, frozen metrics and dashboard snapshot</text>
+  <line class="ln" x1="177" y1="206" x2="177" y2="216"/>
+  <line class="ln" x1="332" y1="206" x2="332" y2="216"/>
+  <line class="ln" x1="425" y1="206" x2="425" y2="216"/>
+</svg>

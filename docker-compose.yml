@@ -21,6 +21,25 @@ services:
       - neo4j_logs:/logs
       - ./data/neo4j_import:/var/lib/neo4j/import
 
+  # Small, disposable instance for the demo QA sync (fraud_lakehouse_neo4j_sync.py).
+  # Community edition supports only one database, so the "fraudgraph" QA graph
+  # lives here instead of next to the full graph. Wiping it never touches fraud-neo4j.
+  neo4j-qa:
+    image: neo4j:5.26.0-community
+    container_name: fraud-neo4j-qa
+    restart: unless-stopped
+    ports:
+      - "7475:7474"   # Browser UI
+      - "7688:7687"   # Bolt protocol
+    environment:
+      - NEO4J_AUTH=neo4j/fraud2026
+      - NEO4J_server_memory_heap_initial__size=256M
+      - NEO4J_server_memory_heap_max__size=512M
+      - NEO4J_server_memory_pagecache_size=256M
+    volumes:
+      - neo4j_qa_data:/data
+
 volumes:
   neo4j_data:
   neo4j_logs:
+  neo4j_qa_data:

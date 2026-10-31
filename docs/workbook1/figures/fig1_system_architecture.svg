@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="294pt" viewBox="0 0 470 294" role="img" aria-label="Fig. 1. Four-layer framework: data preparation feeds a knowledge graph, graph analytics and XGBoost detection; flagged transactions are investigated by a fine-tuned LLM that retrieves graph evidence and emits a structured report.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .gt { font-size: 8.5px; font-weight: bold; font-style: italic; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .grp { fill: none; stroke: #000; stroke-width: 0.6; stroke-dasharray: 3 2; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .dash { stroke-dasharray: 2.5 2; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="294" fill="#fff"/>
+
+  <!-- Stage groups -->
+  <rect class="grp" x="6" y="22" width="458" height="66" rx="3"/>
+  <text class="gt" x="456" y="33" text-anchor="end">I. Data preparation</text>
+  <rect class="grp" x="6" y="106" width="458" height="72" rx="3"/>
+  <text class="gt" x="456" y="117" text-anchor="end">II. Detection and graph intelligence</text>
+  <rect class="grp" x="6" y="200" width="458" height="86" rx="3"/>
+  <text class="gt" x="456" y="211" text-anchor="end">III. Investigation</text>
+
+  <!-- Stage I -->
+  <rect class="box" x="14" y="38" width="96" height="44"/>
+  <text class="t" x="62" y="52" text-anchor="middle">IBM AML dataset</text>
+  <text class="s" x="62" y="63" text-anchor="middle">HI-Medium, 31.9M txns</text>
+  <text class="s" x="62" y="73" text-anchor="middle">0.11% laundering</text>
+
+  <rect class="box" x="130" y="38" width="96" height="44"/>
+  <text class="t" x="178" y="52" text-anchor="middle">Preprocessing</text>
+  <text class="s" x="178" y="63" text-anchor="middle">schema and null checks</text>
+  <text class="s" x="178" y="73" text-anchor="middle">feature engineering</text>
+
+  <rect class="box" x="246" y="38" width="94" height="44"/>
+  <text class="t" x="293" y="52" text-anchor="middle">Time-aware split</text>
+  <text class="s" x="293" y="63" text-anchor="middle">70 / 15 / 15 %</text>
+  <text class="s" x="293" y="73" text-anchor="middle">chronological order</text>
+
+  <line class="ar" x1="110" y1="60" x2="129" y2="60"/>
+  <line class="ar" x1="226" y1="60" x2="245" y2="60"/>
+
+  <!-- Stage I -> II -->
+  <path class="ar" d="M178 82 V97 H55 V121"/>
+  <text class="el" x="116" y="95" text-anchor="middle">graph construction</text>
+  <line class="ar" x1="293" y1="82" x2="293" y2="121"/>
+  <text class="el" x="297" y="101">tabular features</text>
+
+  <!-- Stage II -->
+  <path class="box" d="M14 127 V163 A41 5 0 0 0 96 163 V127"/>
+  <ellipse class="box" cx="55" cy="127" rx="41" ry="5"/>
+  <text class="t" x="55" y="146" text-anchor="middle">Knowledge graph</text>
+  <text class="s" x="55" y="157" text-anchor="middle">Neo4j, 1.76M accounts</text>
+
+  <rect class="box" x="112" y="122" width="118" height="46"/>
+  <text class="t" x="171" y="139" text-anchor="middle">Graph analytics</text>
+  <text class="s" x="171" y="150" text-anchor="middle">degree centrality (L2)</text>
+  <text class="s" x="171" y="160" text-anchor="middle">Leiden communities (L3)</text>
+
+  <rect class="box" x="246" y="122" width="94" height="46"/>
+  <text class="t" x="293" y="139" text-anchor="middle">Feature vector</text>
+  <text class="s" x="293" y="150" text-anchor="middle">11 tabular + 8 degree</text>
+  <text class="s" x="293" y="160" text-anchor="middle">+ 4 community = 23</text>
+
+  <rect class="box" x="360" y="122" width="96" height="46"/>
+  <text class="t" x="408" y="139" text-anchor="middle">XGBoost classifier</text>
+  <text class="s" x="408" y="150" text-anchor="middle">detection (L1)</text>
+  <text class="s" x="408" y="160" text-anchor="middle">risk score p(fraud)</text>
+
+  <line class="ar" x1="96" y1="145" x2="111" y2="145"/>
+  <line class="ar" x1="230" y1="145" x2="245" y2="145"/>
+  <line class="ar" x1="340" y1="145" x2="359" y2="145"/>
+
+  <!-- Stage II -> III -->
+  <line class="ar" x1="374" y1="168" x2="374" y2="215"/>
+  <text class="el" x="370" y="192" text-anchor="end">p ≥ τ (flagged)</text>
+  <path class="ar dash" d="M310 216 V189 H55 V169"/>
+  <text class="el" x="182" y="186" text-anchor="middle">lookups against graph and features</text>
+
+  <!-- Stage III (flows right to left) -->
+  <rect class="box" x="364" y="216" width="88" height="64"/>
+  <text class="t" x="408" y="231" text-anchor="middle">Case construction</text>
+  <text class="s" x="408" y="242" text-anchor="middle">flagged transaction</text>
+  <text class="s" x="408" y="252" text-anchor="middle">+ account context</text>
+  <text class="s" x="408" y="262" text-anchor="middle">labels withheld</text>
+
+  <rect class="box" x="272" y="216" width="76" height="64"/>
+  <text class="t" x="310" y="231" text-anchor="middle">Evidence retrieval</text>
+  <text class="s" x="310" y="242" text-anchor="middle">transaction,</text>
+  <text class="s" x="310" y="252" text-anchor="middle">graph and</text>
+  <text class="s" x="310" y="262" text-anchor="middle">community lookups</text>
+
+  <rect class="box shade" x="180" y="216" width="76" height="64"/>
+  <text class="t" x="218" y="231" text-anchor="middle">Fine-tuned LLM</text>
+  <text class="s" x="218" y="242" text-anchor="middle">investigator (L4)</text>
+  <text class="s" x="218" y="252" text-anchor="middle">QLoRA adapters</text>
+  <text class="s" x="218" y="262" text-anchor="middle">4 candidates</text>
+
+  <rect class="box" x="96" y="216" width="68" height="64"/>
+  <text class="t" x="130" y="231" text-anchor="middle">Guardrails</text>
+  <text class="s" x="130" y="242" text-anchor="middle">rule-based</text>
+  <text class="s" x="130" y="252" text-anchor="middle">consistency</text>
+  <text class="s" x="130" y="262" text-anchor="middle">checks</text>
+
+  <rect class="box" x="14" y="216" width="66" height="64"/>
+  <text class="t" x="47" y="231" text-anchor="middle">JSON report</text>
+  <text class="s" x="47" y="242" text-anchor="middle">decision, pattern,</text>
+  <text class="s" x="47" y="252" text-anchor="middle">risk, confidence,</text>
+  <text class="s" x="47" y="262" text-anchor="middle">evidence, actions</text>
+
+  <line class="ar" x1="364" y1="248" x2="349" y2="248"/>
+  <line class="ar" x1="272" y1="248" x2="257" y2="248"/>
+  <line class="ar" x1="180" y1="248" x2="165" y2="248"/>
+  <line class="ar" x1="96" y1="248" x2="81" y2="248"/>
+</svg>

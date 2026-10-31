@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="300pt" viewBox="0 0 470 300" role="img" aria-label="Fig. 4. LLM investigator methodology: four base LLMs are fine-tuned with QLoRA on a grounded SFT corpus; held-out cases are stripped of labels, enriched by deterministic retrieval and passed to each fine-tuned investigator; reports pass through guardrails and are scored against ground truth that bypasses the model, leading to model selection.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .gt { font-size: 8.5px; font-weight: bold; font-style: italic; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .grp { fill: none; stroke: #000; stroke-width: 0.6; stroke-dasharray: 3 2; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .dash { stroke-dasharray: 2.5 2; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="300" fill="#fff"/>
+
+  <!-- Column groups -->
+  <rect class="grp" x="6" y="22" width="138" height="270" rx="3"/>
+  <text class="gt" x="75" y="16" text-anchor="middle">(a) Fine-tuning</text>
+  <rect class="grp" x="154" y="22" width="172" height="270" rx="3"/>
+  <text class="gt" x="240" y="16" text-anchor="middle">(b) Investigation</text>
+  <rect class="grp" x="336" y="22" width="128" height="270" rx="3"/>
+  <text class="gt" x="400" y="16" text-anchor="middle">(c) Evaluation</text>
+
+  <!-- (a) -->
+  <rect class="box" x="16" y="32" width="118" height="40"/>
+  <text class="t" x="75" y="46" text-anchor="middle">SFT corpus</text>
+  <text class="s" x="75" y="57" text-anchor="middle">grounded case → report</text>
+  <text class="s" x="75" y="66.5" text-anchor="middle">pairs, JSON schema</text>
+
+  <line class="ar" x1="75" y1="72" x2="75" y2="91"/>
+
+  <rect class="box" x="16" y="92" width="118" height="60"/>
+  <text class="t" x="75" y="106" text-anchor="middle">Base LLMs</text>
+  <text class="s" x="75" y="117" text-anchor="middle">Ministral-3 14B</text>
+  <text class="s" x="75" y="126.5" text-anchor="middle">Phi-4 14B</text>
+  <text class="s" x="75" y="136" text-anchor="middle">Qwen3.5 27B</text>
+  <text class="s" x="75" y="145.5" text-anchor="middle">Gemma-4 31B</text>
+
+  <line class="ar" x1="75" y1="152" x2="75" y2="177"/>
+  <text class="el" x="79" y="168">QLoRA</text>
+
+  <rect class="box" x="16" y="178" width="118" height="34"/>
+  <text class="t" x="75" y="192" text-anchor="middle">LoRA adapters</text>
+  <text class="s" x="75" y="203" text-anchor="middle">one per base model</text>
+
+  <!-- (a) -> (b) -->
+  <line class="ar" x1="134" y1="195" x2="163" y2="195"/>
+
+  <!-- (b) -->
+  <rect class="box" x="164" y="32" width="152" height="40"/>
+  <text class="t" x="240" y="46" text-anchor="middle">Held-out cases</text>
+  <text class="s" x="240" y="57" text-anchor="middle">50 benchmark (40 suspicious, 10 legitimate)</text>
+  <text class="s" x="240" y="66.5" text-anchor="middle">+ 10 unseen validation cases</text>
+
+  <line class="ar" x1="240" y1="72" x2="240" y2="89"/>
+  <text class="el" x="244" y="83">strip labels</text>
+
+  <rect class="box" x="164" y="90" width="152" height="28"/>
+  <text class="t" x="240" y="103" text-anchor="middle">Model-visible context</text>
+  <text class="s" x="240" y="113" text-anchor="middle">labels and provenance removed</text>
+
+  <line class="ar" x1="240" y1="118" x2="240" y2="133"/>
+
+  <rect class="box" x="164" y="134" width="152" height="28"/>
+  <text class="t" x="240" y="147" text-anchor="middle">Deterministic retrieval</text>
+  <text class="s" x="240" y="157" text-anchor="middle">transaction · graph · community</text>
+
+  <line class="ar" x1="240" y1="162" x2="240" y2="177"/>
+
+  <rect class="box shade" x="164" y="178" width="152" height="34"/>
+  <text class="t" x="240" y="192" text-anchor="middle">Fine-tuned investigator</text>
+  <text class="s" x="240" y="203" text-anchor="middle">one model loaded at a time</text>
+
+  <line class="ar" x1="240" y1="212" x2="240" y2="227"/>
+
+  <rect class="box" x="164" y="228" width="152" height="54"/>
+  <text class="t" x="240" y="242" text-anchor="middle">Structured JSON report</text>
+  <text class="s" x="240" y="253" text-anchor="middle">decision, pattern, risk level,</text>
+  <text class="s" x="240" y="262.5" text-anchor="middle">confidence, evidence,</text>
+  <text class="s" x="240" y="272" text-anchor="middle">recommended actions</text>
+
+  <!-- (b) -> (c) -->
+  <line class="ar" x1="316" y1="260" x2="343" y2="260"/>
+  <path class="ar dash" d="M316 52 H455 V184 H445"/>
+  <text class="el" x="390" y="48" text-anchor="middle">ground truth (evaluator only)</text>
+
+  <!-- (c), flows upward -->
+  <rect class="box" x="344" y="90" width="100" height="40"/>
+  <text class="t" x="394" y="104" text-anchor="middle">Model selection</text>
+  <text class="s" x="394" y="115" text-anchor="middle">binary F1, specificity,</text>
+  <text class="s" x="394" y="124.5" text-anchor="middle">unseen validation</text>
+
+  <rect class="box" x="344" y="146" width="100" height="76"/>
+  <text class="t" x="394" y="160" text-anchor="middle">Metrics</text>
+  <text class="s" x="394" y="171" text-anchor="middle">schema validity</text>
+  <text class="s" x="394" y="180.5" text-anchor="middle">binary F1, specificity</text>
+  <text class="s" x="394" y="190" text-anchor="middle">pattern macro-F1</text>
+  <text class="s" x="394" y="199.5" text-anchor="middle">evidence support,</text>
+  <text class="s" x="394" y="209" text-anchor="middle">unsupported claims, latency</text>
+
+  <rect class="box" x="344" y="238" width="100" height="44"/>
+  <text class="t" x="394" y="252" text-anchor="middle">Post-hoc guardrails</text>
+  <text class="s" x="394" y="263" text-anchor="middle">topology and score</text>
+  <text class="s" x="394" y="272.5" text-anchor="middle">consistency rules</text>
+
+  <line class="ar" x1="394" y1="238" x2="394" y2="223"/>
+  <line class="ar" x1="394" y1="146" x2="394" y2="131"/>
+</svg>

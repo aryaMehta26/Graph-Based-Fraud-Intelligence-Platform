@@ -1,0 +1,377 @@
+{
+  "sweep": {
+    "1": {
+      "val_pr_auc": 0.5705302767561787,
+      "best_iteration": 478
+    },
+    "10": {
+      "val_pr_auc": 0.6117704661435046,
+      "best_iteration": 360
+    },
+    "50": {
+      "val_pr_auc": 0.5954425908238047,
+      "best_iteration": 329
+    },
+    "904": {
+      "val_pr_auc": 0.5207626382872723,
+      "best_iteration": 77
+    }
+  },
+  "best_scale_pos_weight": 10,
+  "v2_leakfree": {
+    "val_pr_auc": 0.6139721863363856,
+    "pr_auc": 0.5627118220968284,
+    "roc_auc": 0.9854393264058087,
+    "thresholds_chosen_on_val": {
+      "default_0.30": 0.3,
+      "f1_optimal_on_val": 0.7733604311943054,
+      "precision_20pct_on_val": 0.22798912227153778,
+      "budget_1000_per_day_on_val": 0.8991274237632751
+    },
+    "test_at_thresholds": {
+      "default_0.30": {
+        "threshold": 0.3,
+        "alerts": 15472,
+        "tp": 2961,
+        "fp": 12511,
+        "fn": 1619,
+        "tn": 4766597,
+        "precision": 0.19137797311271976,
+        "recall": 0.6465065502183406,
+        "f1": 0.29533213644524237,
+        "accuracy": 0.9970462120439293
+      },
+      "f1_optimal_on_val": {
+        "threshold": 0.7733604311943054,
+        "alerts": 2859,
+        "tp": 2222,
+        "fp": 637,
+        "fn": 2358,
+        "tn": 4778471,
+        "precision": 0.7771948233648128,
+        "recall": 0.4851528384279476,
+        "f1": 0.5973921225971232,
+        "accuracy": 0.9993739140178038
+      },
+      "precision_20pct_on_val": {
+        "threshold": 0.22798912227153778,
+        "alerts": 24379,
+        "tp": 3102,
+        "fp": 21277,
+        "fn": 1478,
+        "tn": 4757831,
+        "precision": 0.12724065794331188,
+        "recall": 0.6772925764192139,
+        "f1": 0.21423391691702065,
+        "accuracy": 0.9952432098414445
+      },
+      "budget_1000_per_day_on_val": {
+        "threshold": 0.8991274237632751,
+        "alerts": 1946,
+        "tp": 1800,
+        "fp": 146,
+        "fn": 2780,
+        "tn": 4778962,
+        "precision": 0.9249743062692704,
+        "recall": 0.3930131004366812,
+        "f1": 0.5516395954642966,
+        "accuracy": 0.9993883380354237
+      }
+    },
+    "test_top_k": {
+      "500": {
+        "alerts": 500,
+        "tp": 495,
+        "precision": 0.99,
+        "recall": 0.10807860262008734
+      },
+      "1000": {
+        "alerts": 1000,
+        "tp": 979,
+        "precision": 0.979,
+        "recall": 0.21375545851528385
+      },
+      "2000": {
+        "alerts": 2000,
+        "tp": 1838,
+        "precision": 0.919,
+        "recall": 0.4013100436681223
+      },
+      "5000": {
+        "alerts": 5000,
+        "tp": 2608,
+        "precision": 0.5216,
+        "recall": 0.5694323144104804
+      },
+      "10000": {
+        "alerts": 10000,
+        "tp": 2828,
+        "precision": 0.2828,
+        "recall": 0.617467248908297
+      },
+      "50000": {
+        "alerts": 50000,
+        "tp": 3392,
+        "precision": 0.06784,
+        "recall": 0.7406113537117904
+      }
+    },
+    "features": [
+      "log_amount",
+      "is_ACH",
+      "is_Cheque",
+      "is_CC",
+      "is_Wire",
+      "is_Bitcoin",
+      "hour",
+      "dow",
+      "is_weekend",
+      "is_cross_currency",
+      "amount_bucket",
+      "src_out_cnt_1h",
+      "dst_in_cnt_1h",
+      "src_out_cnt_1d",
+      "dst_in_cnt_1d",
+      "src_out_cnt_7d",
+      "src_out_amt_dev_7d",
+      "dst_in_cnt_7d",
+      "src_out_total",
+      "src_out_gap",
+      "dst_in_total",
+      "dst_in_gap",
+      "src_in_cnt_1d",
+      "src_in_cnt_7d",
+      "src_in_amt_dev_7d",
+      "src_in_total",
+      "src_in_gap",
+      "dst_out_cnt_1d",
+      "dst_out_total",
+      "pair_prior_cnt",
+      "rev_pair_prior_cnt",
+      "src_distinct_out_total",
+      "src_distinct_out_new_7d",
+      "dst_distinct_in_total",
+      "dst_distinct_in_new_7d",
+      "cyc3_cnt",
+      "cyc4_cnt",
+      "gather_cnt",
+      "scatter_cnt",
+      "src_age_min",
+      "dst_age_min",
+      "amt_round_100",
+      "amt_round_1000",
+      "amt_whole",
+      "amt_paid_recv_logratio",
+      "src_same_amt_7d",
+      "dst_same_amt_7d",
+      "same_bank",
+      "from_bank_out_1h",
+      "to_bank_in_1h",
+      "dst_distinct_out_total",
+      "src_distinct_in_total"
+    ],
+    "best_iteration": 610,
+    "scale_pos_weight": 10,
+    "top_gain_features": {
+      "is_ACH": 16824.849609375,
+      "cyc3_cnt": 1989.8685302734375,
+      "src_same_amt_7d": 1885.845947265625,
+      "pair_prior_cnt": 1338.460205078125,
+      "src_distinct_out_total": 1250.5682373046875,
+      "is_CC": 1044.2030029296875,
+      "is_cross_currency": 875.437255859375,
+      "amount_bucket": 763.5372314453125,
+      "scatter_cnt": 692.6350708007812,
+      "same_bank": 574.5260620117188,
+      "src_age_min": 571.5982055664062,
+      "dst_same_amt_7d": 547.2989501953125,
+      "src_out_total": 519.7425537109375,
+      "dst_in_gap": 422.9643249511719,
+      "dst_age_min": 397.7381286621094
+    }
+  },
+  "v2_graph": {
+    "val_pr_auc": 0.6388991875203881,
+    "pr_auc": 0.5932565533947042,
+    "roc_auc": 0.9849926119985636,
+    "thresholds_chosen_on_val": {
+      "default_0.30": 0.3,
+      "f1_optimal_on_val": 0.749339759349823,
+      "precision_20pct_on_val": 0.19107601046562195,
+      "budget_1000_per_day_on_val": 0.9189230799674988
+    },
+    "test_at_thresholds": {
+      "default_0.30": {
+        "threshold": 0.3,
+        "alerts": 10960,
+        "tp": 2900,
+        "fp": 8060,
+        "fn": 1680,
+        "tn": 4771048,
+        "precision": 0.2645985401459854,
+        "recall": 0.6331877729257642,
+        "f1": 0.3732303732303732,
+        "accuracy": 0.9979639140345273
+      },
+      "f1_optimal_on_val": {
+        "threshold": 0.749339759349823,
+        "alerts": 2886,
+        "tp": 2422,
+        "fp": 464,
+        "fn": 2158,
+        "tn": 4778644,
+        "precision": 0.8392238392238393,
+        "recall": 0.52882096069869,
+        "f1": 0.6488079292794,
+        "accuracy": 0.9994518873304447
+      },
+      "precision_20pct_on_val": {
+        "threshold": 0.19107601046562195,
+        "alerts": 22441,
+        "tp": 3126,
+        "fp": 19315,
+        "fn": 1454,
+        "tn": 4759793,
+        "precision": 0.13929860523149593,
+        "recall": 0.6825327510917031,
+        "f1": 0.23137559675807706,
+        "accuracy": 0.9956583706964166
+      },
+      "budget_1000_per_day_on_val": {
+        "threshold": 0.9189230799674988,
+        "alerts": 1964,
+        "tp": 1870,
+        "fp": 94,
+        "fn": 2710,
+        "tn": 4779014,
+        "precision": 0.9521384928716904,
+        "recall": 0.40829694323144106,
+        "f1": 0.5715158924205379,
+        "accuracy": 0.9994138413709255
+      }
+    },
+    "test_top_k": {
+      "500": {
+        "alerts": 500,
+        "tp": 497,
+        "precision": 0.994,
+        "recall": 0.10851528384279475
+      },
+      "1000": {
+        "alerts": 1000,
+        "tp": 983,
+        "precision": 0.983,
+        "recall": 0.21462882096069869
+      },
+      "2000": {
+        "alerts": 2000,
+        "tp": 1902,
+        "precision": 0.951,
+        "recall": 0.4152838427947598
+      },
+      "5000": {
+        "alerts": 5000,
+        "tp": 2701,
+        "precision": 0.5402,
+        "recall": 0.5897379912663755
+      },
+      "10000": {
+        "alerts": 10000,
+        "tp": 2870,
+        "precision": 0.287,
+        "recall": 0.6266375545851528
+      },
+      "50000": {
+        "alerts": 50000,
+        "tp": 3419,
+        "precision": 0.06838,
+        "recall": 0.7465065502183406
+      }
+    },
+    "features": [
+      "log_amount",
+      "is_ACH",
+      "is_Cheque",
+      "is_CC",
+      "is_Wire",
+      "is_Bitcoin",
+      "hour",
+      "dow",
+      "is_weekend",
+      "is_cross_currency",
+      "amount_bucket",
+      "src_out_cnt_1h",
+      "dst_in_cnt_1h",
+      "src_out_cnt_1d",
+      "dst_in_cnt_1d",
+      "src_out_cnt_7d",
+      "src_out_amt_dev_7d",
+      "dst_in_cnt_7d",
+      "src_out_total",
+      "src_out_gap",
+      "dst_in_total",
+      "dst_in_gap",
+      "src_in_cnt_1d",
+      "src_in_cnt_7d",
+      "src_in_amt_dev_7d",
+      "src_in_total",
+      "src_in_gap",
+      "dst_out_cnt_1d",
+      "dst_out_total",
+      "pair_prior_cnt",
+      "rev_pair_prior_cnt",
+      "src_distinct_out_total",
+      "src_distinct_out_new_7d",
+      "dst_distinct_in_total",
+      "dst_distinct_in_new_7d",
+      "cyc3_cnt",
+      "cyc4_cnt",
+      "gather_cnt",
+      "scatter_cnt",
+      "src_age_min",
+      "dst_age_min",
+      "amt_round_100",
+      "amt_round_1000",
+      "amt_whole",
+      "amt_paid_recv_logratio",
+      "src_same_amt_7d",
+      "dst_same_amt_7d",
+      "same_bank",
+      "from_bank_out_1h",
+      "to_bank_in_1h",
+      "dst_distinct_out_total",
+      "src_distinct_in_total",
+      "src_out_degree",
+      "src_in_degree",
+      "src_total_degree",
+      "src_degree_centrality",
+      "dst_out_degree",
+      "dst_in_degree",
+      "dst_total_degree",
+      "dst_degree_centrality",
+      "src_community_size",
+      "src_community_fraud_rate",
+      "dst_community_size",
+      "dst_community_fraud_rate"
+    ],
+    "best_iteration": 853,
+    "scale_pos_weight": 10,
+    "top_gain_features": {
+      "is_ACH": 15706.4453125,
+      "cyc3_cnt": 1653.7149658203125,
+      "pair_prior_cnt": 1350.1844482421875,
+      "src_same_amt_7d": 1343.83984375,
+      "src_total_degree": 925.0839233398438,
+      "src_degree_centrality": 873.04296875,
+      "amount_bucket": 862.7584228515625,
+      "is_CC": 823.5113525390625,
+      "is_cross_currency": 775.2628173828125,
+      "scatter_cnt": 701.4869995117188,
+      "src_age_min": 591.47509765625,
+      "same_bank": 557.0287475585938,
+      "src_out_total": 516.2908325195312,
+      "dst_same_amt_7d": 505.88458251953125,
+      "src_distinct_out_total": 471.7325134277344
+    }
+  }
+}

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="296pt" viewBox="0 0 470 296" role="img" aria-label="Use case diagram: the AML analyst reviews flagged transactions, explores account networks, investigates cases with LLM reports, compares models and views reports; the compliance officer views reports; the data and ML engineer ingests data, refreshes the graph, trains models and runs the pipeline.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 9px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .u { font-size: 8px; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .uc { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .ai { fill: #e3e3e3; stroke: #000; stroke-width: 0.8; }
+    .bound { fill: none; stroke: #000; stroke-width: 0.9; }
+    .as { stroke: #000; stroke-width: 0.6; fill: none; }
+    .fig { stroke: #000; stroke-width: 0.9; fill: none; }
+    .inc { fill: none; stroke: #000; stroke-width: 0.7; stroke-dasharray: 3 2; marker-end: url(#oa); }
+  </style>
+  <defs>
+    <marker id="oa" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#000" stroke-width="1"/></marker>
+  </defs>
+  <rect width="470" height="296" fill="#fff"/>
+
+  <!-- System boundary -->
+  <rect class="bound" x="96" y="18" width="278" height="270" rx="4"/>
+  <text class="t" x="235" y="32" text-anchor="middle">Graph-Based Fraud Intelligence Platform</text>
+
+  <!-- Analyst use cases (AI-assisted shaded) -->
+  <ellipse class="ai" cx="170" cy="64" rx="64" ry="14"/><text class="u" x="170" y="67" text-anchor="middle">Review flagged transactions</text>
+  <ellipse class="uc" cx="170" cy="108" rx="64" ry="14"/><text class="u" x="170" y="111" text-anchor="middle">Explore account network</text>
+  <ellipse class="ai" cx="170" cy="152" rx="64" ry="14"/><text class="u" x="170" y="155" text-anchor="middle">Investigate case (LLM report)</text>
+  <ellipse class="uc" cx="170" cy="196" rx="64" ry="14"/><text class="u" x="170" y="199" text-anchor="middle">Compare detection / LLM models</text>
+  <ellipse class="uc" cx="170" cy="240" rx="64" ry="14"/><text class="u" x="170" y="243" text-anchor="middle">View and export reports</text>
+  <path class="inc" d="M170 138 V123"/>
+  <text class="el" x="175" y="133">«include»</text>
+
+  <!-- Engineer use cases -->
+  <ellipse class="uc" cx="306" cy="86" rx="62" ry="14"/><text class="u" x="306" y="89" text-anchor="middle">Ingest and preprocess data</text>
+  <ellipse class="uc" cx="306" cy="130" rx="62" ry="14"/><text class="u" x="306" y="133" text-anchor="middle">Load and refresh graph</text>
+  <ellipse class="ai" cx="306" cy="174" rx="62" ry="14"/><text class="u" x="306" y="177" text-anchor="middle">Train and evaluate models</text>
+  <ellipse class="uc" cx="306" cy="218" rx="62" ry="14"/><text class="u" x="306" y="221" text-anchor="middle">Run orchestrated pipeline</text>
+
+  <!-- Actor: AML analyst -->
+  <circle class="fig" cx="46" cy="114" r="6"/>
+  <line class="fig" x1="46" y1="120" x2="46" y2="140"/>
+  <line class="fig" x1="34" y1="127" x2="58" y2="127"/>
+  <line class="fig" x1="46" y1="140" x2="37" y2="154"/>
+  <line class="fig" x1="46" y1="140" x2="55" y2="154"/>
+  <text class="u" x="46" y="166" text-anchor="middle">AML analyst</text>
+  <text class="s" x="46" y="175" text-anchor="middle">(primary)</text>
+  <line class="as" x1="58" y1="127" x2="106" y2="64"/>
+  <line class="as" x1="58" y1="127" x2="106" y2="108"/>
+  <line class="as" x1="58" y1="127" x2="106" y2="152"/>
+  <line class="as" x1="58" y1="127" x2="106" y2="196"/>
+  <line class="as" x1="58" y1="127" x2="107" y2="236"/>
+
+  <!-- Actor: compliance officer -->
+  <circle class="fig" cx="46" cy="222" r="6"/>
+  <line class="fig" x1="46" y1="228" x2="46" y2="248"/>
+  <line class="fig" x1="34" y1="235" x2="58" y2="235"/>
+  <line class="fig" x1="46" y1="248" x2="37" y2="262"/>
+  <line class="fig" x1="46" y1="248" x2="55" y2="262"/>
+  <text class="u" x="46" y="274" text-anchor="middle">Compliance</text>
+  <text class="u" x="46" y="283" text-anchor="middle">officer</text>
+  <line class="as" x1="58" y1="238" x2="106" y2="242"/>
+
+  <!-- Actor: data / ML engineer -->
+  <circle class="fig" cx="424" cy="134" r="6"/>
+  <line class="fig" x1="424" y1="140" x2="424" y2="160"/>
+  <line class="fig" x1="412" y1="147" x2="436" y2="147"/>
+  <line class="fig" x1="424" y1="160" x2="415" y2="174"/>
+  <line class="fig" x1="424" y1="160" x2="433" y2="174"/>
+  <text class="u" x="424" y="186" text-anchor="middle">Data / ML</text>
+  <text class="u" x="424" y="195" text-anchor="middle">engineer</text>
+  <line class="as" x1="412" y1="147" x2="368" y2="86"/>
+  <line class="as" x1="412" y1="147" x2="368" y2="130"/>
+  <line class="as" x1="412" y1="147" x2="368" y2="174"/>
+  <line class="as" x1="412" y1="147" x2="368" y2="218"/>
+
+  <!-- Legend -->
+  <ellipse class="ai" cx="118" cy="275" rx="12" ry="5"/>
+  <text class="s" x="134" y="278">AI-powered use case</text>
+</svg>

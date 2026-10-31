@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="236pt" viewBox="0 0 470 236" role="img" aria-label="Fig. 2. Data pipeline: raw IBM AML files are cleaned and feature-engineered, then exported as a graph without self-loops into Neo4j and split chronologically into 70/15/15 train, validation and test sets.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .seg { stroke: #000; stroke-width: 0.6; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="236" fill="#fff"/>
+
+  <!-- Row 1: processing chain -->
+  <rect class="box" x="10" y="22" width="98" height="60"/>
+  <text class="t" x="59" y="36" text-anchor="middle">Raw IBM AML files</text>
+  <text class="s" x="59" y="47" text-anchor="middle">31,898,238 transactions</text>
+  <text class="s" x="59" y="56.5" text-anchor="middle">1.76M accounts</text>
+  <text class="s" x="59" y="66" text-anchor="middle">2,756 laundering attempts</text>
+  <text class="s" x="59" y="75.5" text-anchor="middle">(8 pattern types)</text>
+
+  <rect class="box" x="124" y="22" width="98" height="60"/>
+  <text class="t" x="173" y="36" text-anchor="middle">Schema cleaning</text>
+  <text class="s" x="173" y="47" text-anchor="middle">type casting</text>
+  <text class="s" x="173" y="56.5" text-anchor="middle">null validation</text>
+  <text class="s" x="173" y="66" text-anchor="middle">timestamp parsing</text>
+  <text class="s" x="173" y="75.5" text-anchor="middle">sorted by time</text>
+
+  <rect class="box" x="238" y="22" width="98" height="60"/>
+  <text class="t" x="287" y="36" text-anchor="middle">Feature engineering</text>
+  <text class="s" x="287" y="47" text-anchor="middle">log amount, amount bucket</text>
+  <text class="s" x="287" y="56.5" text-anchor="middle">hour, weekday, weekend</text>
+  <text class="s" x="287" y="66" text-anchor="middle">5 payment-format flags</text>
+  <text class="s" x="287" y="75.5" text-anchor="middle">cross-currency flag</text>
+
+  <rect class="box" x="352" y="22" width="108" height="60"/>
+  <text class="t" x="406" y="36" text-anchor="middle">Chronological split</text>
+  <text class="s" x="406" y="47" text-anchor="middle">ordered by timestamp</text>
+  <text class="s" x="406" y="56.5" text-anchor="middle">train 70%</text>
+  <text class="s" x="406" y="66" text-anchor="middle">validation 15%</text>
+  <text class="s" x="406" y="75.5" text-anchor="middle">test 15%</text>
+
+  <line class="ar" x1="108" y1="52" x2="123" y2="52"/>
+  <line class="ar" x1="222" y1="52" x2="237" y2="52"/>
+  <line class="ar" x1="336" y1="52" x2="351" y2="52"/>
+
+  <!-- Row 2: graph branch -->
+  <line class="ar" x1="287" y1="82" x2="287" y2="103"/>
+  <text class="el" x="291" y="96">graph rows</text>
+
+  <rect class="box" x="110" y="104" width="190" height="62"/>
+  <text class="t" x="205" y="118" text-anchor="middle">Graph export (ontology shattering)</text>
+  <text class="s" x="205" y="129" text-anchor="middle">self-loops removed: 29,336,378 transactions</text>
+  <text class="s" x="205" y="138.5" text-anchor="middle">1,758,573 Account nodes</text>
+  <text class="s" x="205" y="148" text-anchor="middle">29,336,378 Transaction nodes</text>
+  <text class="s" x="205" y="157.5" text-anchor="middle">SENT and RECEIVED_BY edges (29.3M each)</text>
+
+  <line class="ar" x1="300" y1="135" x2="315" y2="135"/>
+  <path class="box" d="M316 113 V157 A40 5 0 0 0 396 157 V113"/>
+  <ellipse class="box" cx="356" cy="113" rx="40" ry="5"/>
+  <text class="t" x="356" y="134" text-anchor="middle">Neo4j</text>
+  <text class="s" x="356" y="144" text-anchor="middle">knowledge graph</text>
+  <text class="s" x="356" y="153" text-anchor="middle">bulk LOAD CSV</text>
+
+  <!-- Row 3: chronological split bar -->
+  <line class="ar" x1="430" y1="82" x2="430" y2="187"/>
+  <text class="el" x="426" y="172" text-anchor="end">tabular splits</text>
+
+  <rect class="seg" x="20" y="188" width="301" height="26" fill="#d9d9d9"/>
+  <rect class="seg" x="321" y="188" width="64.5" height="26" fill="#efefef"/>
+  <rect class="seg" x="385.5" y="188" width="64.5" height="26" fill="#ffffff"/>
+  <text class="t" x="170.5" y="199" text-anchor="middle">Train (70%)</text>
+  <text class="s" x="170.5" y="209" text-anchor="middle">22,328,766 transactions</text>
+  <text class="t" x="353.25" y="199" text-anchor="middle">Val (15%)</text>
+  <text class="s" x="353.25" y="209" text-anchor="middle">4,784,736</text>
+  <text class="t" x="417.75" y="199" text-anchor="middle">Test (15%)</text>
+  <text class="s" x="417.75" y="209" text-anchor="middle">4,784,736</text>
+
+  <line class="ar" x1="20" y1="221" x2="450" y2="221"/>
+  <text class="el" x="235" y="231" text-anchor="middle">transaction timestamp (September 2022)</text>
+</svg>

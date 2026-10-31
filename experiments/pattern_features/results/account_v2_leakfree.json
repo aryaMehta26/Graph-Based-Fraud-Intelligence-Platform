@@ -1,0 +1,96 @@
+{
+  "stage1": "v2_leakfree",
+  "features": [
+    "out_n",
+    "out_max",
+    "out_mean",
+    "out_top3",
+    "out_n_above_0.5",
+    "out_n_above_0.9",
+    "out_n_above_0.99",
+    "in_n",
+    "in_max",
+    "in_mean",
+    "in_top3",
+    "in_n_above_0.5",
+    "in_n_above_0.9",
+    "in_n_above_0.99",
+    "max_any",
+    "nb_max",
+    "nb_mean",
+    "nb_n_above_0.9"
+  ],
+  "test_accounts": 1443365,
+  "test_laundering_accounts": 6760,
+  "val_oof_pr_auc": 0.6233142403254982,
+  "test_pr_auc": 0.5249296266176116,
+  "test_pr_auc_max_score_baseline": 0.5499659127847566,
+  "operating_points": {
+    "f1_optimal": {
+      "threshold": 0.28581997752189636,
+      "alerts": 8202,
+      "tp": 3443,
+      "fp": 4759,
+      "fn": 3317,
+      "tn": 1431846,
+      "precision": 0.41977566447208,
+      "recall": 0.5093195266272189,
+      "f1": 0.4602325892260393,
+      "accuracy": 0.994404741697353,
+      "laundering_txns_reached": 0.7478165938864629
+    },
+    "precision_50pct": {
+      "threshold": 0.09470028430223465,
+      "alerts": 21704,
+      "tp": 3956,
+      "fp": 17748,
+      "fn": 2804,
+      "tn": 1418857,
+      "precision": 0.18227054920751934,
+      "recall": 0.585207100591716,
+      "f1": 0.27796514896008995,
+      "accuracy": 0.985761051431897,
+      "laundering_txns_reached": 0.8082969432314411
+    },
+    "precision_20pct": {
+      "threshold": 0.04306097328662872,
+      "alerts": 60366,
+      "tp": 4953,
+      "fp": 55413,
+      "fn": 1807,
+      "tn": 1381192,
+      "precision": 0.08204949806182288,
+      "recall": 0.7326923076923076,
+      "f1": 0.14757322051068142,
+      "accuracy": 0.9603565279745595,
+      "laundering_txns_reached": 0.9534934497816594
+    }
+  },
+  "top_k_accounts": {
+    "500": {
+      "precision": 1.0,
+      "recall": 0.07396449704142012,
+      "laundering_txns_reached": 0.2408296943231441
+    },
+    "1000": {
+      "precision": 0.999,
+      "recall": 0.1477810650887574,
+      "laundering_txns_reached": 0.3471615720524017
+    },
+    "2000": {
+      "precision": 0.9865,
+      "recall": 0.29186390532544376,
+      "laundering_txns_reached": 0.5786026200873362
+    },
+    "5000": {
+      "precision": 0.6388,
+      "recall": 0.4724852071005917,
+      "laundering_txns_reached": 0.7240174672489083
+    },
+    "10000": {
+      "precision": 0.3539,
+      "recall": 0.5235207100591716,
+      "laundering_txns_reached": 0.7563318777292577
+    }
+  }
+}

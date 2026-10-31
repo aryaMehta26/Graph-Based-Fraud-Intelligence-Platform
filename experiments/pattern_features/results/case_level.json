@@ -1,0 +1,264 @@
+{
+  "pattern": {
+    "f1_optimal_on_val": {
+      "threshold": 0.9939278364181519,
+      "alerts": 2625,
+      "txn_recall": 0.36724890829694323,
+      "account_recall": 0.3969759857693448,
+      "accounts": 3373,
+      "attempt_recall": 0.7631851085832472,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.7945205479452054,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.7121212121212122,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.7096774193548387,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.7706422018348624,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.7740112994350282,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.6666666666666666,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.8319327731092437,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.848,
+          "n": 125
+        }
+      }
+    },
+    "precision_20pct_on_val": {
+      "threshold": 0.9746767282485962,
+      "alerts": 11343,
+      "txn_recall": 0.6104803493449782,
+      "account_recall": 0.6821820337978061,
+      "accounts": 3373,
+      "attempt_recall": 0.9658738366080661,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.9315068493150684,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.9545454545454546,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.9435483870967742,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.963302752293578,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.9887005649717514,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.9814814814814815,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.9663865546218487,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.976,
+          "n": 125
+        }
+      }
+    },
+    "budget_1000_per_day_on_val": {
+      "threshold": 0.9964338541030884,
+      "alerts": 1518,
+      "txn_recall": 0.264410480349345,
+      "account_recall": 0.28876371182923216,
+      "accounts": 3373,
+      "attempt_recall": 0.6142709410548087,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.589041095890411,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.5227272727272727,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.5241935483870968,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.6146788990825688,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.655367231638418,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.5370370370370371,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.7394957983193278,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.704,
+          "n": 125
+        }
+      }
+    }
+  },
+  "pattern_graph": {
+    "f1_optimal_on_val": {
+      "threshold": 0.992701530456543,
+      "alerts": 2448,
+      "txn_recall": 0.40611353711790393,
+      "account_recall": 0.43670323154461904,
+      "accounts": 3373,
+      "attempt_recall": 0.8014477766287487,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.7397260273972602,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.7575757575757576,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.7419354838709677,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.8256880733944955,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.847457627118644,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.7777777777777778,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.8235294117647058,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.856,
+          "n": 125
+        }
+      }
+    },
+    "precision_20pct_on_val": {
+      "threshold": 0.965941846370697,
+      "alerts": 11742,
+      "txn_recall": 0.6323144104803493,
+      "account_recall": 0.7070856804032019,
+      "accounts": 3373,
+      "attempt_recall": 0.9751809720785936,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.9452054794520548,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.9545454545454546,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.9838709677419355,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.981651376146789,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.9887005649717514,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.9814814814814815,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.9663865546218487,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.984,
+          "n": 125
+        }
+      }
+    },
+    "budget_1000_per_day_on_val": {
+      "threshold": 0.9960458874702454,
+      "alerts": 1499,
+      "txn_recall": 0.29323144104803495,
+      "account_recall": 0.31544619033501337,
+      "accounts": 3373,
+      "attempt_recall": 0.6732161323681489,
+      "attempts": 967,
+      "attempt_recall_by_typology": {
+        "BIPARTITE": {
+          "recall": 0.6027397260273972,
+          "n": 73
+        },
+        "CYCLE": {
+          "recall": 0.6287878787878788,
+          "n": 132
+        },
+        "FAN-IN": {
+          "recall": 0.5564516129032258,
+          "n": 124
+        },
+        "FAN-OUT": {
+          "recall": 0.6972477064220184,
+          "n": 109
+        },
+        "GATHER-SCATTER": {
+          "recall": 0.7288135593220338,
+          "n": 177
+        },
+        "RANDOM": {
+          "recall": 0.6296296296296297,
+          "n": 108
+        },
+        "SCATTER-GATHER": {
+          "recall": 0.6974789915966386,
+          "n": 119
+        },
+        "STACK": {
+          "recall": 0.792,
+          "n": 125
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+% Thesis figures — upload the four PDFs to figures/ in Overleaf, then \input{figures.tex} or paste blocks.
+% All figures are drawn at 470 pt (6.5 in) wide with 7.5–8.5 pt Times; width=\linewidth keeps text near 8 pt.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig1_system_architecture.pdf}
+  \caption{Overview of the proposed four-layer framework. Stage~I prepares the IBM AML HI-Medium data and splits it chronologically. Stage~II builds a transaction knowledge graph, derives degree (L2) and Leiden community (L3) features, and scores each transaction with XGBoost (L1). Stage~III, read right to left, turns each flagged transaction into a label-isolated case, retrieves graph evidence, and generates a structured report with a QLoRA fine-tuned LLM investigator (L4), followed by rule-based guardrails.}
+  \label{fig:architecture}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig2_data_pipeline.pdf}
+  \caption{Data preparation pipeline. Self-loop transactions are removed only for the graph export (29,336,378 of 31,898,238 transactions). The tabular data is split by timestamp into 70/15/15 training, validation and test sets to prevent temporal leakage.}
+  \label{fig:pipeline}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig3_graph_ontology_features.pdf}
+  \caption{(a) Graph schema: each transaction is a node linking a sender and a receiver account; $\dagger$~used only as an evaluation label and to compute community fraud rates. (b) Each transaction $t=(s\rightarrow d)$ is represented by a 23-dimensional vector concatenating ($\oplus$) tabular, degree and community features of both endpoint accounts. Graph structure is computed on the full graph (transductive setting); community fraud rates use training-split labels only.}
+  \label{fig:graph-features}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig4_llm_investigator_evaluation.pdf}
+  \caption{LLM investigator methodology. (a)~Four open-weight LLMs are fine-tuned with QLoRA on a grounded SFT corpus. (b)~Held-out cases are stripped of labels and provenance, enriched by deterministic retrieval, and passed to each fine-tuned investigator, which returns a structured JSON report. (c)~Reports pass through post-hoc guardrails and are scored against ground truth that bypasses the model (dashed); the selected model is then checked on 10 unseen validation cases.}
+  \label{fig:llm-method}
+\end{figure}

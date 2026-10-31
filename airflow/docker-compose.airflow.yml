@@ -19,6 +19,7 @@ services:
       PROJ_ROOT: /opt/project
       PYTHONPATH: /opt/project
       NEO4J_URI: neo4j://host.docker.internal:7687
+      NEO4J_QA_URI: neo4j://host.docker.internal:7688
       SKIP_HEAVY_STAGES: "1"
     extra_hosts:
       - "host.docker.internal:host-gateway"

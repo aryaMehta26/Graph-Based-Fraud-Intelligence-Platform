@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="262pt" viewBox="0 0 470 262" role="img" aria-label="Planned cloud deployment design: analysts reach a static React dashboard and a TLS load balancer with single sign-on; inside private subnets, container services for the graph API and Streamlit, managed Airflow, a managed Neo4j graph, an object-storage data lake and a GPU inference service for the fine-tuned investigator.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .gt { font-size: 8.5px; font-weight: bold; font-style: italic; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .grp { fill: none; stroke: #000; stroke-width: 0.6; stroke-dasharray: 3 2; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .fig { stroke: #000; stroke-width: 0.9; fill: none; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="262" fill="#fff"/>
+  <text class="gt" x="235" y="12" text-anchor="middle">Planned cloud deployment (design, not yet deployed)</text>
+
+  <!-- Analyst -->
+  <circle class="fig" cx="36" cy="80" r="6"/>
+  <line class="fig" x1="36" y1="86" x2="36" y2="104"/>
+  <line class="fig" x1="25" y1="92" x2="47" y2="92"/>
+  <line class="fig" x1="36" y1="104" x2="28" y2="117"/>
+  <line class="fig" x1="36" y1="104" x2="44" y2="117"/>
+  <text class="s" x="36" y="128" text-anchor="middle">AML analyst</text>
+
+  <!-- Edge -->
+  <rect class="box" x="72" y="30" width="104" height="42"/>
+  <text class="t" x="124" y="45" text-anchor="middle">Static web hosting</text>
+  <text class="s" x="124" y="56" text-anchor="middle">React dashboard</text>
+  <text class="s" x="124" y="65" text-anchor="middle">object storage + CDN</text>
+  <rect class="box" x="72" y="96" width="104" height="42"/>
+  <text class="t" x="124" y="111" text-anchor="middle">Load balancer</text>
+  <text class="s" x="124" y="122" text-anchor="middle">TLS, single sign-on,</text>
+  <text class="s" x="124" y="131" text-anchor="middle">role-based access</text>
+  <line class="ar" x1="48" y1="88" x2="71" y2="56"/>
+  <line class="ar" x1="48" y1="96" x2="71" y2="114"/>
+  <text class="el" x="57" y="64" text-anchor="end">HTTPS</text>
+  <line class="ar" x1="124" y1="72" x2="124" y2="95"/>
+  <text class="el" x="128" y="87">API calls</text>
+
+  <!-- VPC -->
+  <rect class="grp" x="190" y="22" width="272" height="182" rx="3"/>
+  <text class="gt" x="456" y="34" text-anchor="end">Virtual private network, private subnets</text>
+  <rect class="box" x="200" y="40" width="96" height="40"/>
+  <text class="t" x="248" y="55" text-anchor="middle">Graph API</text>
+  <text class="s" x="248" y="66" text-anchor="middle">container service</text>
+  <rect class="box" x="200" y="94" width="96" height="40"/>
+  <text class="t" x="248" y="109" text-anchor="middle">Streamlit + scoring</text>
+  <text class="s" x="248" y="120" text-anchor="middle">container service</text>
+  <rect class="box" x="200" y="148" width="96" height="44"/>
+  <text class="t" x="248" y="163" text-anchor="middle">Orchestration</text>
+  <text class="s" x="248" y="174" text-anchor="middle">managed Airflow</text>
+  <text class="s" x="248" y="183" text-anchor="middle">scheduled DAGs</text>
+
+  <path class="box" d="M316 46 V82 A65 5 0 0 0 446 82 V46"/>
+  <ellipse class="box" cx="381" cy="46" rx="65" ry="5"/>
+  <text class="t" x="381" y="64" text-anchor="middle">Managed Neo4j graph</text>
+  <text class="s" x="381" y="75" text-anchor="middle">private endpoint, TLS</text>
+  <rect class="box" x="316" y="98" width="130" height="36"/>
+  <text class="t" x="381" y="112" text-anchor="middle">Object-storage data lake</text>
+  <text class="s" x="381" y="123" text-anchor="middle">parquet, models, report JSON</text>
+  <rect class="box shade" x="316" y="148" width="130" height="44"/>
+  <text class="t" x="381" y="163" text-anchor="middle">GPU inference service</text>
+  <text class="s" x="381" y="174" text-anchor="middle">Gemma-4 31B + LoRA adapter</text>
+  <text class="s" x="381" y="183" text-anchor="middle">GPU with at least 40 GB memory</text>
+
+  <path class="ar" d="M176 108 H186 V60 H199"/>
+  <line class="ar" x1="176" y1="120" x2="199" y2="114"/>
+  <line class="ar" x1="296" y1="60" x2="315" y2="62"/>
+  <text class="el" x="306" y="54" text-anchor="middle">Bolt</text>
+  <line class="ar" x1="296" y1="114" x2="315" y2="116"/>
+  <path class="ar" d="M296 162 H306 V128 H315"/>
+  <line class="ar" x1="296" y1="178" x2="315" y2="174"/>
+  <text class="el" x="304" y="198" text-anchor="middle">batch jobs</text>
+
+  <!-- Cross-cutting -->
+  <rect class="box" x="8" y="214" width="454" height="42"/>
+  <text class="t" x="235" y="227" text-anchor="middle">Cross-cutting services</text>
+  <text class="s" x="235" y="238" text-anchor="middle">secrets manager for database and model credentials · least-privilege IAM roles · encrypted storage</text>
+  <text class="s" x="235" y="248" text-anchor="middle">centralised logs, metrics and alarms · budget alerts · infrastructure defined in code from the existing Docker images</text>
+</svg>

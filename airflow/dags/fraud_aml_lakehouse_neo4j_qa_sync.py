@@ -121,10 +121,18 @@ def emit_post_sync_airflow_metrics() -> None:
     ):
         pq_rows(rel)
 
-    uri = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
-    user = os.getenv("NEO4J_USER", "neo4j")
-    password = os.getenv("NEO4J_PASSWORD", "")
-    db = os.getenv("NEO4J_DATABASE", "fraudgraph")
+    # Same target resolution as fraud_lakehouse_neo4j_sync.py: prefer the separate QA instance.
+    qa_uri = os.getenv("NEO4J_QA_URI", "")
+    if qa_uri:
+        uri = qa_uri
+        user = os.getenv("NEO4J_QA_USER", os.getenv("NEO4J_USER", "neo4j"))
+        password = os.getenv("NEO4J_QA_PASSWORD", os.getenv("NEO4J_PASSWORD", ""))
+        db = "neo4j"
+    else:
+        uri = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
+        user = os.getenv("NEO4J_USER", "neo4j")
+        password = os.getenv("NEO4J_PASSWORD", "")
+        db = os.getenv("NEO4J_DATABASE", "fraudgraph")
     try:
         from neo4j import GraphDatabase
 

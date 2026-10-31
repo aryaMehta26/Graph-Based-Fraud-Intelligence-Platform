@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="226pt" viewBox="0 0 470 226" role="img" aria-label="Data management zones: raw Kaggle files become a curated parquet lake, then the Neo4j graph and the feature store, then model and LLM artifacts, and finally serving data for the dashboards.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .gt { font-size: 8.5px; font-weight: bold; font-style: italic; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .sep { stroke: #000; stroke-width: 0.5; stroke-dasharray: 3 2; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="226" fill="#fff"/>
+
+  <text class="gt" x="49" y="16" text-anchor="middle">Raw</text>
+  <text class="gt" x="144" y="16" text-anchor="middle">Curated</text>
+  <text class="gt" x="240" y="16" text-anchor="middle">Graph and features</text>
+  <text class="gt" x="335" y="16" text-anchor="middle">Models</text>
+  <text class="gt" x="425" y="16" text-anchor="middle">Serving</text>
+  <line class="sep" x1="96" y1="22" x2="96" y2="180"/>
+  <line class="sep" x1="192" y1="22" x2="192" y2="180"/>
+  <line class="sep" x1="288" y1="22" x2="288" y2="180"/>
+  <line class="sep" x1="382" y1="22" x2="382" y2="180"/>
+
+  <!-- Raw -->
+  <rect class="box" x="8" y="28" width="82" height="62"/>
+  <text class="t" x="49" y="42" text-anchor="middle">Kaggle files (CSV)</text>
+  <text class="s" x="49" y="53" text-anchor="middle">transactions 2.8 GB</text>
+  <text class="s" x="49" y="62.5" text-anchor="middle">31.9M rows</text>
+  <text class="s" x="49" y="72" text-anchor="middle">accounts 138 MB</text>
+  <text class="s" x="49" y="81.5" text-anchor="middle">patterns 2.2 MB</text>
+
+  <!-- Curated -->
+  <rect class="box" x="102" y="28" width="84" height="72"/>
+  <text class="t" x="144" y="42" text-anchor="middle">Parquet lake</text>
+  <text class="s" x="144" y="53" text-anchor="middle">clean: 1.2 GB</text>
+  <text class="s" x="144" y="62.5" text-anchor="middle">graph rows: 1.1 GB</text>
+  <text class="s" x="144" y="72" text-anchor="middle">train: 0.86 GB</text>
+  <text class="s" x="144" y="81.5" text-anchor="middle">val, test: 0.19 GB each</text>
+  <text class="s" x="144" y="91" text-anchor="middle">columnar, Snappy</text>
+
+  <!-- Graph and features -->
+  <path class="box" d="M198 36 V96 A42 5 0 0 0 282 96 V36"/>
+  <ellipse class="box" cx="240" cy="36" rx="42" ry="5"/>
+  <text class="t" x="240" y="54" text-anchor="middle">Neo4j graph DB</text>
+  <text class="s" x="240" y="64" text-anchor="middle">1.76M Account nodes</text>
+  <text class="s" x="240" y="73.5" text-anchor="middle">29.3M Transaction nodes</text>
+  <text class="s" x="240" y="83" text-anchor="middle">58.7M relationships</text>
+  <text class="s" x="240" y="92.5" text-anchor="middle">9.6 GB store</text>
+
+  <rect class="box" x="198" y="118" width="84" height="52"/>
+  <text class="t" x="240" y="132" text-anchor="middle">Feature store</text>
+  <text class="s" x="240" y="143" text-anchor="middle">account features</text>
+  <text class="s" x="240" y="152.5" text-anchor="middle">(101 MB CSV)</text>
+  <text class="s" x="240" y="162" text-anchor="middle">enriched splits 1.7 GB</text>
+
+  <!-- Models -->
+  <rect class="box" x="294" y="28" width="82" height="52"/>
+  <text class="t" x="335" y="42" text-anchor="middle">Model registry</text>
+  <text class="s" x="335" y="53" text-anchor="middle">XGBoost JSON</text>
+  <text class="s" x="335" y="62.5" text-anchor="middle">metrics, SHAP</text>
+  <text class="s" x="335" y="72" text-anchor="middle">(local)</text>
+  <rect class="box shade" x="294" y="98" width="82" height="62"/>
+  <text class="t" x="335" y="112" text-anchor="middle">LLM artifacts</text>
+  <text class="s" x="335" y="123" text-anchor="middle">SFT corpus</text>
+  <text class="s" x="335" y="132.5" text-anchor="middle">LoRA adapters</text>
+  <text class="s" x="335" y="142" text-anchor="middle">cases, traces</text>
+  <text class="s" x="335" y="151.5" text-anchor="middle">(Google Drive)</text>
+
+  <!-- Serving -->
+  <rect class="box" x="388" y="28" width="74" height="52"/>
+  <text class="t" x="425" y="42" text-anchor="middle">Serving data</text>
+  <text class="s" x="425" y="53" text-anchor="middle">metrics manifest</text>
+  <text class="s" x="425" y="62.5" text-anchor="middle">dashboard</text>
+  <text class="s" x="425" y="72" text-anchor="middle">snapshot (JSON)</text>
+  <rect class="box" x="388" y="98" width="74" height="52"/>
+  <text class="t" x="425" y="112" text-anchor="middle">Consumers</text>
+  <text class="s" x="425" y="123" text-anchor="middle">React dashboard</text>
+  <text class="s" x="425" y="132.5" text-anchor="middle">Streamlit</text>
+  <text class="s" x="425" y="142" text-anchor="middle">graph API</text>
+
+  <!-- Flows -->
+  <line class="ar" x1="90" y1="58" x2="101" y2="58"/>
+  <line class="ar" x1="186" y1="58" x2="197" y2="58"/>
+  <path class="ar" d="M170 100 V144 H197"/>
+  <line class="ar" x1="240" y1="101" x2="240" y2="117"/>
+  <text class="el" x="244" y="112">degree</text>
+  <path class="ar" d="M282 130 H288 V54 H293"/>
+  <line class="ar" x1="282" y1="150" x2="293" y2="150"/>
+  <line class="ar" x1="376" y1="54" x2="387" y2="54"/>
+  <path class="ar" d="M376 128 H382 V72 H387"/>
+  <line class="ar" x1="425" y1="80" x2="425" y2="97"/>
+
+  <!-- Governance -->
+  <rect class="box" x="8" y="188" width="454" height="32"/>
+  <text class="t" x="235" y="200" text-anchor="middle">Governance and integrity</text>
+  <text class="s" x="235" y="212" text-anchor="middle">raw and processed data kept out of Git · labels visible to evaluators only · unique constraints on account_id and txn_id · index on is_laundering</text>
+</svg>

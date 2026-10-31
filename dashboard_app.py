@@ -113,6 +113,17 @@ GRAPH_FEATURES = [
 NEO4J_URI = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
+# Optional separate QA instance; when set, "fraudgraph" resolves to its default database.
+NEO4J_QA_URI = os.getenv("NEO4J_QA_URI", "")
+NEO4J_QA_USER = os.getenv("NEO4J_QA_USER", NEO4J_USER)
+NEO4J_QA_PASSWORD = os.getenv("NEO4J_QA_PASSWORD", NEO4J_PASSWORD)
+
+
+def neo4j_target(database: str) -> tuple[str, tuple[str, str], str]:
+    """Map a dashboard database name to (uri, auth, database)."""
+    if database == "fraudgraph" and NEO4J_QA_URI:
+        return NEO4J_QA_URI, (NEO4J_QA_USER, NEO4J_QA_PASSWORD), "neo4j"
+    return NEO4J_URI, (NEO4J_USER, NEO4J_PASSWORD), database
 
 
 st.set_page_config(
@@ -2394,8 +2405,9 @@ def try_neo4j_stats(database: str) -> dict[str, Any]:
             "error": "Python package `neo4j` is not installed in the current environment.",
         }
     try:
-        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-        with driver.session(database=database) as session:
+        uri, auth, db = neo4j_target(database)
+        driver = GraphDatabase.driver(uri, auth=auth)
+        with driver.session(database=db) as session:
             node_count = session.run("MATCH (n) RETURN count(n) AS c").single()["c"]
             rel_count = session.run("MATCH ()-[r]->() RETURN count(r) AS c").single()["c"]
             tx_count = session.run("MATCH (t:Transaction) RETURN count(t) AS c").single()["c"]
@@ -2419,8 +2431,9 @@ def try_neo4j_table(database: str, query: str) -> pd.DataFrame:
     if GraphDatabase is None:
         return pd.DataFrame()
     try:
-        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-        with driver.session(database=database) as session:
+        uri, auth, db = neo4j_target(database)
+        driver = GraphDatabase.driver(uri, auth=auth)
+        with driver.session(database=db) as session:
             records = session.run(query).data()
         driver.close()
         return pd.DataFrame(records)
@@ -2455,7 +2468,7 @@ def render_ops() -> None:
         status_box(
             "warn",
             "Neo4j not reachable from this app right now",
-            f"Tried `{NEO4J_URI}` against database `{db_name}`. Error: {stats.get('error', 'Unknown error')}",
+            f"Tried `{neo4j_target(db_name)[0]}` against database `{db_name}`. Error: {stats.get('error', 'Unknown error')}",
         )
 
     st.markdown("")

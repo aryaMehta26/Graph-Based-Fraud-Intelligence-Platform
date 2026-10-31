@@ -7,7 +7,9 @@ Upstream stages (same repo, same logic as `run_all_backend_eda.py`):
 
 This script:
 - Reads a sample from `data/processed/transactions_graph.parquet`
-- Clears the **fraudgraph** Neo4j database, then loads Account / Transaction / edges
+- Clears the **fraudgraph** QA graph, then loads Account / Transaction / edges
+  (the separate neo4j-qa instance when NEO4J_QA_URI is set; refuses to reset
+  anything larger than NEO4J_QA_MAX_RESET_NODES)
 - Writes `logs/pipeline_run_*.log`
 """
 
@@ -35,10 +37,22 @@ LOG_DIR = ROOT / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 load_dotenv(ROOT / ".env")
 
-NEO4J_URI = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
-NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "fraudgraph")
+# A separate QA instance (NEO4J_QA_URI) keeps this reset away from the full graph on
+# Neo4j Community, which has a single database. Without it, fall back to NEO4J_DATABASE
+# on the main server (works on Enterprise, where fraudgraph can be its own database).
+NEO4J_QA_URI = os.getenv("NEO4J_QA_URI", "")
+if NEO4J_QA_URI:
+    NEO4J_URI = NEO4J_QA_URI
+    NEO4J_USER = os.getenv("NEO4J_QA_USER", os.getenv("NEO4J_USER", "neo4j"))
+    NEO4J_PASSWORD = os.getenv("NEO4J_QA_PASSWORD", os.getenv("NEO4J_PASSWORD", ""))
+    NEO4J_DATABASE = "neo4j"
+else:
+    NEO4J_URI = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
+    NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+    NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
+    NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "fraudgraph")
+# Refuse to reset a target this large: it is the full graph, not a QA sample.
+MAX_RESET_NODES = int(os.getenv("NEO4J_QA_MAX_RESET_NODES", "1000000"))
 DEMO_COLUMNS = [
     "src_acct",
     "dst_acct",
@@ -148,6 +162,14 @@ try:
     driver.verify_connectivity()
 
     with driver.session(database=NEO4J_DATABASE) as session:
+        existing_nodes = session.run("MATCH (n) RETURN count(n) AS c").single()["c"]
+        if existing_nodes > MAX_RESET_NODES:
+            raise RuntimeError(
+                f"Refusing to reset {NEO4J_URI} (DB: {NEO4J_DATABASE}): it holds {existing_nodes:,} nodes, "
+                f"above the {MAX_RESET_NODES:,} QA limit. This looks like the full graph; "
+                "point NEO4J_QA_URI at the QA instance (docker compose service neo4j-qa)."
+            )
+
         logger.info("Injecting transformed records into Knowledge Graph (%s QA database)...", NEO4J_DATABASE)
 
         session.run(

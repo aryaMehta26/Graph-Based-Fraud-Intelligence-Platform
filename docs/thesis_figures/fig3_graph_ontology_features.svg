@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470pt" height="232pt" viewBox="0 0 470 232" role="img" aria-label="Fig. 3. (a) Graph schema: Account SENT Transaction RECEIVED_BY Account. (b) For each transaction, 11 tabular, 8 degree and 4 community features are concatenated into a 23-dimensional vector scored by XGBoost.">
+  <style>
+    text { font-family: "Times New Roman", Times, serif; fill: #000; }
+    .t { font-size: 8.5px; font-weight: bold; }
+    .s { font-size: 7.5px; }
+    .p { font-size: 7.5px; font-family: "Courier New", Courier, monospace; }
+    .el { font-size: 7.5px; font-style: italic; }
+    .cap { font-size: 8.5px; }
+    .box { fill: #fff; stroke: #000; stroke-width: 0.8; }
+    .shade { fill: #e3e3e3; }
+    .ar { fill: none; stroke: #000; stroke-width: 0.8; marker-end: url(#ah); }
+    .sep { stroke: #000; stroke-width: 0.5; stroke-dasharray: 3 2; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000"/></marker>
+  </defs>
+  <rect width="470" height="232" fill="#fff"/>
+
+  <!-- (a) Graph schema -->
+  <ellipse class="box" cx="62" cy="40" rx="40" ry="14"/>
+  <text class="t" x="62" y="43" text-anchor="middle">Account (s)</text>
+  <text class="p" x="112" y="37">account_id (key)</text>
+  <text class="p" x="112" y="47">bank_id</text>
+
+  <line class="ar" x1="62" y1="54" x2="62" y2="93"/>
+  <text class="s" x="67" y="77">SENT</text>
+
+  <rect class="box shade" x="22" y="94" width="80" height="32"/>
+  <text class="t" x="62" y="113" text-anchor="middle">Transaction (t)</text>
+  <text class="p" x="112" y="92">txn_id (key)</text>
+  <text class="p" x="112" y="101.5">amount, currency</text>
+  <text class="p" x="112" y="111">timestamp</text>
+  <text class="p" x="112" y="120.5">payment_format</text>
+  <text class="p" x="112" y="130">is_laundering †</text>
+
+  <line class="ar" x1="62" y1="126" x2="62" y2="165"/>
+  <text class="s" x="67" y="149">RECEIVED_BY</text>
+
+  <ellipse class="box" cx="62" cy="180" rx="40" ry="14"/>
+  <text class="t" x="62" y="183" text-anchor="middle">Account (d)</text>
+
+  <text class="s" x="115" y="206" text-anchor="middle">1,758,573 accounts · 29,336,378 transactions</text>
+  <text class="cap" x="115" y="226" text-anchor="middle">(a) Graph schema</text>
+
+  <line class="sep" x1="226" y1="18" x2="226" y2="214"/>
+
+  <!-- (b) Feature construction -->
+  <rect class="box" x="236" y="20" width="134" height="48"/>
+  <text class="t" x="303" y="33" text-anchor="middle">Tabular features (11)</text>
+  <text class="s" x="303" y="44" text-anchor="middle">log amount, amount bucket, hour,</text>
+  <text class="s" x="303" y="53.5" text-anchor="middle">weekday, weekend, cross-currency,</text>
+  <text class="s" x="303" y="63" text-anchor="middle">5 payment-format flags</text>
+
+  <rect class="box" x="236" y="82" width="134" height="48"/>
+  <text class="t" x="303" y="95" text-anchor="middle">Degree features (4 × 2)</text>
+  <text class="s" x="303" y="106" text-anchor="middle">in-, out- and total degree,</text>
+  <text class="s" x="303" y="115.5" text-anchor="middle">degree centrality</text>
+  <text class="s" x="303" y="125" text-anchor="middle">for sender s and receiver d</text>
+
+  <rect class="box" x="236" y="144" width="134" height="48"/>
+  <text class="t" x="303" y="157" text-anchor="middle">Community features (2 × 2)</text>
+  <text class="s" x="303" y="168" text-anchor="middle">Leiden community size,</text>
+  <text class="s" x="303" y="177.5" text-anchor="middle">community fraud rate *</text>
+  <text class="s" x="303" y="187" text-anchor="middle">for s and d</text>
+
+  <!-- concatenation -->
+  <path class="ar" d="M370 44 H392 V96"/>
+  <line class="ar" x1="370" y1="106" x2="382" y2="106"/>
+  <path class="ar" d="M370 168 H392 V116"/>
+  <circle class="box" cx="392" cy="106" r="9"/>
+  <line x1="386" y1="106" x2="398" y2="106" stroke="#000" stroke-width="0.8"/>
+  <line x1="392" y1="100" x2="392" y2="112" stroke="#000" stroke-width="0.8"/>
+
+  <line class="ar" x1="401" y1="106" x2="411" y2="106"/>
+  <rect class="box" x="412" y="86" width="50" height="40"/>
+  <text class="t" x="437" y="102" text-anchor="middle">x ∈ R²³</text>
+  <text class="s" x="437" y="113" text-anchor="middle">feature</text>
+  <text class="s" x="437" y="122" text-anchor="middle">vector</text>
+
+  <line class="ar" x1="437" y1="126" x2="437" y2="149"/>
+  <rect class="box shade" x="412" y="150" width="50" height="32"/>
+  <text class="t" x="437" y="164" text-anchor="middle">XGBoost</text>
+  <text class="s" x="437" y="175" text-anchor="middle">p(fraud)</text>
+
+  <text class="el" x="236" y="206">* from training-split labels only</text>
+  <text class="cap" x="349" y="226" text-anchor="middle">(b) Feature vector for transaction t = (s → d)</text>
+</svg>

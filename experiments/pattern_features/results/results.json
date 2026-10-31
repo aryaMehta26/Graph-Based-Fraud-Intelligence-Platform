@@ -1,0 +1,330 @@
+{
+  "pattern": {
+    "features": [
+      "log_amount",
+      "is_ACH",
+      "is_Cheque",
+      "is_CC",
+      "is_Wire",
+      "is_Bitcoin",
+      "hour",
+      "dow",
+      "is_weekend",
+      "is_cross_currency",
+      "amount_bucket",
+      "src_out_cnt_1h",
+      "dst_in_cnt_1h",
+      "src_out_cnt_1d",
+      "dst_in_cnt_1d",
+      "src_out_cnt_7d",
+      "src_out_amt_dev_7d",
+      "dst_in_cnt_7d",
+      "src_out_total",
+      "src_out_gap",
+      "dst_in_total",
+      "dst_in_gap",
+      "src_in_cnt_1d",
+      "src_in_cnt_7d",
+      "src_in_amt_dev_7d",
+      "src_in_total",
+      "src_in_gap",
+      "dst_out_cnt_1d",
+      "dst_out_total",
+      "pair_prior_cnt",
+      "rev_pair_prior_cnt",
+      "src_distinct_out_total",
+      "src_distinct_out_new_7d",
+      "dst_distinct_in_total",
+      "dst_distinct_in_new_7d",
+      "cyc3_cnt",
+      "cyc4_cnt",
+      "gather_cnt",
+      "scatter_cnt"
+    ],
+    "best_iteration": 323,
+    "val_pr_auc": 0.4938096220711243,
+    "pr_auc": 0.4566160483423353,
+    "roc_auc": 0.9870308973911935,
+    "thresholds_chosen_on_val": {
+      "default_0.30": 0.3,
+      "f1_optimal_on_val": 0.9939278364181519,
+      "precision_20pct_on_val": 0.9746767282485962,
+      "budget_1000_per_day_on_val": 0.9964338541030884
+    },
+    "test_at_thresholds": {
+      "default_0.30": {
+        "threshold": 0.3,
+        "alerts": 382892,
+        "tp": 4295,
+        "fp": 378597,
+        "fn": 285,
+        "tn": 4400511,
+        "precision": 0.01121726230895396,
+        "recall": 0.9377729257641921,
+        "f1": 0.022169343849362016,
+        "accuracy": 0.9207970921180478
+      },
+      "f1_optimal_on_val": {
+        "threshold": 0.9939278364181519,
+        "alerts": 2625,
+        "tp": 1682,
+        "fp": 943,
+        "fn": 2898,
+        "tn": 4778165,
+        "precision": 0.6407619047619048,
+        "recall": 0.36724890829694323,
+        "f1": 0.4668979875086746,
+        "accuracy": 0.9991970630191601
+      },
+      "precision_20pct_on_val": {
+        "threshold": 0.9746767282485962,
+        "alerts": 11343,
+        "tp": 2796,
+        "fp": 8547,
+        "fn": 1784,
+        "tn": 4770561,
+        "precision": 0.2464956360751124,
+        "recall": 0.6104803493449782,
+        "f1": 0.3511901023676443,
+        "accuracy": 0.997840369187957
+      },
+      "budget_1000_per_day_on_val": {
+        "threshold": 0.9964338541030884,
+        "alerts": 1518,
+        "tp": 1211,
+        "fp": 307,
+        "fn": 3369,
+        "tn": 4778801,
+        "precision": 0.7977602108036891,
+        "recall": 0.264410480349345,
+        "f1": 0.3971794030829781,
+        "accuracy": 0.9992315552352077
+      }
+    },
+    "test_top_k": {
+      "500": {
+        "alerts": 500,
+        "tp": 480,
+        "precision": 0.96,
+        "recall": 0.10480349344978165
+      },
+      "1000": {
+        "alerts": 1000,
+        "tp": 881,
+        "precision": 0.881,
+        "recall": 0.19235807860262008
+      },
+      "2000": {
+        "alerts": 2000,
+        "tp": 1440,
+        "precision": 0.72,
+        "recall": 0.314410480349345
+      },
+      "5000": {
+        "alerts": 5000,
+        "tp": 2229,
+        "precision": 0.4458,
+        "recall": 0.4866812227074236
+      },
+      "10000": {
+        "alerts": 10000,
+        "tp": 2722,
+        "precision": 0.2722,
+        "recall": 0.5943231441048035
+      },
+      "50000": {
+        "alerts": 50000,
+        "tp": 3650,
+        "precision": 0.073,
+        "recall": 0.7969432314410481
+      }
+    },
+    "top_gain_features": {
+      "is_ACH": 667649.625,
+      "src_distinct_out_total": 100287.6796875,
+      "src_out_cnt_1h": 41880.24609375,
+      "pair_prior_cnt": 38282.109375,
+      "is_cross_currency": 32475.869140625,
+      "rev_pair_prior_cnt": 21478.89453125,
+      "src_out_gap": 17200.740234375,
+      "is_Bitcoin": 14568.3427734375,
+      "src_out_cnt_1d": 14467.3662109375,
+      "src_in_total": 10644.52734375,
+      "amount_bucket": 10134.9228515625,
+      "is_CC": 8834.736328125,
+      "is_weekend": 8686.3505859375,
+      "dow": 6745.6943359375,
+      "is_Cheque": 6663.2880859375
+    }
+  },
+  "pattern_graph": {
+    "features": [
+      "log_amount",
+      "is_ACH",
+      "is_Cheque",
+      "is_CC",
+      "is_Wire",
+      "is_Bitcoin",
+      "hour",
+      "dow",
+      "is_weekend",
+      "is_cross_currency",
+      "amount_bucket",
+      "src_out_cnt_1h",
+      "dst_in_cnt_1h",
+      "src_out_cnt_1d",
+      "dst_in_cnt_1d",
+      "src_out_cnt_7d",
+      "src_out_amt_dev_7d",
+      "dst_in_cnt_7d",
+      "src_out_total",
+      "src_out_gap",
+      "dst_in_total",
+      "dst_in_gap",
+      "src_in_cnt_1d",
+      "src_in_cnt_7d",
+      "src_in_amt_dev_7d",
+      "src_in_total",
+      "src_in_gap",
+      "dst_out_cnt_1d",
+      "dst_out_total",
+      "pair_prior_cnt",
+      "rev_pair_prior_cnt",
+      "src_distinct_out_total",
+      "src_distinct_out_new_7d",
+      "dst_distinct_in_total",
+      "dst_distinct_in_new_7d",
+      "cyc3_cnt",
+      "cyc4_cnt",
+      "gather_cnt",
+      "scatter_cnt",
+      "src_out_degree",
+      "src_in_degree",
+      "src_total_degree",
+      "src_degree_centrality",
+      "dst_out_degree",
+      "dst_in_degree",
+      "dst_total_degree",
+      "dst_degree_centrality",
+      "src_community_size",
+      "src_community_fraud_rate",
+      "dst_community_size",
+      "dst_community_fraud_rate"
+    ],
+    "best_iteration": 499,
+    "val_pr_auc": 0.5521564440294711,
+    "pr_auc": 0.517592970188016,
+    "roc_auc": 0.9865538615082701,
+    "thresholds_chosen_on_val": {
+      "default_0.30": 0.3,
+      "f1_optimal_on_val": 0.992701530456543,
+      "precision_20pct_on_val": 0.965941846370697,
+      "budget_1000_per_day_on_val": 0.9960458874702454
+    },
+    "test_at_thresholds": {
+      "default_0.30": {
+        "threshold": 0.3,
+        "alerts": 229897,
+        "tp": 4044,
+        "fp": 225853,
+        "fn": 536,
+        "tn": 4553255,
+        "precision": 0.017590486174243247,
+        "recall": 0.8829694323144105,
+        "f1": 0.03449378830333039,
+        "accuracy": 0.9526747981891796
+      },
+      "f1_optimal_on_val": {
+        "threshold": 0.992701530456543,
+        "alerts": 2448,
+        "tp": 1860,
+        "fp": 588,
+        "fn": 2720,
+        "tn": 4778520,
+        "precision": 0.7598039215686274,
+        "recall": 0.40611353711790393,
+        "f1": 0.5293113261240752,
+        "accuracy": 0.9993084833291803
+      },
+      "precision_20pct_on_val": {
+        "threshold": 0.965941846370697,
+        "alerts": 11742,
+        "tp": 2896,
+        "fp": 8846,
+        "fn": 1684,
+        "tn": 4770262,
+        "precision": 0.24663600749446432,
+        "recall": 0.6323144104803493,
+        "f1": 0.35485847322632025,
+        "accuracy": 0.9977987694849664
+      },
+      "budget_1000_per_day_on_val": {
+        "threshold": 0.9960458874702454,
+        "alerts": 1499,
+        "tp": 1343,
+        "fp": 156,
+        "fn": 3237,
+        "tn": 4778952,
+        "precision": 0.895930620413609,
+        "recall": 0.29323144104803495,
+        "f1": 0.44184898832044744,
+        "accuracy": 0.9992907146118225
+      }
+    },
+    "test_top_k": {
+      "500": {
+        "alerts": 500,
+        "tp": 486,
+        "precision": 0.972,
+        "recall": 0.10611353711790393
+      },
+      "1000": {
+        "alerts": 1000,
+        "tp": 950,
+        "precision": 0.95,
+        "recall": 0.2074235807860262
+      },
+      "2000": {
+        "alerts": 2000,
+        "tp": 1642,
+        "precision": 0.821,
+        "recall": 0.35851528384279474
+      },
+      "5000": {
+        "alerts": 5000,
+        "tp": 2429,
+        "precision": 0.4858,
+        "recall": 0.530349344978166
+      },
+      "10000": {
+        "alerts": 10000,
+        "tp": 2804,
+        "precision": 0.2804,
+        "recall": 0.6122270742358079
+      },
+      "50000": {
+        "alerts": 50000,
+        "tp": 3644,
+        "precision": 0.07288,
+        "recall": 0.7956331877729258
+      }
+    },
+    "top_gain_features": {
+      "is_ACH": 493438.96875,
+      "src_total_degree": 104131.140625,
+      "is_Wire": 53419.375,
+      "src_degree_centrality": 52354.390625,
+      "is_CC": 51727.1875,
+      "pair_prior_cnt": 44841.80078125,
+      "is_cross_currency": 32478.056640625,
+      "is_Cheque": 28124.75,
+      "src_in_degree": 25233.12890625,
+      "rev_pair_prior_cnt": 19979.337890625,
+      "src_out_gap": 16248.2333984375,
+      "amount_bucket": 15357.7607421875,
+      "scatter_cnt": 13900.791015625,
+      "is_Bitcoin": 11609.025390625,
+      "src_in_total": 8764.7958984375
+    }
+  }
+}

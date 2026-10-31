@@ -303,8 +303,13 @@ To get the latest dashboard in an existing clone, run `git switch main` and
 On macOS, XGBoost also requires `brew install libomp`.
 
 The optional Airflow setup is documented in [airflow/README.md](airflow/README.md).
-The QA sync (`fraud_lakehouse_neo4j_sync.py`) clears its configured Neo4j database
-before loading a sample; use a dedicated QA database via `NEO4J_DATABASE`.
+The QA sync (`fraud_lakehouse_neo4j_sync.py`) clears its target graph before loading
+a sample. Neo4j Community has a single database, so the QA graph runs as a separate
+container: `docker compose up -d neo4j-qa` (browser on http://localhost:7475, bolt on
+port 7688) with `NEO4J_QA_URI=neo4j://127.0.0.1:7688` in `.env`. The dashboard's
+`fraudgraph` option then reads that instance, while `neo4j` stays the full graph. The
+sync refuses to reset any target with more than 1,000,000 nodes. Without
+`NEO4J_QA_URI` it falls back to `NEO4J_DATABASE` on the main server (Enterprise only).
 `demo_TA_pipeline.py` remains a compatibility entry point for that sync.
 
 
