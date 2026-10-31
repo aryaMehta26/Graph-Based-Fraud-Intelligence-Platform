@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -233,12 +234,12 @@ def _load_gemma_backend():
     return _gemma_backend
 
 
-def _recover_report_from_raw_response(trace: dict) -> tuple[dict, bool]:
+def _recover_report_from_raw_response(trace: dict) -> tuple[dict, str]:
     """Recover valid JSON when an older AMLAgent parser returns defaults."""
     report = trace.get("report") or {}
     raw = str(trace.get("raw_response") or "")
     if not raw:
-        return report, False
+        return report, "agent_parser"
     try:
         # Decode the first complete JSON object. Some older model/parser
         # combinations append repeated or malformed text after the valid
@@ -249,8 +250,43 @@ def _recover_report_from_raw_response(trace: dict) -> tuple[dict, bool]:
         parsed = None
     required = {"decision", "pattern", "risk_level", "confidence", "evidence", "recommended_actions", "summary"}
     if isinstance(parsed, dict) and required.issubset(parsed):
-        return parsed, True
-    return report, False
+        return parsed, "raw_model_json"
+
+    # A truncated response can still contain reliable leading fields. Recover
+    # only values explicitly emitted by the model and mark the result partial;
+    # never manufacture confidence or evidence.
+    def field(pattern: str, default=None):
+        match = re.search(pattern, raw, re.S)
+        return match.group(1) if match else default
+
+    decision = field(r'"decision"\s*:\s*"([^"]+)"')
+    pattern = field(r'"pattern"\s*:\s*"([^"]+)"')
+    risk = field(r'"risk_level"\s*:\s*"([^"]+)"')
+    confidence_text = field(r'"confidence"\s*:\s*([-+]?\d*\.?\d+)')
+    evidence_match = re.search(r'"evidence"\s*:\s*\[(.*?)(?:\]|$)', raw, re.S)
+    evidence = []
+    if evidence_match:
+        for item in re.finditer(r'"((?:\\.|[^"\\])*)"', evidence_match.group(1)):
+            try:
+                value = json.loads('"' + item.group(1) + '"')
+            except json.JSONDecodeError:
+                continue
+            if value and value not in evidence:
+                evidence.append(value)
+            if len(evidence) >= 5:
+                break
+    if decision and pattern and risk and confidence_text and evidence:
+        confidence = float(confidence_text)
+        return {
+            "decision": decision,
+            "pattern": pattern,
+            "risk_level": risk,
+            "confidence": confidence,
+            "evidence": evidence,
+            "recommended_actions": [],
+            "summary": f"Gemma identified a {pattern} pattern with {risk} risk; corroborate the partial report in the network view.",
+        }, "raw_model_partial"
+    return report, "agent_parser"
 
 
 def _run_gemma(payload: dict) -> dict:
@@ -277,13 +313,12 @@ def _run_gemma(payload: dict) -> dict:
     if "prefetch_tools" in inspect.signature(agent.investigate).parameters:
         investigate_kwargs["prefetch_tools"] = True
     trace = agent.investigate(case, **investigate_kwargs)
-    report, recovered_from_raw = _recover_report_from_raw_response(trace)
+    report, report_source = _recover_report_from_raw_response(trace)
     graph = context.get("graph_stats") if isinstance(context.get("graph_stats"), dict) else {}
     score = float(context.get("xgboost_score", context.get("fraud_probability", graph.get("xgboost_score", 0))) or 0)
     transactions = context.get("transactions") if isinstance(context.get("transactions"), list) else []
     accounts = context.get("accounts") if isinstance(context.get("accounts"), list) else []
-    report_source = "raw_model_json" if recovered_from_raw else "agent_parser"
-    report_is_valid = report_source == "raw_model_json"
+    report_is_valid = report_source in {"raw_model_json", "raw_model_partial"}
     pattern = str(report.get("pattern") or "EMERGING_UNKNOWN")
     risk = str(report.get("risk_level") or "MEDIUM")
     if report_is_valid:
