@@ -270,7 +270,7 @@ def _run_gemma(payload: dict) -> dict:
         "model_family": "gemma",
         "variant": "finetuned_live",
         "seed": 42,
-        "inference_config": {"max_tokens": 700, "temperature": 0.0},
+        "inference_config": {"max_tokens": 1000, "temperature": 0.0},
     }
     # The live branch must work with both the older checked-in agent and the
     # newer agent that supports controlled evidence prefetching.
