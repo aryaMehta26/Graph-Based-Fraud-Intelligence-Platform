@@ -11,6 +11,8 @@ export type LivePrediction = {
   prediction: string;
   source: string;
   investigatable?: boolean;
+  review_threshold?: number;
+  'Is Laundering'?: number;
 };
 
 export type LiveReportRow = {
@@ -53,11 +55,15 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export function getLiveStatus() {
-  return request<{ status: string; data_available: boolean; model_available: boolean; gemma_enabled: boolean; gemma_loaded: boolean }>('/api/live/status');
+  return request<{ status: string; data_available: boolean; model_available: boolean; gemma_enabled: boolean; gemma_loaded: boolean; model?: string; review_threshold?: number; high_threshold?: number }>('/api/live/status');
 }
 
 export function getLivePredictions(limit = 8) {
   return request<{ items: LivePrediction[] }>(`/api/live/predictions?limit=${limit}`);
+}
+
+export function getLiveAlerts(limit = 100) {
+  return request<{ items: LivePrediction[]; review_threshold: number }>(`/api/live/alerts?limit=${limit}`);
 }
 
 export function getLiveGraph(accountId: string) {

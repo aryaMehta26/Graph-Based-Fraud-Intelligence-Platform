@@ -77,3 +77,4 @@ Thumbs.db
 
 # Local Airflow authentication
 airflow/simple_auth_manager_passwords.json
+!data/live/*.parquet

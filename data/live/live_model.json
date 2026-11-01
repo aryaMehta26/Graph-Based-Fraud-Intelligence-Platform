@@ -1,0 +1,163 @@
+{
+  "model": "v2_leakfree",
+  "display_name": "XGBoost champion (leak-free pattern features)",
+  "features": [
+    "log_amount",
+    "is_ACH",
+    "is_Cheque",
+    "is_CC",
+    "is_Wire",
+    "is_Bitcoin",
+    "hour",
+    "dow",
+    "is_weekend",
+    "is_cross_currency",
+    "amount_bucket",
+    "src_out_cnt_1h",
+    "dst_in_cnt_1h",
+    "src_out_cnt_1d",
+    "dst_in_cnt_1d",
+    "src_out_cnt_7d",
+    "src_out_amt_dev_7d",
+    "dst_in_cnt_7d",
+    "src_out_total",
+    "src_out_gap",
+    "dst_in_total",
+    "dst_in_gap",
+    "src_in_cnt_1d",
+    "src_in_cnt_7d",
+    "src_in_amt_dev_7d",
+    "src_in_total",
+    "src_in_gap",
+    "dst_out_cnt_1d",
+    "dst_out_total",
+    "pair_prior_cnt",
+    "rev_pair_prior_cnt",
+    "src_distinct_out_total",
+    "src_distinct_out_new_7d",
+    "dst_distinct_in_total",
+    "dst_distinct_in_new_7d",
+    "cyc3_cnt",
+    "cyc4_cnt",
+    "gather_cnt",
+    "scatter_cnt",
+    "src_age_min",
+    "dst_age_min",
+    "amt_round_100",
+    "amt_round_1000",
+    "amt_whole",
+    "amt_paid_recv_logratio",
+    "src_same_amt_7d",
+    "dst_same_amt_7d",
+    "same_bank",
+    "from_bank_out_1h",
+    "to_bank_in_1h",
+    "dst_distinct_out_total",
+    "src_distinct_in_total"
+  ],
+  "review_threshold": 0.7733604311943054,
+  "high_threshold": 0.8991274237632751,
+  "threshold_source": "chosen on the validation period (F1-optimal for review, 1000 alerts/day for HIGH)",
+  "split": "clean chronological 70/15/15 on Sep 1-16; test = Sep 15 01:24 - Sep 16 23:59",
+  "test_metrics": {
+    "pr_auc": 0.5627118220968284,
+    "roc_auc": 0.9854393264058087,
+    "val_pr_auc": 0.6139721863363856,
+    "at_thresholds": {
+      "default_0.30": {
+        "threshold": 0.3,
+        "alerts": 15472,
+        "tp": 2961,
+        "fp": 12511,
+        "fn": 1619,
+        "tn": 4766597,
+        "precision": 0.19137797311271976,
+        "recall": 0.6465065502183406,
+        "f1": 0.29533213644524237,
+        "accuracy": 0.9970462120439293
+      },
+      "f1_optimal_on_val": {
+        "threshold": 0.7733604311943054,
+        "alerts": 2859,
+        "tp": 2222,
+        "fp": 637,
+        "fn": 2358,
+        "tn": 4778471,
+        "precision": 0.7771948233648128,
+        "recall": 0.4851528384279476,
+        "f1": 0.5973921225971232,
+        "accuracy": 0.9993739140178038
+      },
+      "precision_20pct_on_val": {
+        "threshold": 0.22798912227153778,
+        "alerts": 24379,
+        "tp": 3102,
+        "fp": 21277,
+        "fn": 1478,
+        "tn": 4757831,
+        "precision": 0.12724065794331188,
+        "recall": 0.6772925764192139,
+        "f1": 0.21423391691702065,
+        "accuracy": 0.9952432098414445
+      },
+      "budget_1000_per_day_on_val": {
+        "threshold": 0.8991274237632751,
+        "alerts": 1946,
+        "tp": 1800,
+        "fp": 146,
+        "fn": 2780,
+        "tn": 4778962,
+        "precision": 0.9249743062692704,
+        "recall": 0.3930131004366812,
+        "f1": 0.5516395954642966,
+        "accuracy": 0.9993883380354237
+      }
+    },
+    "top_k": {
+      "500": {
+        "alerts": 500,
+        "tp": 495,
+        "precision": 0.99,
+        "recall": 0.10807860262008734
+      },
+      "1000": {
+        "alerts": 1000,
+        "tp": 979,
+        "precision": 0.979,
+        "recall": 0.21375545851528385
+      },
+      "2000": {
+        "alerts": 2000,
+        "tp": 1838,
+        "precision": 0.919,
+        "recall": 0.4013100436681223
+      },
+      "5000": {
+        "alerts": 5000,
+        "tp": 2608,
+        "precision": 0.5216,
+        "recall": 0.5694323144104804
+      },
+      "10000": {
+        "alerts": 10000,
+        "tp": 2828,
+        "precision": 0.2828,
+        "recall": 0.617467248908297
+      },
+      "50000": {
+        "alerts": 50000,
+        "tp": 3392,
+        "precision": 0.06784,
+        "recall": 0.7406113537117904
+      }
+    }
+  },
+  "replay_window": {
+    "rows": 200000,
+    "start": "2022-09-15 01:24:00",
+    "end": "2022-09-15 03:58:00",
+    "laundering": 173,
+    "alerts": 68,
+    "alerts_laundering": 53
+  }
+}

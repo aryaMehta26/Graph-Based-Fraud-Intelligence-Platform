@@ -1,7 +1,9 @@
 """Small read-only/live bridge for the React DATA 298B dashboard.
 
-The prediction endpoint replays a bounded prefix of the existing chronological
-test Parquet and scores it with the saved graph-enhanced XGBoost model. The
+The prediction endpoint replays the first transactions of the clean test period
+(data/live/replay_v2_leakfree.parquet) and scores them with the champion XGBoost
+model (leak-free pattern features). The review and HIGH thresholds were chosen on
+the validation period and are read from data/live/live_model.json. The
 investigation endpoint loads the existing Gemma adapter lazily and is only
 enabled when DATA298B_LIVE_GEMMA=1.
 """
@@ -25,29 +27,29 @@ import pyarrow.parquet as pq
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-DATA_PATH = Path(os.getenv("DATA298B_LIVE_DATA", str(ROOT / "data/processed/test_graph_enriched.parquet")))
-MODEL_PATH = Path(os.getenv("DATA298B_LIVE_MODEL", str(ROOT / "data/models/xgboost_graph_enhanced.json")))
+DATA_PATH = Path(os.getenv("DATA298B_LIVE_DATA", str(ROOT / "data/live/replay_v2_leakfree.parquet")))
+MODEL_PATH = Path(os.getenv("DATA298B_LIVE_MODEL", str(ROOT / "data/live/xgboost_v2_leakfree.json")))
+META_PATH = Path(os.getenv("DATA298B_LIVE_META", str(ROOT / "data/live/live_model.json")))
+# Network neighborhoods come from the full test-period Parquet when it is linked
+# (it covers the same Sep 15-16 period); otherwise from the replay window itself.
+_full_test = ROOT / "data/processed/test_graph_enriched.parquet"
+GRAPH_DATA_PATH = Path(os.getenv("DATA298B_LIVE_GRAPH_DATA", str(_full_test if _full_test.exists() else DATA_PATH)))
 PORT = int(os.getenv("DATA298B_LIVE_API_PORT", "8765"))
 MODEL_ID = os.getenv("DATA298B_GEMMA_MODEL_ID", "google/gemma-4-31B")
 ADAPTER_DIR = os.getenv("DATA298B_GEMMA_ADAPTER_DIR", "")
 LIVE_GEMMA = os.getenv("DATA298B_LIVE_GEMMA", "0").lower() in {"1", "true", "yes"}
 
-BASELINE_FEATURES = [
-    "log_amount", "is_ACH", "is_Cheque", "is_CC", "is_Wire", "is_Bitcoin",
-    "hour", "dow", "is_weekend", "is_cross_currency", "amount_bucket",
-]
-GRAPH_FEATURES = [
-    "src_out_degree", "src_in_degree", "src_total_degree", "src_degree_centrality",
-    "dst_out_degree", "dst_in_degree", "dst_total_degree", "dst_degree_centrality",
-    "src_community_size", "src_community_fraud_rate", "dst_community_size",
-    "dst_community_fraud_rate",
-]
-FEATURES = BASELINE_FEATURES + GRAPH_FEATURES
+META = json.loads(META_PATH.read_text()) if META_PATH.exists() else {}
+FEATURES = META.get("features", [])
+REVIEW_THRESHOLD = float(META.get("review_threshold", 0.5))
+HIGH_THRESHOLD = float(META.get("high_threshold", 0.9))
+LABEL = "Is Laundering"
 DISPLAY_COLUMNS = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment Format"]
 
 _lock = threading.Lock()
 _cursor = 0
 _rows: list[dict] = []
+_rows_by_account: dict[str, list[int]] = {}
 _graph_cache: dict[str, dict] = {}
 _model = None
 _gemma_backend = None
@@ -61,35 +63,39 @@ def _jsonable(value):
     return value.item() if hasattr(value, "item") else value
 
 
-def _load_replay_rows(limit: int = 2000) -> None:
+def _load_replay_rows(limit: int = int(os.getenv("DATA298B_LIVE_ROWS", "200000"))) -> None:
     global _rows
     if _rows or not DATA_PATH.exists():
         return
-    parquet = pq.ParquetFile(DATA_PATH)
-    columns = list(dict.fromkeys(DISPLAY_COLUMNS + FEATURES))
-    batch = next(parquet.iter_batches(batch_size=limit, columns=columns)).to_pandas()
+    columns = list(dict.fromkeys(DISPLAY_COLUMNS + [LABEL] + FEATURES))
+    batch = pd.read_parquet(DATA_PATH, columns=columns).iloc[:limit]
     if batch.empty:
         return
     _load_model()
-    features = batch[FEATURES].copy()
-    if "amount_bucket" in features.columns and not pd.api.types.is_numeric_dtype(features["amount_bucket"]):
-        features["amount_bucket"] = features["amount_bucket"].astype("category").cat.codes
     import xgboost as xgb
 
-    probabilities = _model.predict(xgb.DMatrix(features.astype("float32")))
-    for index, (_, row) in enumerate(batch.iterrows()):
+    # amount_bucket is stored pre-encoded with the training-time codes.
+    probabilities = _model.predict(xgb.DMatrix(batch[FEATURES].to_numpy("float32"), feature_names=FEATURES))
+    stamps = batch["Timestamp"].astype(str).str.replace(":", "").str.replace(" ", "T")
+    display = batch[DISPLAY_COLUMNS].assign(Timestamp=batch["Timestamp"].map(lambda t: t.isoformat()))
+    for index, (row, stamp, label) in enumerate(zip(display.to_dict("records"), stamps, batch[LABEL])):
         probability = float(probabilities[index])
-        payload = {key: _jsonable(row[key]) for key in DISPLAY_COLUMNS}
+        payload = {key: _jsonable(value) for key, value in row.items()}
         payload.update({
-            "case_id": f"live-{index}-{str(row['Timestamp']).replace(':', '').replace(' ', 'T')}",
+            "case_id": f"live-{index}-{stamp}",
             "xgboost_score": probability,
             "fraud_probability": probability,
-            "risk_level": "HIGH" if probability >= 0.7 else "MEDIUM" if probability >= 0.3 else "LOW",
-            "prediction": "SUSPICIOUS" if probability >= 0.3 else "LEGITIMATE",
+            "risk_level": "HIGH" if probability >= HIGH_THRESHOLD else "MEDIUM" if probability >= REVIEW_THRESHOLD else "LOW",
+            "prediction": "SUSPICIOUS" if probability >= REVIEW_THRESHOLD else "LEGITIMATE",
+            "review_threshold": REVIEW_THRESHOLD,
             "source": "replayed test transaction",
-            "investigatable": probability >= 0.3,
+            "investigatable": probability >= REVIEW_THRESHOLD,
+            # Ground truth is only shown in the dashboard's evaluation mode; the model never sees it.
+            LABEL: int(label),
         })
         _rows.append(payload)
+        for key in ("src_acct", "dst_acct"):
+            _rows_by_account.setdefault(str(payload[key]), []).append(index)
 
 
 def _load_model():
@@ -116,6 +122,14 @@ def _next_predictions(limit: int) -> list[dict]:
         return result
 
 
+def _alerts(limit: int) -> list[dict]:
+    """Every transaction in the replay window at or above the review threshold, in time order."""
+    with _lock:
+        _load_replay_rows()
+        flagged = [row for row in _rows if row["investigatable"]]
+    return flagged[: max(1, min(limit, 500))]
+
+
 def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
     """Return a bounded read-only neighborhood from the replay Parquet.
 
@@ -125,11 +139,11 @@ def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
     account_id = str(account_id)
     if account_id in _graph_cache:
         return _graph_cache[account_id]
-    if not DATA_PATH.exists():
-        raise FileNotFoundError(f"Replay source not found: {DATA_PATH}")
+    if not GRAPH_DATA_PATH.exists():
+        raise FileNotFoundError(f"Graph source not found: {GRAPH_DATA_PATH}")
     columns = ["Timestamp", "src_acct", "dst_acct", "Amount Paid", "Payment Format"]
     edges: list[dict] = []
-    parquet = pq.ParquetFile(DATA_PATH)
+    parquet = pq.ParquetFile(GRAPH_DATA_PATH)
     for batch in parquet.iter_batches(batch_size=20000, columns=columns):
         frame = batch.to_pandas()
         matched = frame[(frame["src_acct"].astype(str) == account_id) | (frame["dst_acct"].astype(str) == account_id)]
@@ -154,7 +168,7 @@ def _graph_neighborhood(account_id: str, limit: int = 100) -> dict:
         "community_id": "Unavailable",
         "community_size": 0,
     }
-    payload = {"account": account, "edges": edges, "source": "live replay Parquet"}
+    payload = {"account": account, "edges": edges, "source": f"test-period Parquet ({GRAPH_DATA_PATH.name})"}
     _graph_cache[account_id] = payload
     return payload
 
@@ -175,7 +189,8 @@ def _build_live_case_context(context: dict) -> dict:
             account_ids.add(str(selected[key]))
     cutoff = pd.to_datetime(selected.get("Timestamp"), errors="coerce")
     candidates = []
-    for row in _rows:
+    indices = sorted({i for account_id in account_ids for i in _rows_by_account.get(account_id, [])})
+    for row in (_rows[i] for i in indices):
         row_src = str(row.get("src_acct"))
         row_dst = str(row.get("dst_acct"))
         row_time = pd.to_datetime(row.get("Timestamp"), errors="coerce")
@@ -297,6 +312,12 @@ def _run_gemma(payload: dict) -> dict:
     backend = _load_gemma_backend()
     case_id = str(payload.get("case_id") or f"live_case_{int(time.time())}")
     context = payload.get("context") if isinstance(payload.get("context"), dict) else payload
+    # Replay rows carry the ground-truth label for the dashboard's evaluation mode; Gemma must not see it.
+    context = dict(context)
+    context["transactions"] = [
+        {key: value for key, value in row.items() if key != LABEL} if isinstance(row, dict) else row
+        for row in (context.get("transactions") or [])
+    ]
     _load_replay_rows()
     context = _build_live_case_context(context)
     case = InvestigationCase(case_id=case_id, context=context, ground_truth={}, split="live")
@@ -324,7 +345,7 @@ def _run_gemma(payload: dict) -> dict:
     if report_is_valid:
         rationale = (
             f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
-            "above the live review threshold of 0.300. "
+            f"above the live review threshold of {REVIEW_THRESHOLD:.3f} (chosen on validation). "
             f"Gemma classified the grounded case as {pattern} with {risk} risk "
             f"using {len(transactions)} observed transaction(s), {len(accounts)} account(s), and the retrieved graph context. "
             "The pattern is an investigation hypothesis that should be corroborated in the linked network view; "
@@ -333,7 +354,7 @@ def _run_gemma(payload: dict) -> dict:
     else:
         rationale = (
             f"The transaction was escalated because the frozen XGBoost fraud score was {score:.3f}, "
-            "above the live review threshold of 0.300. Gemma did not return a valid structured report "
+            f"above the live review threshold of {REVIEW_THRESHOLD:.3f} (chosen on validation). Gemma did not return a valid structured report "
             "for this request, so no Gemma pattern, confidence, or narrative is being asserted. "
             "Review the transaction window and network evidence before making a disposition."
         )
@@ -367,14 +388,14 @@ def _run_gemma(payload: dict) -> dict:
         )
     if report_is_valid:
         rationale_points = [
-            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
+            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the {REVIEW_THRESHOLD:.3f} review threshold.",
             structural_reason,
             f"Gemma classified the grounded case as {pattern} with {risk} risk using {len(transactions)} transaction(s) across {len(accounts)} account(s).",
             "This is an investigation hypothesis, not proof of fraud; corroborate it in the network view and transaction history.",
         ]
     else:
         rationale_points = [
-            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the 0.300 review threshold.",
+            f"XGBoost escalated the alert with a fraud score of {score:.3f}, above the {REVIEW_THRESHOLD:.3f} review threshold.",
             structural_reason.replace(f"Gemma's {pattern} prediction", "a specific Gemma pattern prediction"),
             f"The grounded live window contains {len(transactions)} transaction(s) across {len(accounts)} account(s); inspect the linked network and transaction history.",
             "Gemma did not return a valid structured report for this request, so its pattern and confidence are unavailable.",
@@ -410,6 +431,9 @@ class Handler(BaseHTTPRequestHandler):
                 "data_available": DATA_PATH.exists(),
                 "model_available": MODEL_PATH.exists(),
                 "replay_rows_loaded": len(_rows),
+                "model": META.get("model", MODEL_PATH.stem),
+                "review_threshold": REVIEW_THRESHOLD,
+                "high_threshold": HIGH_THRESHOLD,
                 "gemma_enabled": LIVE_GEMMA,
                 "gemma_loaded": _gemma_backend is not None,
             })
@@ -427,6 +451,16 @@ class Handler(BaseHTTPRequestHandler):
                 self._send({"items": _next_predictions(limit)})
             except Exception as exc:
                 self._send({"error": str(exc)}, 500)
+            return
+        if parsed.path == "/api/live/alerts":
+            try:
+                limit = int(parse_qs(parsed.query).get("limit", ["100"])[0])
+                self._send({"items": _alerts(limit), "review_threshold": REVIEW_THRESHOLD})
+            except Exception as exc:
+                self._send({"error": str(exc)}, 500)
+            return
+        if parsed.path == "/api/live/model":
+            self._send(META)
             return
         if parsed.path.startswith("/api/graph/"):
             try:
@@ -454,6 +488,10 @@ def main():
     server = ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
     print(f"Live dashboard API listening on 0.0.0.0:{PORT}", flush=True)
     print(f"Replay source: {DATA_PATH}", flush=True)
+    print(f"Model: {MODEL_PATH.name}  review threshold {REVIEW_THRESHOLD:.4f}  HIGH threshold {HIGH_THRESHOLD:.4f}", flush=True)
+    print(f"Network source: {GRAPH_DATA_PATH}", flush=True)
+    _load_replay_rows()  # score the replay window once at startup so the first request is instant
+    print(f"Replay rows scored: {len(_rows):,} ({sum(row['investigatable'] for row in _rows):,} alerts)", flush=True)
     print(f"Live Gemma enabled: {LIVE_GEMMA}", flush=True)
     server.serve_forever()
 
